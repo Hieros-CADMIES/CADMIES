@@ -3,7 +3,7 @@
 # ===========================================
 
 # ========================
-# 1. BLOCK EVERYTHING FIRST (safest approach)
+# 1. BLOCK EVERYTHING FIRST
 # ========================
 *
 
@@ -24,7 +24,6 @@
 # ========================
 # 4. BLOCK SENSITIVE PATTERN FILES
 # ========================
-# Files that might contain secrets
 *password*
 *secret*
 *key*
@@ -38,9 +37,8 @@ config.local.*
 settings.local.*
 
 # ========================
-# 5. BLOCK SYSTEM PATHS (generic, not personal)
+# 5. BLOCK SYSTEM PATHS
 # ========================
-# These are standard Linux paths, not personal
 /etc/
 /root/
 /boot/
@@ -102,11 +100,8 @@ private-*
 *_internal.*
 
 # ========================
-# 10. SAFETY CATCH-ALLS
+# 10. BLOCK HIDDEN FILES (except .gitignore)
 # ========================
-# Block files without extensions
-!*.*
-# Block hidden files except .gitignore
 .*
 !.gitignore
 
@@ -125,7 +120,7 @@ private-*
 !environment.yml
 
 # ========================
-# 12. DATA/ASSET FILES (optional - remove if you want to allow these)
+# 12. DATA/ASSET FILES (blocked)
 # ========================
 *.csv
 *.xlsx
