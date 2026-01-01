@@ -1,0 +1,141 @@
+# ===========================================
+# SECURE .gitignore - NO PERSONAL INFORMATION
+# ===========================================
+
+# ========================
+# 1. BLOCK EVERYTHING FIRST (safest approach)
+# ========================
+*
+
+# ========================
+# 2. ALLOW ONLY SPECIFIC FILE TYPES
+# ========================
+!*.py
+!*.md
+!*.json
+!*.sh
+
+# ========================
+# 3. ALLOW FOLDERS
+# ========================
+!*/
+!.gitignore
+
+# ========================
+# 4. BLOCK SENSITIVE PATTERN FILES
+# ========================
+# Files that might contain secrets
+*password*
+*secret*
+*key*
+*token*
+*credential*
+*.env
+.env*
+*private*
+*internal*
+config.local.*
+settings.local.*
+
+# ========================
+# 5. BLOCK SYSTEM PATHS (generic, not personal)
+# ========================
+# These are standard Linux paths, not personal
+/etc/
+/root/
+/boot/
+/usr/local/
+/proc/
+/sys/
+/dev/
+
+# ========================
+# 6. BLOCK COMMON SENSITIVE FILES
+# ========================
+secrets.json
+credentials.json
+config.private.json
+private.md
+keys.sh
+passwords.txt
+tokens.yaml
+
+# ========================
+# 7. TEMPORARY/GENERATED FILES
+# ========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.python-version
+*.egg-info/
+dist/
+build/
+*.log
+*.tmp
+*.temp
+.cache/
+.tox/
+.mypy_cache/
+.pytest_cache/
+.coverage
+
+# ========================
+# 8. SYSTEM/IDE FILES
+# ========================
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ========================
+# 9. EXPLICIT "PRIVATE" MARKED FILES
+# ========================
+*_private.*
+*.private.*
+private-*
+*_internal.*
+
+# ========================
+# 10. SAFETY CATCH-ALLS
+# ========================
+# Block files without extensions
+!*.*
+# Block hidden files except .gitignore
+.*
+!.gitignore
+
+# ========================
+# 11. SPECIFIC FILE ALLOWANCES
+# ========================
+!README.md
+!README.txt
+!LICENSE
+!LICENSE.txt
+!CONTRIBUTING.md
+!setup.py
+!pyproject.toml
+!package.json
+!requirements.txt
+!environment.yml
+
+# ========================
+# 12. DATA/ASSET FILES (optional - remove if you want to allow these)
+# ========================
+*.csv
+*.xlsx
+*.xls
+*.db
+*.sqlite
+*.pdf
+*.jpg
+*.png
+*.mp4
+*.zip
+*.tar
+*.gz
