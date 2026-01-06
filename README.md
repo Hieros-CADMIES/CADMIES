@@ -18,3 +18,16 @@ Initial project documentation and manifests for CADMIES (Cosmium Angelo Digital 
 
 For inquiries of any kind, email: hieroscadmies@proton.me  
 Let the mycelium grow!
+
+## License
+
+This project is licensed under the **GNU Affero General Public License v3.0**
+with a **Commons Clause** supplement.
+
+See [LICENSE](LICENSE) for full details.
+
+### Ethical Use Principles:
+- ✅ Free for education, research, personal use
+- ✅ Open source projects welcome
+- ✅ Commercial use requires permission
+- ❌ No proprietary exploitation without reciprocity
