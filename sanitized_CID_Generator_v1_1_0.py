@@ -3,7 +3,7 @@
 # MODULE METADATA
 # ============================================================================
 __version__ = "1.1.0"
-__author__ = "Project Hieros - IPLD Research Group"
+__author__ = "Project Hieros - CADMIES-IPLD Research Group"
 __created__ = "2026-01-05"
 __status__ = "Public Release"
 __license__ = "AGPLv3 with Commons Clause"
@@ -31,7 +31,7 @@ express permission of the copyright holders.
 
 For commercial licensing or permission, contact: hieroscadmies@proton.me
 
-Copyright (c) 2026 Project Hieros - CADMIES-IPLD Research Division
+Copyright (c) 2026 Project Hieros - CADMIES-IPLD Research Group
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
