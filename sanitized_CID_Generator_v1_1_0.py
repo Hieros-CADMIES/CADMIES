@@ -31,7 +31,7 @@ express permission of the copyright holders.
 
 For commercial licensing or permission, contact: hieroscadmies@proton.me
 
-Copyright (c) 2026 Project Hieros - IPLD Research Group
+Copyright (c) 2026 Project Hieros - CADMIES-IPLD Research Division
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
