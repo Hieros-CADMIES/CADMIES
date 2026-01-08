@@ -1,33 +1,155 @@
-# CADMIES Project Documentation
+# IPLD Knowledge Tools
 
-## Overview
-Initial project documentation and manifests for CADMIES (Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem) development.
+**Content-Addressed Systems for Educational Knowledge Management**
 
-## Documents
-1. **Project Hieros Manifesto** - Core project principles and vision
-2. **CADMIES post-IPLD Integration Assessment** - Technical evaluation
-3. **CADMIES to IPLD to MDI Evolution Narrative** - Development roadmap
-4. **CADMIES IPLD to MDI Evolution Technical Narrative** - Technical specifications
+## 🎯 Purpose
 
-## Status
-🚧 Initial Documentation Upload Phase
+This project provides tools for creating, storing, and retrieving knowledge concepts using IPLD (InterPlanetary Linked Data) and content addressing. It demonstrates how deterministic content identifiers (CIDs) can create reliable knowledge systems where the same understanding always leads to the same address.
 
-## Notes
-- These documents are subject to revision
-- Project documentation for CADMIES development
+## 🛠️ Available Tools
 
-For inquiries of any kind, email: hieroscadmies@proton.me  
-Let the mycelium grow!
+### 1. CID Generator (`cid_generator_v1.1.0.py`)
+Generates Content Identifiers (CIDs) from structured knowledge concepts using DAG-CBOR encoding.
 
-## License
+**Features:**
+- Creates deterministic CIDs from JSON knowledge concepts
+- Maintains human-readable indexes
+- Includes audit logging for educational use
+- Compatible with universal scientific concept schema
 
-This project is licensed under the **GNU Affero General Public License v3.0**
-with a **Commons Clause** supplement.
+### 2. CBOR Reader (`cbor_reader.py`)
+Retrieves and displays knowledge concepts stored in IPLD/CBOR format.
 
-See [LICENSE](LICENSE) for full details.
+**Features:**
+- Reads concepts by CID or human-readable ID
+- Validates schema compliance
+- Formats knowledge for educational display
+- Configurable storage paths
 
-### Ethical Use Principles:
-- ✅ Free for education, research, personal use
-- ✅ Open source projects welcome
-- ✅ Commercial use requires permission
-- ❌ No proprietary exploitation without reciprocity
+### 3. Universal Scientific Concept Schema (`schemas/universal_scientific_concept_schema_v1.0.0.json`)
+Standardized JSON Schema for representing educational and scientific concepts.
+
+**Features:**
+- JSON Schema draft-07 compliant
+- Supports multi-level explanations (beginner to expert)
+- Includes metadata for provenance and licensing
+- Designed for research and educational applications
+
+## 🚀 Quick Start
+
+### Installation
+```bash
+# Install required dependencies
+pip install dag-cbor multiformats
+
+Basic Usage
+bash
+
+# 1. Create a knowledge concept (generates CID)
+python cid_generator_v1.1.0.py
+
+# 2. Read it back using human ID
+python cbor_reader.py Physics:Law/ConservationOfEnergy
+
+# 3. Or read by CID
+python cbor_reader.py bafy...
+
+📚 How It Works
+Content Addressing Principle
+text
+
+Same Knowledge → Same CID → Same Understanding
+
+The system ensures that:
+
+    Identical content always produces the same CID
+
+    CIDs can be shared and verified independently
+
+    Knowledge remains permanently addressable
+
+Complete Workflow
+
+    Create knowledge concepts with standardized schema
+
+    Generate CIDs using DAG-CBOR encoding
+
+    Store in local blockstore with index
+
+    Retrieve by CID or human-readable ID
+
+    Verify content integrity through hashing
+
+🏗️ Architecture
+Schema-Based Knowledge
+
+All concepts follow the universal_scientific_concept_schema_v1.0.0.json which defines:
+
+    Required fields (title, definition, domain, metadata)
+
+    Multi-level explanations for different audiences
+
+    Cross-references and relationships
+
+    Provenance and licensing information
+
+Local-First Storage
+
+    All data stored locally in ./blocks/ directory
+
+    Human-readable index maintained in ./index/
+
+    Operation logs in ./logs/ for auditing
+
+    No external dependencies or cloud services
+
+⚖️ License & Ethical Use
+License
+
+AGPLv3 with Commons Clause - See LICENSE
+Permitted Uses
+
+    ✅ Individual learning and research
+
+    ✅ Academic institutions and non-profits
+
+    ✅ Open source projects
+
+    ✅ Personal knowledge management
+
+Restricted Uses (Commons Clause)
+
+    ❌ Commercial SaaS offerings without contributing back
+
+    ❌ Proprietary AI training without reciprocity
+
+    ❌ Commercial products that don't share improvements
+
+For commercial licensing: Contact hieroscadmies@proton.me
+📁 Repository Structure
+text
+
+philosophical-ipld-tools/
+├── cid_generator_v1.1.0.py    # CID generation tool
+├── cbor_reader.py             # Knowledge retrieval tool
+├── schemas/                   # Knowledge schemas
+│   └── universal_scientific_concept_schema_v1.0.0.json
+├── LICENSE                    # AGPLv3 + Commons Clause
+└── README.md                  # This file
+
+🔗 Related Resources
+
+    IPLD Documentation: https://ipld.io/
+
+    DAG-CBOR Specification: https://ipld.io/specs/codecs/dag-cbor/
+
+    CID Explanation: https://docs.ipfs.tech/concepts/content-addressing/
+
+🤝 Contributing
+
+This project welcomes educational and research-focused contributions. Please ensure all contributions align with the project's ethical framework and licensing terms.
+📞 Contact
+
+For questions about ethical use, commercial licensing, or research collaboration: hieroscadmies@proton.me
+
+"Knowledge should be free to access, but its commercial use should benefit the commons."
