@@ -29,7 +29,7 @@ The license granted under the AGPLv3 is hereby limited to exclude the right
 to sell the Software, or products that include the Software, without the
 express permission of the copyright holders.
 
-For commercial licensing or permission, contact: research@project-hieros.org
+For commercial licensing or permission, contact: hieroscadmies@proton.me
 
 Copyright (c) 2026 Project Hieros - IPLD Research Group
 
