@@ -35,26 +35,30 @@ Standardized JSON Schema for representing educational and scientific concepts.
 - Includes metadata for provenance and licensing
 - Designed for research and educational applications
 
-## 🚀 Quick Start
+## 🧪 Hands-On Testing
 
-### Installation
-```bash
-# Install required dependencies
-pip install dag-cbor multiformats
+**New to content addressing? Want to verify the system works on your computer?**
 
-Basic Usage
-bash
+We've created a complete beginner's guide that walks you through every step:
 
-# 1. Create a knowledge concept (generates CID)
-python cid_generator_v1.1.0.py
+👉 **[Testing the IPLD Knowledge System: A Complete Beginner's Guide](docs/testing_guide.md)**
 
-# 2. Read it back using human ID
-python cbor_reader.py Physics:Law/ConservationOfEnergy
+**Perfect for:**
+- First-time users with no programming experience
+- Educators wanting to demonstrate content addressing  
+- Researchers verifying system behavior
+- Anyone who learns best by doing
 
-# 3. Or read by CID
-python cbor_reader.py bafy...
+**You'll learn how to:**
+1. ✅ Set up Python and required tools (we guide you through it)
+2. ✅ Generate your first Content Identifier (CID)
+3. ✅ Retrieve knowledge using that CID
+4. ✅ Verify the system is deterministic (critical test!)
+5. ✅ Understand what "content addressing" means in practice
 
-📚 How It Works
+**No prior knowledge needed** - starts from "how to open your terminal"
+
+## 📚 How It Works
 Content Addressing Principle
 text
 
@@ -103,7 +107,7 @@ Local-First Storage
 
     No external dependencies or cloud services
 
-⚖️ License & Ethical Use
+## ⚖️ License & Ethical Use
 License
 
 AGPLv3 with Commons Clause - See LICENSE
@@ -137,7 +141,7 @@ philosophical-ipld-tools/
 ├── LICENSE                    # AGPLv3 + Commons Clause
 └── README.md                  # This file
 
-🔗 Related Resources
+## 🔗 Related Resources
 
     IPLD Documentation: https://ipld.io/
 
