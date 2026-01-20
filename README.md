@@ -41,7 +41,7 @@ Standardized JSON Schema for representing educational and scientific concepts.
 
 We've created a complete beginner's guide that walks you through every step:
 
-👉 **[Testing the IPLD Knowledge System: A Complete Beginner's Guide](docs/testing_guide.md)**
+👉 **[Testing the IPLD Knowledge System: A Complete Beginner's Guide](./docs/TESTING_GUIDE.md)**
 
 **Perfect for:**
 - First-time users with no programming experience
@@ -130,9 +130,10 @@ Restricted Uses (Commons Clause)
     ❌ Commercial products that don't share improvements
 
 For commercial licensing: Contact hieroscadmies@proton.me
-📁 Repository Structure
-text
 
+📁 Repository Structure
+
+```text
 philosophical-ipld-tools/
 ├── cid_generator_v1.1.0.py    # CID generation tool
 ├── cbor_reader.py             # Knowledge retrieval tool
@@ -140,14 +141,13 @@ philosophical-ipld-tools/
 │   └── universal_scientific_concept_schema_v1.0.0.json
 ├── LICENSE                    # AGPLv3 + Commons Clause
 └── README.md                  # This file
+```
 
 ## 🔗 Related Resources
 
-    IPLD Documentation: https://ipld.io/
-
-    DAG-CBOR Specification: https://ipld.io/specs/codecs/dag-cbor/
-
-    CID Explanation: https://docs.ipfs.tech/concepts/content-addressing/
+* IPLD Documentation: https://ipld.io/
+* DAG-CBOR Specification: https://ipld.io/specs/codecs/dag-cbor/
+* CID Explanation: https://docs.ipfs.tech/concepts/content-addressing/
 
 🤝 Contributing
 
