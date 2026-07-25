@@ -2,7 +2,7 @@
   unfiltered thoughts, and coded messages for fellow gardeners.
   For polished documentation, check Polished CADMIES or promote this note.
 
-# Session 014 — 2026-05-20/21 — Midnight Cowboy Run
+# Session-014 — 2026-05-20/21 — Midnight Cowboy Run
 
 ## Part 1: May 20, 10:46 p.m. – May 21, 12:57 a.m.
 
