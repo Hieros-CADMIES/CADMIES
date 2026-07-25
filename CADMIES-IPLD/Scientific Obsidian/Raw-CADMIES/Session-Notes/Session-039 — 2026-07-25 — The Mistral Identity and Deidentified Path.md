@@ -8,6 +8,8 @@ related: [[Phase-45G-Dr. Amanda Mistral — Spiritual Knowledge & Helpfulness]],
 
 ## What We Did
 
+**Background from Session 038 (July 19-21):** This session continues work from the merge wars — the 16-adapter catastrophic failure, the systematic debugging that landed on 5 stable adapters at 0.3 scale, the SHP Reddit leakage discovery, the failed bulk persona experiment (249 pairs), and the hybrid architecture blueprint (weights for soul, vectors for brain). A 500-pair handcrafted persona dataset was generated based on findings from the Captain Zara Steele test persona, which proved that ~400 pairs at scale 1.25 via dynamic LoRA loading can fully overwrite the original Mistral identity. GGUF merge was found to NOT work for Mistral persona.
+
 **Continued Dr. Mistral persona refinement.** After the looping and hallucination issues were fixed (tokenizer fix using `unk_token` instead of `eos_token`), we tested the persona at various scales. The model was coherent and factual but kept inventing wrong identities — "Dr. Amelia Hartman, theoretical astrophysicist" instead of "Dr. Amanda Mistral." Willie was described as a golden retriever instead of a Scottish research assistant. CADMIES lore was missing.
 
 **Identified the core problem:** The dataset had too much general knowledge and not enough identity reinforcement. The model was learning facts but ignoring identity markers. This is a known issue documented in the Jbliteration research — the original Mistral identity competes with any new persona implanted via LoRA.
