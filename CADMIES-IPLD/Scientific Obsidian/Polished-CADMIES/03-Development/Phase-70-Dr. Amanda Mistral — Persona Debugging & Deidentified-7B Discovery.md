@@ -2,12 +2,17 @@
 phase: 70
 date: 2026-07-21
 status: Active — iterative testing
-related: [[Session-038]], [[Dr-Amanda-Mistral-SOP]], [[CADMIES-Growth-Roadmap]]
+related: [[Session-038 — 2026-07-21 — The Merge, The Moon Rock, and The Fractal Ducks]], , 
 ---
 
 # Phase 70: Dr. Amanda Mistral — Persona Debugging & Deidentified-7B Discovery
 
-What Changed
+## Why
+
+*[Placeholder — content to be added]*
+## What Changed
+
+*[Placeholder — content to be added]*
 Dr. Amanda Mistral's persona training was stress-tested and debugged. The looping and repetition issues were fixed by changing the tokenizer's pad token from eos_token to unk_token. However, the model continued to invent wrong identities — "Dr. Amelia Hartman, theoretical astrophysicist" instead of "Dr. Amanda Mistral." Willie was described as a golden retriever instead of a Scottish research assistant. CADMIES lore was missing.
 
 The core problem was identified: the dataset had too much general knowledge and not enough identity reinforcement. The model was learning facts but ignoring identity markers. This is a known issue documented in the Jbliteration research — the original Mistral identity competes with any new persona implanted via LoRA.

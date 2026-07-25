@@ -2,12 +2,30 @@
 phase: 71
 date: 2026-07-25
 status: Active — Persona refinement & identity research
-related: [[Session-039 — 2026-07-25 — The Mistral Identity and Deidentified Path]], [[Phase-70-Dr. Amanda Mistral — Hybrid Architecture & Merge Protocol]], [[CADMIES-Growth-Roadmap]]
+related: [[Session-039 — 2026-07-25 — The Mistral Identity and Deidentified Path]], , 
 ---
 
 # Phase 71: Dr. Amanda Mistral — Identity Anchoring & Deidentified-7B Exploration
 
+## Why
+
+*[Placeholder — content to be added]*
+
+
+## What Changed
+
+*[Placeholder — content to be added]*
+
+
+
+
 ## Background: The Merge Wars (July 19–21, 2026)
+
+
+
+
+
+
 
 ## Phase 70 builds on a multi-day training and debugging marathon (Session 038) that established the foundational knowledge for Dr. Mistral's architecture.
 
@@ -67,6 +85,12 @@ A comprehensive technical blueprint (v4.1.0) was produced documenting the full t
 All version numbers stripped from files. Failed experiments removed. Notebook reduced from 27 GB to 11 GB. Clean slate: base-mistral.gguf, five adapter GGUFs, dr-amanda-mistral.gguf, chat application, llama.cpp tools, and nothing else.
 
 ---
+
+
+
+
+
+
 
 ## Phase 70 Continued: Persona Debugging (July 22–25, 2026)
 
