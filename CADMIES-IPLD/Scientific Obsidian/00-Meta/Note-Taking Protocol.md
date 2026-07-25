@@ -1,7 +1,10 @@
-CADMIES Note-Taking Protocol
-Version: 1.1.0
-Date: 2026-07-25
-Status: Living document — updated as conventions evolve
+---
+type: protocol
+version: 1.1.0
+date: 2026-07-25
+status: Living document — updated as conventions evolve
+related: [[NASA-level standards reference]], [[CADMIES-Canon]], [[Architecture Overview]]
+---
 
 Purpose
 This protocol governs how notes are created, formatted, linked, and promoted within the Scientific Obsidian vault. It ensures consistency across Raw CADMIES and Polished CADMIES, making the vault navigable for gardeners, collaborators, and PhDs alike. Standards are informed by NASA-level scientific documentation practices where applicable.
