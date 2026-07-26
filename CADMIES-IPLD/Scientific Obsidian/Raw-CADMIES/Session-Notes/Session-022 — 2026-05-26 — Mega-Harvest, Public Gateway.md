@@ -2,7 +2,7 @@
   unfiltered thoughts, and coded messages for fellow gardeners.
   For polished documentation, check Polished CADMIES or promote this note.
 
-# Session 022 — 2026-05-26 — Mega-Harvest, Public Gateway & The Rebentisch Collaboration
+# Session 022 — 2026-05-26 — Mega-Harvest, Public Gateway
 
 ## Soundtrack
 Pine Vinyl — Luke LaRock. Ellis: "That's not fear you feel. That's happiness."
