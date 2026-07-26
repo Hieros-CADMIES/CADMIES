@@ -2,7 +2,7 @@
   unfiltered thoughts, and coded messages for fellow gardeners.
   For polished documentation, check Polished CADMIES or promote this note.
 
-# Session 021 — The Harvester Hardening
+# Session 021 — 2026-05-25 — The Harvester Hardening
 
 ## Soundtrack
 Pine Vinyl — Luke LaRock. Bong rips. Flaming Hot Cheeto Puffs. Bob's judgmental mustache.
