@@ -2,13 +2,16 @@
 """
 File: generate_public_gateway.py
 Tool: CADMIES Public Mycelium Gateway Generator
-Version: 3.0.0
+Version: 3.1.0
 System: CADMIES / tools
 Status: ACTIVE
 
 Purpose: Generates a single-page public-facing website from the blockstore.
          All concepts rendered as filterable, searchable cards on one page.
          Includes JSON-LD structured data feed and XML sitemap.
+
+         Domain filter pills now actually filter the concept cards.
+         Subdomain tier is designed but not yet implemented.
 
          No personal information. No internal tooling references.
          Just the knowledge the mycelium wants to share with the world.
@@ -20,6 +23,10 @@ Output:
     ../docs/ — static site served by web server
 
 Version History:
+  v3.1.0 (2026-07-27): Domain filter pills now functional. Added domain and
+      canonical_domain fields to concepts.json. JavaScript filter logic now
+      hides/shows cards based on selected domain. Results counter updates.
+      Subdomain tier placeholder added for future expansion.
   v3.0.0 (2026-06-24): Project renamed from Hieros to Hierion. Updated all
       URLs and references to reflect new project identity and domain.
   v2.0.1 (2026-05-27): Fixed OUTPUT_DIR from public_concepts_gateway/ to ../docs/.
@@ -45,37 +52,161 @@ from paths import BLOCKS_DIR
 OUTPUT_DIR = PROJECT_ROOT.parent / "docs"
 SITE_URL = "https://project-hierion.duckdns.org"
 
-# Domain display names for the public site
+# === CANONICAL 15-DOMAIN TAXONOMY ===
+CANONICAL_DOMAINS = [
+    "Physics",
+    "Philosophy",
+    "Biology",
+    "Mathematics",
+    "Consciousness",
+    "Chemistry",
+    "Ethics",
+    "Computer Science",
+    "Psychology",
+    "Spirituality",
+    "Neuroscience",
+    "Sociology",
+    "Economics",
+    "Ecology",
+    "Medicine",
+]
+
+# === DOMAIN UPWARD MAP (from generate_mycelium_map.py) ===
+DOMAIN_UPWARD_MAP = {
+    "Theoretical Physics": "Physics",
+    "Cosmology": "Physics",
+    "Complexity_Science": "Physics",
+    "Astrophysics": "Physics",
+    "Physics (String Theory)": "Physics",
+    "Physics, Quantum Field Theory": "Physics",
+    "Quantum Mechanics, Philosophy": "Physics",
+    "Quantum Physics and Philosophy": "Physics",
+    "Quantum Physics, Consciousness Studies": "Physics",
+    "Physics and Philosophy": "Physics",
+    "Physics & Philosophy": "Physics",
+    "Physics, Philosophy": "Physics",
+    "Philosophy, Physics": "Philosophy",
+    "Physics, Metaphysics": "Physics",
+    "Metaphysics, Philosophy": "Philosophy",
+    "Physics, Philosophy, Consciousness": "Physics",
+    "Physics, Philosophy, Biology": "Physics",
+    "Physics, Biology, Ecology": "Physics",
+    "Physics, Biology, Computer Science": "Physics",
+    "Neurology and Quantum Physics": "Neuroscience",
+    "Epistemology": "Philosophy",
+    "Metaphysics": "Philosophy",
+    "Buddhist_Philosophy": "Philosophy",
+    "Philosophy of Art": "Philosophy",
+    "Art, Philosophy": "Philosophy",
+    "Art & Philosophy": "Philosophy",
+    "Philosophy of Daily Life": "Philosophy",
+    "Philosophy of Technology": "Philosophy",
+    "Technology, Philosophy": "Philosophy",
+    "Technology & Philosophy": "Philosophy",
+    "Philosophy of Science & Spirituality": "Philosophy",
+    "Philosophy of Science": "Philosophy",
+    "Philosophy of Science & Nature": "Philosophy",
+    "Philosophy of Physics": "Philosophy",
+    "Philosophy of Language": "Philosophy",
+    "Philosophy of Mind": "Philosophy",
+    "Philosophy of Religion": "Philosophy",
+    "Philosophy of Law": "Philosophy",
+    "Philosophy of Perception & Sound": "Philosophy",
+    "Philosophy of Perception & Scent": "Philosophy",
+    "Philosophy, Meditation": "Philosophy",
+    "Philosophy & Neuroscience": "Philosophy",
+    "Philosophy & Psychology": "Philosophy",
+    "Metaphysics & Philosophy of Mind": "Philosophy",
+    "Literature & Philosophy": "Philosophy",
+    "Symbolism, Philosophy": "Philosophy",
+    "Science & Philosophy": "Philosophy",
+    "Science, Philosophy": "Philosophy",
+    "MolecularBiology": "Biology",
+    "Genomics": "Biology",
+    "Biology, Philosophy": "Biology",
+    "Evolutionary Biology": "Biology",
+    "Botany": "Biology",
+    "Biology & Marketing": "Biology",
+    "Biology & Business": "Biology",
+    "Biology and Philosophy of Mind": "Biology",
+    "Computer Science, Biology": "Computer Science",
+    "Cognitive_Science": "Psychology",
+    "Cognitive Science": "Psychology",
+    "Cognitive Processes": "Psychology",
+    "ConsciousnessStudies": "Consciousness",
+    "Psychology, Physics": "Psychology",
+    "Psychology and Neuroscience": "Psychology",
+    "Neuroscience & Philosophy": "Neuroscience",
+    "Consciousness & Philosophy": "Consciousness",
+    "Climate Ethics": "Ethics",
+    "Ethics, Social Science": "Ethics",
+    "Ethics & Philosophy of Mind": "Ethics",
+    "Law and Business Ethics": "Ethics",
+    "Law and Philosophy": "Philosophy",
+    "Philanthropy": "Ethics",
+    "Project Management, Ethics": "Ethics",
+    "Project Management, Philosophy": "Philosophy",
+    "Artificial Intelligence": "Computer Science",
+    "AI": "Computer Science",
+    "Computer Science, Philosophy": "Computer Science",
+    "Science & Technology": "Computer Science",
+    "Technology & Society": "Sociology",
+    "Politics and Law": "Sociology",
+    "Governance": "Sociology",
+    "Communication": "Sociology",
+    "Cultural Movement": "Sociology",
+    "Creativity, Collaboration": "Sociology",
+    "Food & Language": "Sociology",
+    "Project Management": "Sociology",
+    "Project Management, Governance": "Sociology",
+    "Project Financing": "Economics",
+    "Linguistics": "Philosophy",
+    "Knowledge Management": "Sociology",
+    "Buddhism": "Spirituality",
+    "Biomysticism": "Philosophy",
+    "Quantum Physics & Philosophy": "Physics",
+    "Philosophy, Religion, Physics": "Philosophy",
+    "Neuroscience & Quantum Physics": "Neuroscience",
+    "Philosophy, Psychology": "Philosophy",
+    "Philosophy, Consciousness": "Philosophy",
+    "Astrobiology": "Biology",
+    "Philosophy/Quantum Physics": "Physics",
+    "Metaphysics & Philosophy": "Philosophy",
+    "Neuroscience/Philosophy": "Neuroscience",
+    "Genetics": "Biology",
+    "Quantum Physics": "Physics",
+    "Thermodynamics": "Physics",
+    "Geology": "Physics",
+    "Biochemistry": "Chemistry",
+    "Environmental Science": "Ecology",
+    "Microbiology": "Biology",
+    "Earth Sciences": "Physics",
+    "Cell Biology": "Biology",
+    "Science": "Philosophy",
+    "Cell Biology, Physiology": "Biology",
+    "Chemistry & Biology": "Chemistry",
+    "Molecular Biology, Genetics": "Biology",
+    "Neuroscience, Chemistry, Psychology": "Neuroscience",
+    "Physics & Atmospheric Science": "Physics",
+}
+
+# Domain display names
 DOMAIN_DISPLAY = {
     "Physics": "Physics",
     "Philosophy": "Philosophy",
     "Biology": "Biology",
     "Mathematics": "Mathematics",
-    "Genomics": "Genomics",
     "Consciousness": "Consciousness Studies",
     "Chemistry": "Chemistry",
     "Ethics": "Ethics",
-    "Epistemology": "Epistemology",
-    "Complexity_Science": "Complexity Science",
-    "Cosmology": "Cosmology",
-    "Computer_Science": "Computer Science",
+    "Computer Science": "Computer Science",
     "Psychology": "Psychology",
     "Spirituality": "Spirituality",
-    "Buddhism": "Buddhism",
-    "Buddhist_Philosophy": "Buddhist Philosophy",
-    "Cognitive_Science": "Cognitive Science",
-    "Ecology": "Ecology",
-    "Metaphysics": "Metaphysics",
-    "MolecularBiology": "Molecular Biology",
     "Neuroscience": "Neuroscience",
     "Sociology": "Sociology",
     "Economics": "Economics",
-    "Education": "Education",
-    "Political_Science": "Political Science",
+    "Ecology": "Ecology",
     "Medicine": "Medicine",
-    "Artificial Intelligence": "Artificial Intelligence",
-    "Theoretical Physics": "Theoretical Physics",
-    "Emotional_Physics": "Emotional Physics",
 }
 
 RELATIONSHIP_LABELS = {
@@ -86,11 +217,19 @@ RELATIONSHIP_LABELS = {
 }
 
 
+def normalize_domain(domain):
+    """Map raw domain to canonical 15-domain taxonomy."""
+    if domain in CANONICAL_DOMAINS:
+        return domain
+    return DOMAIN_UPWARD_MAP.get(domain, domain)
+
+
 def gather_public_concepts():
-    """Load all concepts, return only public-facing data."""
+    """Load all concepts, return public-facing data with domain info."""
     all_cids = load_all_concept_cids()
     concepts = []
     domain_counts = Counter()
+    subdomain_index = {}  # canonical_domain -> set of raw domains
 
     for cid in all_cids:
         concept = load_concept(cid)
@@ -99,18 +238,25 @@ def gather_public_concepts():
 
         hid = concept.get('human_id', '')
         title = concept.get('title', hid.replace('_', ' ').title())
-        domain = concept.get('domain', 'Unknown')
+        raw_domain = concept.get('domain', 'Unknown')
+        canonical = normalize_domain(raw_domain)
         definition = concept.get('definition', '')
         rels = concept.get('relationships', {})
         extra = concept.get('extra_fields', {})
 
-        domain_counts[domain] += 1
+        domain_counts[canonical] += 1
+
+        # Build subdomain index
+        if canonical not in subdomain_index:
+            subdomain_index[canonical] = set()
+        subdomain_index[canonical].add(raw_domain)
 
         concepts.append({
             "human_id": hid,
             "title": title,
-            "domain": domain,
-            "domain_display": DOMAIN_DISPLAY.get(domain, domain.replace('_', ' ')),
+            "domain": raw_domain,
+            "canonical_domain": canonical,
+            "domain_display": DOMAIN_DISPLAY.get(canonical, canonical.replace('_', ' ')),
             "definition": definition,
             "poetic_version": extra.get("poetic_version", ""),
             "mantra": extra.get("mantra", ""),
@@ -124,7 +270,7 @@ def gather_public_concepts():
             },
         })
 
-    # Build ID-to-title lookup for relationship display
+    # Build ID-to-title lookup
     id_to_title = {c["human_id"]: c["title"] for c in concepts}
 
     for c in concepts:
@@ -137,7 +283,10 @@ def gather_public_concepts():
             ]
         c["relationships"] = filtered_rels
 
-    return sorted(concepts, key=lambda c: c["title"]), domain_counts
+    # Convert subdomain sets to sorted lists
+    subdomain_index = {k: sorted(v) for k, v in subdomain_index.items()}
+
+    return sorted(concepts, key=lambda c: c["title"]), domain_counts, subdomain_index
 
 
 def escape_html(text):
@@ -150,9 +299,10 @@ def build_card(concept):
     hid = concept["human_id"]
     title = escape_html(concept["title"])
     domain = concept["domain"]
+    canonical_domain = concept["canonical_domain"]
     domain_display = escape_html(concept["domain_display"])
     definition = escape_html(concept["definition"])
-    domain_class = domain.lower().replace(" ", "-").replace("_", "-")
+    domain_class = canonical_domain.lower().replace(" ", "-").replace("_", "-")
 
     # Relationships
     rel_html_parts = []
@@ -164,7 +314,7 @@ def build_card(concept):
             rel_html_parts.append(f'<div class="rel-group"><strong>{label}:</strong> {tags}</div>')
     rel_html = "".join(rel_html_parts) if rel_html_parts else '<p class="no-rels"><em>No relationships recorded yet.</em></p>'
 
-    # Insight / Poetics / Mantra
+    # Extras
     extras = []
     if concept.get("insight"):
         extras.append(f'<div class="extra-section"><strong>Core Insight:</strong> {escape_html(concept["insight"])}</div>')
@@ -176,7 +326,7 @@ def build_card(concept):
     extras_html = "".join(extras)
 
     return f'''
-    <article class="concept-card" data-domain="{domain}" data-search="{title.lower()} {domain_display.lower()} {hid.lower()}">
+    <article class="concept-card" data-domain="{escape_html(canonical_domain)}" data-raw-domain="{escape_html(domain)}" data-search="{title.lower()} {domain_display.lower()} {hid.lower()}">
         <div class="card-header" onclick="this.parentElement.classList.toggle('expanded')">
             <span class="domain-badge domain-{domain_class}">{domain_display}</span>
             <h2>{title}</h2>
@@ -200,16 +350,11 @@ def build_card(concept):
     </article>'''
 
 
-def build_index_page(concepts, domain_counts):
+def build_index_page(concepts, domain_counts, subdomain_index):
     """Build the single-page public gateway."""
     cards = [build_card(c) for c in concepts]
 
-    # Domain filter buttons — 15 canonical domains only
-    CANONICAL_DOMAINS = [
-        "Physics", "Philosophy", "Biology", "Mathematics", "Consciousness",
-        "Chemistry", "Ethics", "Computer Science", "Psychology", "Spirituality",
-        "Neuroscience", "Sociology", "Economics", "Ecology", "Medicine",
-    ]
+    # Domain filter buttons — 15 canonical domains with counts
     domain_filters = []
     for d in CANONICAL_DOMAINS:
         count = domain_counts.get(d, 0)
@@ -257,10 +402,18 @@ def build_index_page(concepts, domain_counts):
         .search-bar input::placeholder {{ color: #484f58; }}
 
         /* Filters */
-        .filters {{ display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px; }}
+        .filters {{ display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 8px; }}
         .filter-btn {{ background: #21262d; border: 1px solid #30363d; color: #c9d1d9; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85em; transition: all 0.2s; }}
         .filter-btn:hover {{ background: #30363d; }}
         .filter-btn.active {{ background: #58a6ff; color: #ffffff; border-color: #58a6ff; }}
+
+        /* Subdomain row (placeholder for future) */
+        .subdomain-row {{ display: none; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; padding-left: 4px; }}
+        .subdomain-row.visible {{ display: flex; }}
+        .subdomain-btn {{ background: #1c2333; border: 1px solid #30363d; color: #8b949e; padding: 4px 12px; border-radius: 16px; cursor: pointer; font-size: 0.75em; transition: all 0.2s; }}
+        .subdomain-btn:hover {{ background: #30363d; color: #c9d1d9; }}
+        .subdomain-btn.active {{ background: #58a6ff; color: #ffffff; border-color: #58a6ff; }}
+        .subdomain-label {{ color: #484f58; font-size: 0.75em; margin-right: 4px; align-self: center; }}
 
         /* Cards */
         .concept-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }}
@@ -310,28 +463,14 @@ def build_index_page(concepts, domain_counts):
         .domain-ethics {{ background: #3a1b2d; color: #ff9bce; }}
         .domain-psychology {{ background: #1b3a2d; color: #7ee787; }}
         .domain-chemistry {{ background: #3a361b; color: #e3b341; }}
-        .domain-genomics {{ background: #2d1b3a; color: #d2a8ff; }}
         .domain-consciousness {{ background: #21262d; color: #c9d1d9; }}
-        .domain-epistemology {{ background: #2d1b3a; color: #d2a8ff; }}
-        .domain-complexity-science {{ background: #1b2d4a; color: #79c0ff; }}
-        .domain-ecology {{ background: #1b3a1b; color: #7ee787; }}
-        .domain-spirituality {{ background: #2d1b3a; color: #d2a8ff; }}
-        .domain-buddhism {{ background: #2d1b3a; color: #d2a8ff; }}
-        .domain-buddhist-philosophy {{ background: #2d1b3a; color: #d2a8ff; }}
-        .domain-cosmology {{ background: #1b2d4a; color: #79c0ff; }}
         .domain-computer-science {{ background: #1b2d4a; color: #79c0ff; }}
-        .domain-cognitive-science {{ background: #1b3a2d; color: #7ee787; }}
+        .domain-spirituality {{ background: #2d1b3a; color: #d2a8ff; }}
         .domain-neuroscience {{ background: #1b3a2d; color: #7ee787; }}
         .domain-sociology {{ background: #3a1b2d; color: #ff9bce; }}
         .domain-economics {{ background: #3a361b; color: #e3b341; }}
-        .domain-education {{ background: #1b2d4a; color: #79c0ff; }}
-        .domain-political-science {{ background: #3a1b2d; color: #ff9bce; }}
+        .domain-ecology {{ background: #1b3a1b; color: #7ee787; }}
         .domain-medicine {{ background: #1b3a1b; color: #7ee787; }}
-        .domain-artificial-intelligence {{ background: #1b2d4a; color: #79c0ff; }}
-        .domain-theoretical-physics {{ background: #1b2d4a; color: #79c0ff; }}
-        .domain-metaphysics {{ background: #2d1b3a; color: #d2a8ff; }}
-        .domain-molecular-biology {{ background: #1b3a1b; color: #7ee787; }}
-        .domain-emotional-physics {{ background: #3a1b2d; color: #ff9bce; }}
 
         /* Footer */
         footer {{ text-align: center; padding: 40px 20px; color: #484f58; font-size: 0.85em; border-top: 1px solid #30363d; margin-top: 40px; }}
@@ -339,7 +478,7 @@ def build_index_page(concepts, domain_counts):
         footer a:hover {{ text-decoration: underline; }}
 
         /* Results count */
-        .results-count {{ color: #8b949e; font-size: 0.85em; margin: 8px 0 16px; }}
+        .results-count {{ color: #8b949e; font-size: 0.85em; margin: 4px 0 16px; }}
 
         @media (max-width: 640px) {{
             .concept-grid {{ grid-template-columns: 1fr; }}
@@ -371,7 +510,11 @@ def build_index_page(concepts, domain_counts):
             <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">All ({len(concepts)})</button>
             {''.join(domain_filters)}
         </div>
-        <div class="results-count" id="resultsCount">Showing {len(concepts)} concepts</div>
+        <!-- Subdomain row (placeholder for future expansion) -->
+        <div class="subdomain-row" id="subdomainRow">
+            <span class="subdomain-label">Subdomains:</span>
+        </div>
+        <div class="results-count" id="resultsCount">Showing {len(concepts)} of {len(concepts)} concepts</div>
         <div class="concept-grid" id="conceptGrid">
             {''.join(cards)}
         </div>
@@ -385,11 +528,18 @@ def build_index_page(concepts, domain_counts):
     </footer>
     <script>
         let currentFilter = 'all';
+        const totalConcepts = {len(concepts)};
 
         function setFilter(filter, btn) {{
             currentFilter = filter;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+
+            // Update active state on buttons
+            document.querySelectorAll('#filters .filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+
+            // Hide subdomain row for now (placeholder)
+            document.getElementById('subdomainRow').classList.remove('visible');
+
             filterConcepts();
         }}
 
@@ -401,9 +551,10 @@ def build_index_page(concepts, domain_counts):
             cards.forEach(card => {{
                 const domain = card.dataset.domain;
                 const searchData = card.dataset.search;
+
                 const matchesFilter = currentFilter === 'all' || domain === currentFilter;
                 const matchesSearch = searchData.includes(searchTerm);
-                
+
                 if (matchesFilter && matchesSearch) {{
                     card.classList.remove('hidden');
                     visible++;
@@ -412,15 +563,18 @@ def build_index_page(concepts, domain_counts):
                 }}
             }});
 
-            document.getElementById('resultsCount').textContent = 'Showing ' + visible + ' of {len(concepts)} concepts';
+            document.getElementById('resultsCount').textContent = 'Showing ' + visible + ' of ' + totalConcepts + ' concepts';
         }}
+
+        // Search triggers filter
+        document.getElementById('search').addEventListener('input', filterConcepts);
     </script>
 </body>
 </html>'''
 
 
 def build_json_feed(concepts):
-    """Build a JSON-LD structured data feed for AI ingestion."""
+    """Build a JSON-LD structured data feed with domain info."""
     items = []
     for c in concepts:
         items.append({
@@ -433,6 +587,9 @@ def build_json_feed(concepts):
                 "name": "CADMIES Mycelium",
             },
             "url": f"{SITE_URL}/index.html#{c['human_id']}",
+            # Extended fields for client-side filtering
+            "domain": c["domain"],
+            "canonical_domain": c["canonical_domain"],
         })
     return json.dumps({"@context": "https://schema.org", "@graph": items}, indent=2)
 
@@ -450,27 +607,28 @@ def build_sitemap(concepts):
 
 def main():
     print("=" * 60)
-    print("CADMIES PUBLIC MYCELIUM GATEWAY GENERATOR v2.0.1")
+    print("CADMIES PUBLIC MYCELIUM GATEWAY GENERATOR v3.1.0")
     print(f"Output: {OUTPUT_DIR}")
     print("=" * 60)
 
-    concepts, domain_counts = gather_public_concepts()
+    concepts, domain_counts, subdomain_index = gather_public_concepts()
     total_edges = sum(
         sum(len(targets) for targets in c["relationships"].values())
         for c in concepts
     )
-    print(f"\nLoaded {len(concepts)} concepts across {len(domain_counts)} domains with {total_edges} edges")
+    print(f"\nLoaded {len(concepts)} concepts across {len(domain_counts)} canonical domains with {total_edges} edges")
+    print(f"Subdomain index: {len(subdomain_index)} canonical domains with subdomains")
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     # Build single-page index
     print("Generating index.html (single-page gateway)...")
-    index_html = build_index_page(concepts, domain_counts)
+    index_html = build_index_page(concepts, domain_counts, subdomain_index)
     with open(OUTPUT_DIR / "index.html", "w") as f:
         f.write(index_html)
 
     # Build JSON-LD feed
-    print("Generating concepts.json (structured data)...")
+    print("Generating concepts.json (structured data with domain fields)...")
     json_feed = build_json_feed(concepts)
     with open(OUTPUT_DIR / "concepts.json", "w") as f:
         f.write(json_feed)
@@ -488,9 +646,11 @@ def main():
 
     print(f"\nPublic gateway generated: {OUTPUT_DIR}")
     print(f"   index.html — single-page app with {len(concepts)} concept cards")
-    print(f"   concepts.json — JSON-LD structured data feed")
+    print(f"   concepts.json — JSON-LD structured data with domain fields")
     print(f"   sitemap.xml — search engine sitemap")
     print(f"   .nojekyll — bypass Jekyll processing")
+    print(f"\nDomain filter pills now functional. Click a domain to filter cards.")
+    print(f"   Subdomain tier is designed but not yet implemented.")
     print(f"\nDeploy: push to GitHub, Pages serves from /docs folder")
 
 
