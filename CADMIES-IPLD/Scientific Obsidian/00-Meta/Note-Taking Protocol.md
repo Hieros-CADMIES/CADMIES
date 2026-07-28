@@ -163,7 +163,7 @@ text
 # Session XXX — YYYY-MM-DD — Brief Description
 
 ## Soundtrack
-(Optional — what was playing)
+(Only include this if the gardener mentions they are listening to music or watching a show or a movie)
 
 ## What We Did
 
@@ -174,9 +174,6 @@ text
 ## Decisions Made
 
 ## Nuggets Collected
-
-## Next Session
-Promote completed session summaries to Polished CADMIES/03-Development/ when they are coherent enough for external readers.
 
 Collaboration Notes
 All external collaboration documentation lives in Polished CADMIES/05-Collaboration/. Each collaborator gets a note:
