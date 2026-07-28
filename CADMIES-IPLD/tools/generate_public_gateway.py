@@ -1,4 +1,3 @@
-cat > /home/Project/Hierion/CADMIES/CADMIES-IPLD/tools/generate_public_gateway.py << 'EOF'
 #!/usr/bin/env python3
 """
 File: generate_public_gateway.py
@@ -665,4 +664,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-EOF
