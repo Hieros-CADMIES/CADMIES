@@ -1,3 +1,4 @@
+cat > /home/Project/Hierion/CADMIES/CADMIES-IPLD/tools/generate_public_gateway.py << 'EOF'
 #!/usr/bin/env python3
 """
 File: generate_public_gateway.py
@@ -507,7 +508,7 @@ def build_index_page(concepts, domain_counts, subdomain_index):
             <input type="text" id="search" placeholder="Search concepts..." oninput="filterConcepts()">
         </div>
         <div class="filters" id="filters">
-            <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">All ({len(concepts)})</button>
+            <button class="filter-btn active" data-filter="all">All ({len(concepts)})</button>
             {''.join(domain_filters)}
         </div>
         <!-- Subdomain row (placeholder for future expansion) -->
@@ -565,6 +566,14 @@ def build_index_page(concepts, domain_counts, subdomain_index):
 
             document.getElementById('resultsCount').textContent = 'Showing ' + visible + ' of ' + totalConcepts + ' concepts';
         }}
+
+        // Bind click events to filter buttons
+        document.querySelectorAll('#filters .filter-btn').forEach(function(btn) {{
+            btn.addEventListener('click', function() {{
+                var filter = this.dataset.filter;
+                setFilter(filter, this);
+            }});
+        }});
 
         // Search triggers filter
         document.getElementById('search').addEventListener('input', filterConcepts);
@@ -656,3 +665,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+EOF
