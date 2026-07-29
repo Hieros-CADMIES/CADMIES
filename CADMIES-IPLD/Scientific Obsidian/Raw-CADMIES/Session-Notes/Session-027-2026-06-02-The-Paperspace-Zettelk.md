@@ -4,7 +4,7 @@
 
 # Session 027 — 2026-06-02
 
-related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-60-Scientific-Obsidian-Zettelk]], [[Dr. Rebentisch — Twin Mycelium]]
+related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-60-Scientific-Obsidian-Zettelk]]
 
 ## What We Did
 
