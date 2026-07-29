@@ -4,7 +4,7 @@
 
 # Session 032 — 2026-06-24 — The Mycelium Becomes a Succulent
 
-related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-66-Mycelium-Map-UX-—-Fractal-Succulent-Layout-&-Progressive-Loading]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]]
+related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-66-Mycelium-Map-UX-Fractal-Succulent-Layout-and-Progressive-Loading]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]]
 
 ## What We Did
 
