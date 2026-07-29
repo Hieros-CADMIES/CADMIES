@@ -4,7 +4,7 @@
 
 # Session 031 — 2026-06-23 — The Mycelium Gets a New Home
 
-related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-63-Cloud-Deployment-—-Project-Hierion-Foundation]], [[Phase-64-Hierion-Database-Infrastructure-—-Isolated-MongoDB-Deployment]], [[Phase-65-Hierion-Domain-&-Web-Server-Configuration]], [[Phase-66-Mycelium-Map-UX-—-Fractal-Succulent-Layout-&-Progressive-Loading]]
+related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-63-Cloud-Deployment-Project-Hierion-Foundation]], [[Phase-64-Hierion-Database-Infrastructure-Isolated-MongoDB-Deployment]], [[Phase-65-Hierion-Domain-and-Web-Server-Configuration]], [[Phase-66-Mycelium-Map-UX-Fractal-Succulent-Layout-and-Progressive-Loading]]
 
 ## What We Did
 
