@@ -2,7 +2,7 @@
   unfiltered thoughts, and coded messages for fellow gardeners.
   For polished documentation, check Polished CADMIES or promote this note.
 
-# Session 026 — 2026-05-31 — The Zettelk is Born
+# Session 026 — 2026-05-31 — The Zettelk Is Born
 
 related: [[Session-025A — 2026-05-28 — Index Recovery, Codestral Breakthrough]], [[Dr. Rebentisch — Twin Mycelium]], [[Phase-37-Scientific-Obsidian]]
 
