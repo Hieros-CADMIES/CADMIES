@@ -4,7 +4,7 @@
 
 # Session 030 — 2026-06-08/09 — The Gremlin Feasts
 
-related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-45D-Ball-Spawning-Bug-—-Environment-Debug]], [[Phase-45E-Dr.-Amanda-Mistral-—-Fine-Tuning-the-Librarian]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]]
+related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-45D-Ball-Spawning-Bug-Environment-Debug]], [[Phase-45E-Dr-Amanda-Mistral-Fine-Tuning-the-Librarian]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]]
 
 ## What We Did
 
