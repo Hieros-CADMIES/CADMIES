@@ -2,7 +2,7 @@
 phase: 49
 date: 2026-05-24
 status: Designed — pending implementation
-related: [[Phase-50-CAR-Distribution-Pipeline]], [[Phase-47-Orphan-Edge-Resolution]], [[Session-018]], [[Session-019]]
+related: [[Phase-50-CAR-Distribution-Pipeline]], [[Phase-47-Orphan-Edge-Resolution]], [[Session-018 — 2026-05-23 — Phase 50: CAR Pipeline + Bruno Tree + Snagnar Gold Mine]], [[Session-019 — 2026-05-23 — Phase 43 & 50C - Remint & CAR Resolution + Buttercup A6000 Push]]
 ---
 # Phase 49: Public-CADMIES Branch
 ## What Changed

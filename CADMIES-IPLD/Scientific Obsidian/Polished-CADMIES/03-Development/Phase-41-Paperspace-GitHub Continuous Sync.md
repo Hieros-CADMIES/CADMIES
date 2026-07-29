@@ -2,7 +2,7 @@
 phase: 41
 date: 2026-05-18
 status: Complete
-related: [[Session-010]], [[Architecture Overview]], [[Harvester Pipeline (Superceded by Workflows)]], [[Decisions-Log]]
+related: [[Session-010 — 2026-05-17 — Roadmap Consolidation]], [[Architecture Overview]], [[Harvester Pipeline (Superceded by Workflows)]], [[Decisions-Log]]
 ---
 # Phase 41 — 2026-05-18
 

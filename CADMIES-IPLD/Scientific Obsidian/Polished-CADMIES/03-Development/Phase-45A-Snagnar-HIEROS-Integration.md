@@ -2,7 +2,7 @@
 phase: 45A
 date: 2026-05-20
 status: Complete
-related:[[Session-011]], , [[Architecture Overview]], 
+related:[[Session-011 — 2026-05-18 — Post-Mistral Canonization]], , [[Architecture Overview]], 
 ---
 
 # Session: 012 — 2026-05-20

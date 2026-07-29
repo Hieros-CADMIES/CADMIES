@@ -2,7 +2,7 @@
 phase: 44
 date: 2026-05-20
 status: Complete
-related: , [[generate_mycelium_map.py]], [[Session-012]], [[Session-013]]
+related: , [[generate_mycelium_map.py]], [[Session-012 — 2026-05-20 —  Snagnar HIEROS Full Codebase Analysis]], [[Session-013 — 2026-05-20 — Vault Restructure & Map Cleanup]]
 ---
 
 # Phase 44: Map Legend Cleanup

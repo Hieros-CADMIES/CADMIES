@@ -2,7 +2,7 @@
 phase: 51
 date: 2026-05-23
 status: Active
-related: , [[Phase-50-CAR-Distribution-Pipeline]], [[Session-018]]
+related: , [[Phase-50-CAR-Distribution-Pipeline]], [[Session-018 — 2026-05-23 — Phase 50: CAR Pipeline + Bruno Tree + Snagnar Gold Mine]]
 ---
 
 # Phase 51: External Collaboration — Bruno Cerda Mardini
