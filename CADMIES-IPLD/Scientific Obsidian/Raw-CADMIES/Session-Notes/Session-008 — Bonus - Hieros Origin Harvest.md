@@ -2,7 +2,7 @@
   unfiltered thoughts, and coded messages for fellow gardeners.
   For polished documentation, check Polished CADMIES or promote this note.
 
-# Session 008 Bonus — Hieros Origin Harvest — 2026-05-15 (Late Night)
+# Session 008B — 2026-05-15 — Hieros Origin Harvest
 
 ## What Happened
 
