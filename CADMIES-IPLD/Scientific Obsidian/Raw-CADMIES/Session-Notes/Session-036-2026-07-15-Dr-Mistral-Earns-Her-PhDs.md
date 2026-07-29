@@ -10,7 +10,7 @@ status: Raw
 
 # Session 036 — 2026-07-15 — Dr. Mistral Earns Her PhDs
 
-related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-45F-Dr.-Amanda-Mistral-—-Conversational-Fine-Tuning]], [[Phase-45G-Dr.-Amanda-Mistral-—-Spiritual-Knowledge-&-Helpfulness]]
+related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-45F-Dr-Amanda-Mistral-Conversational-Fine-Tuning]], [[Phase-45G-Dr-Amanda-Mistral-Spiritual-Knowledge-and-Helpfulness]]
 
 ## What We Did
 
