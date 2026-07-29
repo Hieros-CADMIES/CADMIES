@@ -4,7 +4,7 @@
 
 # Session 034 — Local Merge & Deploy
 
-related: [[Phase-45E-Dr.-Amanda-Mistral-—-Fine-Tuning-the-Librarian]], [[Phase-45F-Dr.-Amanda-Mistral-—-Conversational-Fine-Tuning]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]]
+related: [[Phase-45E-Dr-Amanda-Mistral-Fine-Tuning-the-Librarian]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]]
 
 ## What Happened
 - Downloaded trained LoRA adapter (161 MB safetensors) from cloud GPU
