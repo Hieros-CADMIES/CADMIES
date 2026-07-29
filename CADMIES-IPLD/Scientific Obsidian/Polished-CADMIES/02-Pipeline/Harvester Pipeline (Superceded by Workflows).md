@@ -3,7 +3,7 @@ phase: 19, 33, 35
 pipeline: harvest-pipeline
 date: 2026-05-15
 status: Active
-related: [[Phase-35-Difficulty-Levels]], , [[Phase-66-Mycelium-Map-UX-—-Fractal-Succulent-Layout-&-Progressive-Loading]]
+related: [[Phase-35-Difficulty-Levels]], , [[Phase-66-Mycelium-Map-UX-Fractal-Succulent-Layout-and-Progressive-Loading]]
 ---
 
 # Harvester Pipeline
