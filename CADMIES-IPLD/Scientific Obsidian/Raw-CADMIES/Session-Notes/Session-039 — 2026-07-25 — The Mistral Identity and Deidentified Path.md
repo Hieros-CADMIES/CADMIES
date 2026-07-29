@@ -4,7 +4,7 @@
 
 # Session-039 — 2026-07-25 — The Mistral Identity and Deidentified Path
 
-related: [[Phase-45G-Dr.-Amanda-Mistral-—-Spiritual-Knowledge-&-Helpfulness]], , [[Session-038 — 2026-07-21 — The Merge, The Moon Rock, and The Fractal Ducks]]
+related: [[Phase-45G-Dr.-Amanda-Mistral — Spiritual Knowledge and Helpfulness]], , [[Session-038 — 2026-07-21 — The Merge, The Moon Rock, and The Fractal Ducks]]
 
 ## What We Did
 
