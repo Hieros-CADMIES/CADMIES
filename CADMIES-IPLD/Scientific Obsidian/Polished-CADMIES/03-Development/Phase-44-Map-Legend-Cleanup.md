@@ -14,7 +14,6 @@ related: , [[generate_mycelium_map.py]], [[Session-041-2026-07-28-LLMDataHub-For
 > allowlist, upward mapping, directional arrows, and concept cards
 > are preserved in the new version. The force-directed layout has
 > been replaced with a golden-angle spiral preset layout. See
-> [[Phase-66-Mycelium-Map-UX-—-Fractal-Succulent-Layout-&-Progressive-Loading]] for current map architecture.
 
 ## What Changed
 
