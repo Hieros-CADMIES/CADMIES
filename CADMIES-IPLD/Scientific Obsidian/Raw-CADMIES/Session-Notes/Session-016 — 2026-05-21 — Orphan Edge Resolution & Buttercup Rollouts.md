@@ -82,7 +82,7 @@ free machine at a time. Sticking with Pro. Not worth the upgrade for us.
 
 ## Final State
 | Metric | Start | End |
-|--------|-------|-----|
+| —  — --| —  — -| — --|
 | Orphan edges | 316 | 0 |
 | Nodes | 342 | 342 |
 | Edges | 165 | 167 |

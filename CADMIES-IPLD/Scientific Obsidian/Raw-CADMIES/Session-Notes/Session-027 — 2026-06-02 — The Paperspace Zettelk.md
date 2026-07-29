@@ -15,7 +15,7 @@ related: [[Session-026 — 2026-05-31 — The Zettelk is Born]], [[Phase-60-Scie
 **Discovered the Fictional Doctor Problem.** Asked the Zettelk chat "Who is Dr. Rupert Rebentisch?" across three models on two machines:
 
 | Environment | Model | Result |
-|-------------|-------|--------|
+| —  —  —  — -| —  — -| —  — --|
 | Local PNY (CPU) | TinyLlama 1.1B | Fictional |
 | Local PNY (CPU) | Mistral 7B | Fictional (timeout) |
 | Paperspace (GPU) | Mistral 7B | Fictional ("Dr. Repentisch") |

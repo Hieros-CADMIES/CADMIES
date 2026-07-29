@@ -32,7 +32,7 @@ Pine Vinyl — Luke LaRock. Bong rips. Flaming Hot Cheeto Puffs. Bob's judgmenta
 ## Final State
 
 | Metric | Start | End |
-|--------|-------|-----|
+| —  — --| —  — -| — --|
 | Nodes | 383 | 404 |
 | Edges | 458 | 512 |
 | Harvester | v4.1.0 | v4.2.2 |

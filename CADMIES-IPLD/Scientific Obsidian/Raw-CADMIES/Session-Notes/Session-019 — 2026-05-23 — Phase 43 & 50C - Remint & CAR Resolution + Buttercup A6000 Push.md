@@ -115,7 +115,7 @@ independently. You can't bot convergent evolution.
 ## Final State
 
 | Metric | Value |
-|--------|-------|
+| —  — --| —  — -|
 | Nodes | 340 |
 | Edges | 259 |
 | Orphans | 0 |

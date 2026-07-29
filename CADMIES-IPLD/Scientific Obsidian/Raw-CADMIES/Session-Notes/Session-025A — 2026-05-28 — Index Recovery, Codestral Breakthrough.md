@@ -104,7 +104,7 @@ Halloween 5
 ## Final State
 
 |Metric|Value|
-|---|---|
+| — | — |
 |CADMIES Nodes|636|
 |CADMIES Edges|1,131|
 |Index entries|674 (all clean)|
@@ -156,7 +156,7 @@ Halloween 5
 - Write raw CADMIES note for Buttercup recovery (Phase 45B raw companion)
     
 
----
+ — 
 
 And on the map colors — here's what's overlapping right now:
 

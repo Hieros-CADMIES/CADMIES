@@ -43,7 +43,7 @@ The Hollies — "Long Cool Woman in a Black Dress"
 ## The 5 New Concepts
 
 | Concept | Domain | Beginner Sample |
-|---------|--------|-----------------|
+| —  —  — | —  — --| —  —  —  —  — --|
 | quantum_entanglement_of_memory | Physics & Philosophy | "invisible connection... complex scientific phenomenon" |
 | resonant_oblivion | Philosophy | "your unique thoughts and feelings stop echoing in the universe" |
 | physics_of_poetic_eternity | Physics | "like a bouncing ball on an endless trampoline" |

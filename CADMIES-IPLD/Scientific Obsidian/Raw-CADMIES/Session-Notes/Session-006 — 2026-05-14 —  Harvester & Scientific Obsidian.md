@@ -38,7 +38,7 @@
 - Raw CADMIES is the default workspace, Polished CADMIES is secondary
 - Methodology influenced by Dr. Rebentisch but not a clone of his system
 - Roadmap stays on GitHub, vault documents the how and why
-- YAML frontmatter blocks must not conflict with body content — use `***` for dividers, never `---` in body
+- YAML frontmatter blocks must not conflict with body content — use `***` for dividers, never ` — ` in body
 
 ## Nuggets Collected
 

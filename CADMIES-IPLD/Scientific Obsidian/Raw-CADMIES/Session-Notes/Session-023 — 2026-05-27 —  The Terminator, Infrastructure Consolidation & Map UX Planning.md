@@ -73,7 +73,7 @@ She's letting the ball come to her now — teenage gamer behavior.
 ## Final State
 
 | Metric | Value |
-|--------|-------|
+| —  — --| —  — -|
 | Nodes | 654 |
 | Edges | 655 |
 | Domains | 99 |

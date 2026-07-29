@@ -87,7 +87,7 @@ Video saved as `buttercup_rollout_0036_20260526T210000.mp4`.
 ## Final State
 
 | Metric | Value |
-|--------|-------|
+| —  — --| —  — -|
 | Nodes | 461 |
 | Edges | 572 |
 | Domains | 152 |

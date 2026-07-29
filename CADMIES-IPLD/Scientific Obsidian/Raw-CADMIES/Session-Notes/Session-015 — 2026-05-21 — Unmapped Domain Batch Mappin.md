@@ -103,7 +103,7 @@ Six concepts tagged "Science" — but Science is a method, not a domain. Read ea
 
 ## Final State
 | Metric | Start | End |
-|--------|-------|-----|
+| —  — --| —  — -| — --|
 | Concepts | 302 | 342 |
 | Edges | 135 | 165 |
 | Unmapped domain occurrences | 87 | 0 |

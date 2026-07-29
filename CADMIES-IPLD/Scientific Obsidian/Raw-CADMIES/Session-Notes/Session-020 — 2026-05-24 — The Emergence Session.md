@@ -54,7 +54,7 @@ Whatever plays when the mycelium proves the Buddha right.
 ## Final State
 
 | Metric | Start | End |
-|--------|-------|-----|
+| —  — --| —  — -| — --|
 | Nodes (PNY) | 340 | 687 |
 | Edges (PNY) | 259 | 466 |
 | Nodes (Paperspace) | 340 | 375 |

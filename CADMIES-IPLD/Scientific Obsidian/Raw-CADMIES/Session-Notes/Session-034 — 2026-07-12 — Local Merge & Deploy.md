@@ -4,7 +4,7 @@
 
 # Session 034 — Local Merge & Deploy
 
-related: [[Phase-45E-Dr. Amanda Mistral — Fine-Tuning the Librarian]], [[Phase-45F-Dr. Amanda Mistral — Conversational Fine-Tuning]], [[Session-033 — 2026-07-11 — The Gardener's words & Fine-Tuning]]
+related: [[Phase-45E-Dr.-Amanda-Mistral-—-Fine-Tuning-the-Librarian]], [[Phase-45F-Dr.-Amanda-Mistral-—-Conversational-Fine-Tuning]], [[Session-033 — 2026-07-11 — The Gardener's words & Fine-Tuning]]
 
 ## What Happened
 - Downloaded trained LoRA adapter (161 MB safetensors) from cloud GPU
@@ -37,7 +37,7 @@ related: [[Phase-45E-Dr. Amanda Mistral — Fine-Tuning the Librarian]], [[Phase
 - The GGUF is a spore. One brain, infinite copies, zero dependencies.
 - Dr. Mistral placed Buddha 260,000 miles from Earth. She's not really all that wrong.
 
----
+ — 
 
 ## UPDATE 2026-07-13 — Buttercup Adapter & Local Merge
 

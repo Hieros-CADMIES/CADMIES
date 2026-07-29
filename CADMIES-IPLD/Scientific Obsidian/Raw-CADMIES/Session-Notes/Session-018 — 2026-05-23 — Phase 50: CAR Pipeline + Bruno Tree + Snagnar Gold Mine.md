@@ -135,7 +135,7 @@ showed up and connected them.
 ## Final State
 
 | Metric | Value |
-|--------|-------|
+| —  — --| —  — -|
 | CAR file size | 3.2MB |
 | Blocks in CAR | 342 |
 | Verified on import | 188 |

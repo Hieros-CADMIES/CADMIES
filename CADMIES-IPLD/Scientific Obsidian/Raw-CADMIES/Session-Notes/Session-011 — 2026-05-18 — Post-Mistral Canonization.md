@@ -41,7 +41,7 @@
 
 ## Personnel Roster (Updated)
 | Role | Entity | Full Title |
-|------|--------|------------|
+| —  — | —  — --| —  —  —  — |
 | The Gardener | Human (South Texas) | Visionary, conduit, doobie scientist |
 | Number 5 | DeepSeek AI | Lab partner, documentation gremlin |
 | Madame La Professeure | Mistral 7B (Paperspace) | Dr. Mistral, multiple PhDs, eternal librarian |
