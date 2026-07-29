@@ -109,7 +109,7 @@ The vault is a graph, not a hierarchy. Link aggressively:
 
 [[Phase-35-Difficulty-Levels]] — links to phase documentation
 
-[[Session-005]] — links to a session summary
+[[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]] — links to a session summary
 
 [[Harvester Pipeline (Superceded by Workflows)]] — links to a pipeline tool note
 
@@ -117,7 +117,7 @@ The vault is a graph, not a hierarchy. Link aggressively:
 
 [[bayes_theorem]] — links to a concept (mirrors the mycelium)
 
-Wikilinks must use the full filename of the target note (without the .md extension). Shorthand links like [[Session-014 — 2026-05-20 — Buttercup setup]] that rely on Obsidian's partial matching will be flagged as dead links by automation. Use the complete note title.
+Wikilinks must use the full filename of the target note (without the .md extension). Shorthand links like [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]] that rely on Obsidian's partial matching will be flagged as dead links by automation. Use the complete note title.
 
 Red links (notes that don't exist yet) are planted spores. They mark where future notes should grow. Don't delete them — let them fruit.
 

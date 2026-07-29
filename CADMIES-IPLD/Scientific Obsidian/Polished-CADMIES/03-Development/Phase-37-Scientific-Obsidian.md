@@ -2,7 +2,7 @@
 phase: 37
 date: 2026-05-15
 status: Active — Vault operational, backfilling in progress
-related: [[Note-Taking Protocol]], [[Architecture Overview]], [[Session-006 — 2026-05-14 —  Harvester & Scientific Obsidian]], [[Session-007 — 2026-05-15 —  Paperspace Cleanup & Clone]], [[Dr. Rebentisch — Twin Mycelium]]
+related: [[Note-Taking Protocol]], [[Architecture Overview]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Dr. Rebentisch — Twin Mycelium]]
 ---
 
 # Phase 37: Scientific Obsidian — The CADMIES Knowledge Vault

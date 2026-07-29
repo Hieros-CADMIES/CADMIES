@@ -4,7 +4,7 @@
 
 # Session 025 — 2026-05-30/31 — The Third Time's the Charm
 
-related: [[Session-014 — 2026-05-20 — Buttercup setup]], 
+related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], 
 
 ## What We Did
 

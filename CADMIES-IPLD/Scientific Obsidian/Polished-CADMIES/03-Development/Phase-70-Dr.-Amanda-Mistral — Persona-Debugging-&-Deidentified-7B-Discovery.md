@@ -2,7 +2,7 @@
 phase: 70
 date: 2026-07-21
 status: Active — iterative testing
-related: [[Session-038 — 2026-07-21 — The Merge, The Moon Rock, and The Fractal Ducks]], , 
+related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], , 
 ---
 
 # Phase 70: Dr. Amanda Mistral — Persona Debugging & Deidentified-7B Discovery

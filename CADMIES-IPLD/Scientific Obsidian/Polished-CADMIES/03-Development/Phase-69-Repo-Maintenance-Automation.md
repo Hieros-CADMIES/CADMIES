@@ -2,7 +2,7 @@
 phase: 69
 date: 2026-07-16
 status: Complete
-related: [[Session-037 — 2026-07-16 — The Mycelium Cleans Itself]], [[Architecture Overview]], [[Workflows-Pipeline]], [[Note-Taking Protocol]]
+related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Architecture Overview]], [[Workflows-Pipeline]], [[Note-Taking Protocol]]
 ---
 
 # Phase 69: Repo Maintenance Automation
@@ -89,7 +89,7 @@ Scientific rigor requires consistency. A PhD reading the vault should see unifor
 
 The primary challenge was not technical complexity but edge-case handling. The YAML parser initially failed on ``\[\[wikilinks\]\]`` containing commas in the `related:` field. The duplicate detector compared files against themselves. The `&` character in filenames was encoded as `&amp;` by sed during batch replacements. Each edge case was discovered through testing and patched incrementally.
 
-The fuzzy filename matching approach proved highly effective. When a wikilink like `[[Session-014 — 2026-05-20 — Buttercup setup]]` pointed to a file named `Session-014 — 2026-05-20 — Buttercup setup.md`, the matcher correctly identified the target by finding files that start with or contain the link text. This resolved 72 dead links automatically.
+The fuzzy filename matching approach proved highly effective. When a wikilink like `[[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]]` pointed to a file named `Session-014 — 2026-05-20 — Buttercup setup.md`, the matcher correctly identified the target by finding files that start with or contain the link text. This resolved 72 dead links automatically.
 
 The decision to make `--fix` mode interactive with before/after previews was critical for building trust. The gardener could see exactly what would change before approving each fix. Combined with automatic backups, this eliminated the risk of automated corruption.
 

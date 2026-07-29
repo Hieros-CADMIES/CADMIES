@@ -2,7 +2,7 @@
 phase: 45D
 date: 2026-06-05
 status: In Progress
-related: , [[Session-014 — 2026-05-20 — Buttercup setup]], [[Session-025A — 2026-05-28 — Index Recovery, Codestral Breakthrough]], [[Session-027 — 2026-06-02 — The Paperspace Zettelk]]
+related: , [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]]
 ---
 
 # Phase 45D: Ball Spawning Bug — Environment Debug

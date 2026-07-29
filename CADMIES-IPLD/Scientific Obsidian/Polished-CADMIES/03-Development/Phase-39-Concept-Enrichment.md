@@ -2,7 +2,7 @@
 phase: 39
 date: 2026-05-15
 status: Complete — Built, Tested, Deployed
-related: [[Harvester Pipeline (Superceded by Workflows)]], [[Phase-35-Difficulty-Levels]], [[Phase-35-Results]], [[Session-008A — 2026-05-15 — Concept Enrichment — Built and Deployed]], [[bayes_theorem]]
+related: [[Harvester Pipeline (Superceded by Workflows)]], [[Phase-35-Difficulty-Levels]], [[Phase-35-Results]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[bayes_theorem]]
 ---
 
 # Phase 39: Concept Enrichment Pipeline
