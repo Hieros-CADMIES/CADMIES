@@ -2,7 +2,7 @@
   unfiltered thoughts, and coded messages for fellow gardeners.
   For polished documentation, check Polished CADMIES or promote this note.
 
-# Session 009 — 2026-05-16
+# Session 009 — 2026-05-16 —  Narrative Harvester Drafted
 
 ## What We Did (The Gardener & DeepSeek)
 
