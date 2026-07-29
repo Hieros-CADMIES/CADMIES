@@ -4,7 +4,7 @@
 
 # Session 026 — 2026-05-31 — The Zettelk Is Born
 
-related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Dr. Rebentisch — Twin Mycelium]], [[Phase-37-Scientific-Obsidian]]
+related: [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-37-Scientific-Obsidian]]
 
 ## What We Did
 
