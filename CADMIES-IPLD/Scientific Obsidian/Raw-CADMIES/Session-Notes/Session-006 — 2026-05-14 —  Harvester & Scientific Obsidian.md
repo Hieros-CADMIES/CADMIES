@@ -2,7 +2,7 @@
   unfiltered thoughts, and coded messages for fellow gardeners.
   For polished documentation, check Polished CADMIES or promote this note.
 
-# Session 006 — 2026-05-14
+# Session 006 — 2026-05-14 —  Harvester & Scientific Obsidian
 
 ## What We Did
 
