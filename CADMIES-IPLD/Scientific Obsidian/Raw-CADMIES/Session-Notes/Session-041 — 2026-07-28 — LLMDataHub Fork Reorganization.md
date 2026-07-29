@@ -4,7 +4,7 @@
 
 # Session 041 — 2026-07-28 — LLMDataHub Fork Reorganization
 
-related: [[growth_roadmap]], [[Session-038 — 2026-07-21 — The Merge, The Moon Rock, and The Fractal Ducks]], [[Phase-45F-Dr.-Amanda-Mistral-—-Conversational-Fine-Tuning]]
+related: [[growth_roadmap]], [[Session-038 — 2026-07-21 — The Merge, The Moon Rock, and The Fractal Ducks]], [[Phase-45F-Dr.-Amanda-Mistral — Conversational-Fine-Tuning]]
 
 ## Soundtrack
 NA
