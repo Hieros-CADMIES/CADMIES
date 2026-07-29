@@ -2,7 +2,7 @@
   unfiltered thoughts, and coded messages for fellow gardeners.
   For polished documentation, check Polished CADMIES or promote this note.
 
-# Session 008 — 2026-05-15
+# Session 008A — 2026-05-15
 
 ## Soundtrack
 The drum of the desk-sized drone — 25+ passes, first-production-run diagnostics, 
