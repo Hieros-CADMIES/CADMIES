@@ -2,8 +2,8 @@
 """
 File: generate_public_gateway.py
 Tool: CADMIES Public Mycelium Gateway Generator
-Version: 3.1.0
-System: CADMIES / tools
+Version: 3.1.1
+System: CADMIES - tools - harvest
 Status: ACTIVE
 
 Purpose: Generates a single-page public-facing website from the blockstore.
@@ -23,6 +23,7 @@ Output:
     ../docs/ — static site served by web server
 
 Version History:
+  v3.1.1 (2026-07-29): Updated SITE_URL to project-hierion.org. Final migration from DuckDNS to official domain.
   v3.1.0 (2026-07-27): Domain filter pills now functional. Added domain and
       canonical_domain fields to concepts.json. JavaScript filter logic now
       hides/shows cards based on selected domain. Results counter updates.
@@ -50,7 +51,7 @@ from cadmies_concept_reader import load_concept, load_all_concept_cids
 from paths import BLOCKS_DIR
 
 OUTPUT_DIR = PROJECT_ROOT.parent / "docs"
-SITE_URL = "https://project-hierion.duckdns.org"
+SITE_URL = "https://project-hierion.org"
 
 # === CANONICAL 15-DOMAIN TAXONOMY ===
 CANONICAL_DOMAINS = [
@@ -615,7 +616,7 @@ def build_sitemap(concepts):
 
 def main():
     print("=" * 60)
-    print("CADMIES PUBLIC MYCELIUM GATEWAY GENERATOR v3.1.0")
+    print("CADMIES PUBLIC MYCELIUM GATEWAY GENERATOR v3.1.1")
     print(f"Output: {OUTPUT_DIR}")
     print("=" * 60)
 
