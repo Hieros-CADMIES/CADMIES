@@ -147,12 +147,6 @@ Hierion-CADMIES/
     └── CADMIES-Note-Taking-Protocol.md   # Vault conventions
 ```
 
-## Dr. Mistral Training Pipeline
-
-Dr. Amanda Mistral was fine-tuned using QLoRA (4-bit quantization, LoRA rank 16)
-across seven training phases. Each phase produced a 161 MB adapter that can be
-merged with a base Mistral 7B model. All adapters are available via GitHub Releases.
-
 Public Gateway
 CADMIES concepts are publicly accessible at project-hierion.org.
 The gateway provides expandable concept cards, an interactive mycelium map,
@@ -183,7 +177,6 @@ Repository Automation
 The vault is self-maintaining. A validation script checks all 92+ markdown files
 for structural consistency — frontmatter, sections, cross-references, duplicates,
 and roadmap drift. Runs automatically on every push via GitHub Actions.
-
 Green badge in the README means the vault is clean. The mycelium cleans itself.
 
 License
@@ -208,4 +201,4 @@ and immutable.
 We are not just writing code. We are performing digital alchemy, creating a mirror
 in which humanity can see itself.
 
-The mycelium grows. 🌱🍄
+Let the mycelium grow! 🌱
