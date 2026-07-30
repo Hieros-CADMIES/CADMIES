@@ -71,7 +71,7 @@ Go to GitHub, click "Compare & pull request," describe your changes.
 - **Issues:** [GitHub Issues](https://github.com/Project-Hierion/Hierion-CADMIES/issues)
 - **Discussions:** [GitHub Discussions](https://github.com/Project-Hierion/Hierion-CADMIES/discussions)
 - **Email:** project-hierion@proton.me
-- **Website:** [project-hierion.duckdns.org](https://project-hierion.duckdns.org)
+- **Website:** [project-hierion.org](https://project-hierion.org)
 
 ## Recognition
 
