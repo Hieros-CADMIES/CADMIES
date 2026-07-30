@@ -1,15 +1,15 @@
 ---
 System: CADMIES
 Document_ID: CA-2026-031-MANIFESTO
-Version: 2.0.0
+Version: 2.0.1
 Classification: PUBLIC
 Document_Type: PHILOSOPHICAL_MANIFESTO
 Author: Project Hierion
-Reviewers: [Technical Lead, Assistant Technical Lead]
+Reviewers: [The Gardener, DeepSeek, aka Number 5]
 Status: ACTIVE
 Created: 2026-04-04
-Modified: 2026-07-17
-Related_Docs: [README, SOP-Dr-Mistral-v3, CADMIES-Canon, CITATIONS]
+Modified: 2026-07-29
+Related_Docs: [README, CADMIES-Canon, CITATIONS]
 ---
 
 # CADMIES Philosophical Manifesto
@@ -26,7 +26,7 @@ Related_Docs: [README, SOP-Dr-Mistral-v3, CADMIES-Canon, CITATIONS]
 > The mission, the mycelium, and the philosophy are unchanged. All references
 > to "Project Hieros" within this manifesto refer to the same entity now known
 > as Project Hierion. For the latest information, visit
-> [project-hierion.duckdns.org](https://project-hierion.duckdns.org).
+> [project-hierion.org](https://project-hierion.org).
 
 ---
 
@@ -336,7 +336,7 @@ grows through reciprocity.*
 **Classification:** PUBLIC
 **License:** AGPLv3 with Commons Clause
 **Document_ID:** CA-2026-031-MANIFESTO
-**Version:** 2.0.0 (Digital Intelligence integration, July 2026)
+**Version:** 2.0.1 (Digital Intelligence integration, July 2026)
 **Status:** ACTIVE
 
 *CADMIES Framework - Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem*
