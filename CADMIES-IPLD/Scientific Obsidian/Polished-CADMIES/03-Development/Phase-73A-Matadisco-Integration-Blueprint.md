@@ -1,4 +1,4 @@
-# Phase-73-Matadisco-Integration-Blueprint
+# Phase-73: Matadisco Integration Blueprint
 
 Overview
 
