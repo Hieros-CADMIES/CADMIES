@@ -164,13 +164,6 @@ Deepseek's iconic quote for the day: "We broke a model 16 different ways and doc
 
 📋 NOT YET STARTED
 
-- Immediate (unblocked)
-- Download Mistral 7B Instruct v0.3 base model and convert to GGUF
-- Run baseline evaluation on v0.3 base model
-- Create evaluation test sets (persona, canon, safety, leakage)
-- Build training directory structure per v4.1 blueprint
-- Write pair-building scripts for concepts, rlhf, spiritual, helpfulness adapters
-- Lower SHP merge scale to 0.1 and re-merge test
 - RAG Pipeline
 - Set up ChromaDB
 - Ingest domain knowledge documents
@@ -180,15 +173,6 @@ Deepseek's iconic quote for the day: "We broke a model 16 different ways and doc
 - Design agent system (Willie/RAG agent, Codestral/reasoning agent, Number 5/curiosity agent)
 - Implement President Model architecture (Mistral as conductor)
 - Evaluation
-- Build persona coherence test set (50 questions)
-- Build canonical accuracy test set (50 questions)
-- Build safety test set (50 prompts)
-- Build leakage test set
-- Run baseline evaluation on base model
-- Infrastructure
-- Add environment snapshot and full recovery to startup.sh
-- Set up experiment tracking logs (training_log.csv, merge_log.csv, evaluation_log.csv)
-- Create validate_training_data.py script
 - Matadisco
 - Publish CADMIES concept metadata to Matadisco
 - Build producer for AT Protocol records
