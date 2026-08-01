@@ -2,8 +2,8 @@
 """
 File: generate_public_gateway.py
 Tool: CADMIES Public Mycelium Gateway Generator
-Version: 3.1.1
-System: CADMIES - tools - harvest
+Version: 3.1.2
+System: CADMIES - tools
 Status: ACTIVE
 
 Purpose: Generates a single-page public-facing website from the blockstore.
@@ -23,6 +23,7 @@ Output:
     ../docs/ — static site served by web server
 
 Version History:
+  v3.1.2 (2026-07-31): Added ORCID iD to stats bar (0009-0000-8877-2731).
   v3.1.1 (2026-07-29): Updated SITE_URL to project-hierion.org. Final migration from DuckDNS to official domain.
   v3.1.0 (2026-07-27): Domain filter pills now functional. Added domain and
       canonical_domain fields to concepts.json. JavaScript filter logic now
@@ -395,6 +396,9 @@ def build_index_page(concepts, domain_counts, subdomain_index):
         .stat {{ background: #161b22; border: 1px solid #30363d; padding: 14px 24px; border-radius: 8px; }}
         .stat-number {{ font-size: 1.6em; font-weight: bold; color: #e6edf3; }}
         .stat-label {{ font-size: 0.8em; color: #8b949e; }}
+        .stat-orcid .stat-number {{ font-size: 1.0em; font-weight: 600; color: #58a6ff; }}
+        .stat-orcid .stat-label {{ display: flex; align-items: center; gap: 6px; justify-content: center; }}
+        .stat-orcid .stat-label svg {{ width: 18px; height: 18px; fill: #58a6ff; }}
 
         /* Search */
         .search-bar {{ margin: 24px 0; }}
@@ -500,6 +504,18 @@ def build_index_page(concepts, domain_counts, subdomain_index):
                 <div class="stat"><div class="stat-number">{len(domain_counts)}</div><div class="stat-label">Domains</div></div>
                 <div class="stat"><div class="stat-number">{total_edges}</div><div class="stat-label">Relationships</div></div>
                 <div class="stat"><div class="stat-number">CC BY-SA 4.0</div><div class="stat-label">License</div></div>
+                <div class="stat stat-orcid">
+                    <div class="stat-number">0009-0000-8877-2731</div>
+                    <div class="stat-label">
+                        <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M256 128c0 70.686-57.314 128-128 128C57.314 256 0 198.686 0 128 0 57.314 57.314 0 128 0c70.686 0 128 57.314 128 128z" fill="#A6CE39"/>
+                            <path d="M86.4 106.4h25.6v43.2H86.4zM86.4 86.4h25.6v12.8H86.4z" fill="#fff"/>
+                            <path d="M130.4 106.4h25.6v43.2h-25.6zM130.4 86.4h25.6v12.8h-25.6z" fill="#fff"/>
+                            <path d="M174.4 106.4h12.8v43.2h-12.8zM174.4 86.4h12.8v12.8h-12.8z" fill="#fff"/>
+                        </svg>
+                        ORCID iD
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -616,7 +632,7 @@ def build_sitemap(concepts):
 
 def main():
     print("=" * 60)
-    print("CADMIES PUBLIC MYCELIUM GATEWAY GENERATOR v3.1.1")
+    print("CADMIES PUBLIC MYCELIUM GATEWAY GENERATOR v3.1.2")
     print(f"Output: {OUTPUT_DIR}")
     print("=" * 60)
 
