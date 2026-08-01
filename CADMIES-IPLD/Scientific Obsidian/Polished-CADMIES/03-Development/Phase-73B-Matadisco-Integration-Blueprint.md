@@ -7,6 +7,14 @@ related: [[Phase-72-LLMDataHub-Fork-Reorganization]], [[growth_roadmap]]
 
 # Phase-73B: Matadisco Integration Blueprint
 
+## What Changed
+
+*[Placeholder — content to be added]*
+
+## Why
+
+*[Placeholder — content to be added]*
+
 Overview
 
 Publish LLMDataHub datasets and CADMIES concept metadata to the Matadisco decentralized data discovery network on ATProto. Two workstreams: one for existing datasets (curated, licensed, attributed), one for our own concept metadata.
