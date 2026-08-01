@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CADMIES — Digital Mycelium</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="aug-splash.css" />
+    <link rel="stylesheet" href="aug-style.css" />
+
+    <!-- Google Font (optional clean sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+    <!-- ============ SPLASH SCREEN ============ -->
+    <div id="splash-overlay">
+        <div id="splash-content">
+            <div class="splash-emoji">🌱</div>
+            <h1 class="splash-title">CADMIES</h1>
+            <p class="splash-subtitle">Cosmium Angelo Digital Mycorrhizal<br />Intelligence EcoSystem</p>
+            <div class="splash-divider"></div>
+            <p class="splash-message">Welcome to the digital mycelium.<br /><strong>Welcome to the Deep.</strong></p>
+            <div class="splash-whale">🐋</div>
+        </div>
+    </div>
+
+    <!-- ============ MAIN APP ============ -->
+    <div id="app" class="hidden">
+
+        <!-- SIDEBAR -->
+        <aside id="sidebar">
+            <div class="sidebar-brand">
+                <span class="brand-emoji">🌱</span>
+                <span class="brand-name">CADMIES</span>
+            </div>
+            <div class="brand-tagline">Cosmium Angelo Digital<br />Mycorrhizal Intelligence EcoSystem</div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" data-page="dashboard">
+                    <span class="nav-icon">📌</span> Dashboard
+                </button>
+                <button class="nav-btn" data-page="mistral">
+                    <span class="nav-icon">👩‍🏫</span> Dr. Mistral
+                </button>
+                <button class="nav-btn" data-page="browse">
+                    <span class="nav-icon">📚</span> Browse
+                </button>
+                <button class="nav-btn" data-page="add">
+                    <span class="nav-icon">➕</span> Add Concept
+                </button>
+                <button class="nav-btn" data-page="map">
+                    <span class="nav-icon">🕸️</span> Mycelium Map
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <span class="footer-whale">🐋</span>
+                <span class="footer-text">The mycelium grows.</span>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main id="main-content">
+
+            <!-- ===== PAGE: DASHBOARD ===== -->
+            <section id="page-dashboard" class="page active">
+                <div class="page-header">
+                    <h2>📌 Dashboard</h2>
+                    <p class="page-subtitle">Welcome to the digital mycelium. Welcome to the Deep.</p>
+                </div>
+
+                <!-- Stats -->
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-concepts">—</div>
+                        <div class="stat-label">Concepts</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-domains">—</div>
+                        <div class="stat-label">Domains</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="stat-relationships">—</div>
+                        <div class="stat-label">Relationships</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">v1.2.1</div>
+                        <div class="stat-label">Dr. Mistral</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <h3>Quick Actions</h3>
+                    <button class="action-btn primary" data-page="mistral">👩‍🏫 Ask Dr. Mistral a Question</button>
+                    <button class="action-btn secondary" data-page="add">➕ Add a New Concept</button>
+                </div>
+
+                <!-- Welcome message -->
+                <div class="welcome-message">
+                    <p>The mycelium connects everything. Explore the knowledge graph, chat with Dr. Mistral, or add your own concept to the network.</p>
+                </div>
+            </section>
+
+            <!-- ===== PAGE: DR. MISTRAL ===== -->
+            <section id="page-mistral" class="page">
+                <div class="page-header">
+                    <h2>👩‍🏫 Dr. Mistral</h2>
+                    <p class="page-subtitle">Madame La Professeure de CADMIES</p>
+                </div>
+
+                <div class="chat-container">
+                    <div class="chat-display" id="chat-display">
+                        <div class="chat-message system">
+                            <span class="msg-label">Dr. Mistral:</span>
+                            <span class="msg-text">Bonjour, mon ami. I am Dr. Amanda Mistral. Ask me anything about the mycelium, and I shall consult the library.</span>
+                        </div>
+                    </div>
+
+                    <div class="chat-controls">
+                        <div class="control-group">
+                            <label>Model</label>
+                            <select id="chat-model">
+                                <option value="tinyllama:1.1b">TinyLlama (Fast)</option>
+                                <option value="mistral:7b" selected>Mistral (Deep)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Tone</label>
+                            <select id="chat-tone">
+                                <option value="helpful">Helpful</option>
+                                <option value="scholarly">Scholarly</option>
+                                <option value="casual">Casual</option>
+                                <option value="french" selected>French</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Max Concepts</label>
+                            <select id="chat-max">
+                                <option value="3">3</option>
+                                <option value="5" selected>5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="all">All</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="chat-input-area">
+                        <input type="text" id="chat-input" placeholder="Ask Dr. Mistral about the mycelium..." />
+                        <button id="chat-send">Send</button>
+                    </div>
+
+                    <div class="chat-status" id="chat-status">🟢 Connected to Dr. Mistral</div>
+                </div>
+            </section>
+
+            <!-- ===== PAGE: BROWSE ===== -->
+            <section id="page-browse" class="page">
+                <div class="page-header">
+                    <h2>📚 Browse Library</h2>
+                    <p class="page-subtitle" id="browse-count">Loading concepts...</p>
+                </div>
+
+                <div class="browse-controls">
+                    <input type="text" id="browse-search" placeholder="Search concepts..." />
+                    <div class="domain-filters" id="domain-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                    </div>
+                </div>
+
+                <div class="concept-grid" id="concept-grid">
+                    <p class="loading-text">Loading concepts...</p>
+                </div>
+
+                <!-- Detail Modal -->
+                <div id="detail-modal" class="modal hidden">
+                    <div class="modal-content">
+                        <span class="modal-close">&times;</span>
+                        <div id="detail-body">
+                            <h2 id="detail-title">Concept</h2>
+                            <div id="detail-badges"></div>
+                            <p id="detail-definition"></p>
+                            <div id="detail-mantra"></div>
+                            <div id="detail-poetic"></div>
+                            <div id="detail-axioms"></div>
+                            <div id="detail-relationships"></div>
+                            <div id="detail-metadata"></div>
+                            <div id="detail-difficulty"></div>
+                            <div id="detail-cid"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== PAGE: ADD CONCEPT ===== -->
+            <section id="page-add" class="page">
+                <div class="page-header">
+                    <h2>➕ Add Concept</h2>
+                    <p class="page-subtitle">Submit a new concept to the mycelium.</p>
+                </div>
+
+                <form id="add-form" class="add-form">
+                    <div class="form-section">
+                        <h4>Required</h4>
+                        <label>Human ID <span class="required">*</span>
+                            <input type="text" id="add-human-id" placeholder="snake_case_identifier" required />
+                        </label>
+                        <label>Title <span class="required">*</span>
+                            <input type="text" id="add-title" placeholder="Concept Title" required />
+                        </label>
+                        <label>Definition <span class="required">*</span>
+                            <textarea id="add-definition" rows="3" placeholder="Clear 1–3 sentence definition"></textarea>
+                        </label>
+                        <label>Domain <span class="required">*</span>
+                            <select id="add-domain">
+                                <option value="Philosophy">Philosophy</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Biology">Biology</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Consciousness">Consciousness</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Ethics">Ethics</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Psychology">Psychology</option>
+                                <option value="Spirituality">Spirituality</option>
+                                <option value="Neuroscience">Neuroscience</option>
+                                <option value="Sociology">Sociology</option>
+                                <option value="Economics">Economics</option>
+                                <option value="Ecology">Ecology</option>
+                                <option value="Medicine">Medicine</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </label>
+                        <label>Type <span class="required">*</span>
+                            <select id="add-type">
+                                <option value="PhilosophicalPrinciple">Philosophical Principle</option>
+                                <option value="ScientificTheory">Scientific Theory</option>
+                                <option value="ScientificLaw">Scientific Law</option>
+                                <option value="ScientificHypothesis">Scientific Hypothesis</option>
+                                <option value="MetaphysicalConcept">Metaphysical Concept</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>Optional — Enrichment</h4>
+                        <label>Mantra <input type="text" id="add-mantra" placeholder="Short memorable phrase" /></label>
+                        <label>Poetic Version <input type="text" id="add-poetic" placeholder="One beautiful sentence" /></label>
+                        <label>Axioms (one per line)
+                            <textarea id="add-axioms" rows="3" placeholder="Core truths of the concept"></textarea>
+                        </label>
+                        <label>Genesis (origin story)
+                            <textarea id="add-genesis" rows="2" placeholder="How this concept came to be"></textarea>
+                        </label>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>Optional — Relationships</h4>
+                        <label>Builds Upon <input type="text" id="add-builds" placeholder="human_id, human_id" /></label>
+                        <label>Related To <input type="text" id="add-related" placeholder="human_id, human_id" /></label>
+                        <label>Contradicts <input type="text" id="add-contradicts" placeholder="human_id, human_id" /></label>
+                    </div>
+
+                    <div class="form-section">
+                        <h4>Optional — Difficulty Levels</h4>
+                        <label>Beginner <textarea id="add-beginner" rows="2" placeholder="Simple explanation"></textarea></label>
+                        <label>Intermediate <textarea id="add-intermediate" rows="2" placeholder="Domain-fluent explanation"></textarea></label>
+                        <label>Expert <textarea id="add-expert" rows="2" placeholder="Full depth explanation"></textarea></label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Submit to Mycelium</button>
+                        <button type="reset" class="btn-secondary">Reset</button>
+                    </div>
+                </form>
+
+                <div id="add-result" class="hidden"></div>
+            </section>
+
+            <!-- ===== PAGE: MYCELIUM MAP ===== -->
+            <section id="page-map" class="page">
+                <div class="page-header">
+                    <h2>🕸️ Mycelium Map</h2>
+                    <p class="page-subtitle">Interactive visualization of the CADMIES knowledge network</p>
+                </div>
+
+                <div class="map-content">
+                    <div class="map-info">
+                        <p>The mycelium map is a force-directed graph showing all concepts in the CADMIES knowledge network. Each node is a concept. Each connection is a relationship — builds_upon, related_to, or contradicts.</p>
+                        <ul>
+                            <li>🔄 Drag nodes to rearrange</li>
+                            <li>🔍 Scroll to zoom</li>
+                            <li>👆 Hover for concept name</li>
+                            <li>🖱️ Click to highlight connections</li>
+                        </ul>
+                        <div class="map-status" id="map-status">
+                            <span class="status-dot">●</span> Checking map file...
+                        </div>
+                        <button id="map-launch" class="btn-primary">🕸️ Launch Mycelium Map</button>
+                        <p class="map-note">Opens in a new tab. Requires a modern browser with JavaScript enabled.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ============ SCRIPTS ============ -->
+    <script src="aug-app.js"></script>
+
+</body>
+</html>

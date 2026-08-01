@@ -1,0 +1,507 @@
+// ============================================================
+// CADMIES — Main Application
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    // ---------- SPLASH SCREEN ----------
+    const splash = document.getElementById('splash-overlay');
+    const app = document.getElementById('app');
+
+    // Show splash for 4 seconds, then fade
+    setTimeout(() => {
+        splash.classList.add('hidden');
+        app.classList.remove('hidden');
+    }, 4000);
+
+    // ---------- SIDEBAR NAVIGATION ----------
+    const navBtns = document.querySelectorAll('.nav-btn');
+    const pages = {
+        dashboard: document.getElementById('page-dashboard'),
+        mistral: document.getElementById('page-mistral'),
+        browse: document.getElementById('page-browse'),
+        add: document.getElementById('page-add'),
+        map: document.getElementById('page-map')
+    };
+
+    function showPage(pageId) {
+        // Hide all pages
+        Object.values(pages).forEach(p => p.classList.remove('active'));
+
+        // Show target
+        if (pages[pageId]) pages[pageId].classList.add('active');
+
+        // Update nav buttons
+        navBtns.forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.page === pageId);
+        });
+
+        // Scroll to top of content
+        document.getElementById('main-content').scrollTop = 0;
+    }
+
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            showPage(btn.dataset.page);
+        });
+    });
+
+    // Quick action buttons that navigate
+    document.querySelectorAll('[data-page]').forEach(el => {
+        el.addEventListener('click', () => {
+            const page = el.dataset.page;
+            if (page && pages[page]) showPage(page);
+        });
+    });
+
+    // ---------- CONCEPT DATA ----------
+    let conceptsData = [];
+    let domainCounts = {};
+
+    async function loadConcepts() {
+        try {
+            const res = await fetch('concepts.json');
+            if (!res.ok) throw new Error('Failed to load concepts');
+            const data = await res.json();
+
+            // Handle different JSON structures
+            if (data['@graph']) {
+                conceptsData = data['@graph'];
+            } else if (Array.isArray(data)) {
+                conceptsData = data;
+            } else {
+                conceptsData = [data];
+            }
+
+            // Count domains
+            domainCounts = {};
+            conceptsData.forEach(c => {
+                const d = c.canonical_domain || c.domain || 'Unknown';
+                domainCounts[d] = (domainCounts[d] || 0) + 1;
+            });
+
+            // Update stats
+            document.getElementById('stat-concepts').textContent = conceptsData.length;
+            document.getElementById('stat-domains').textContent = Object.keys(domainCounts).length;
+
+            // Count relationships
+            let relCount = 0;
+            conceptsData.forEach(c => {
+                if (c.relationships) {
+                    Object.values(c.relationships).forEach(arr => {
+                        if (Array.isArray(arr)) relCount += arr.length;
+                    });
+                }
+            });
+            document.getElementById('stat-relationships').textContent = relCount;
+
+            // Update browse count
+            document.getElementById('browse-count').textContent =
+                `${conceptsData.length} concepts in the mycelium`;
+
+            // Build domain filters
+            buildDomainFilters();
+
+            // Render concepts
+            renderConcepts();
+
+            // Check map status
+            checkMapStatus();
+
+        } catch (err) {
+            console.error('Error loading concepts:', err);
+            document.getElementById('browse-count').textContent = '❌ Failed to load concepts';
+            document.getElementById('concept-grid').innerHTML =
+                '<p class="error-text">Could not load concept data. Is concepts.json available?</p>';
+            document.getElementById('stat-concepts').textContent = '?';
+            document.getElementById('stat-domains').textContent = '?';
+            document.getElementById('stat-relationships').textContent = '?';
+        }
+    }
+
+    // ---------- DOMAIN FILTERS ----------
+    function buildDomainFilters() {
+        const container = document.getElementById('domain-filters');
+        container.innerHTML = '';
+
+        // All button
+        const allBtn = document.createElement('button');
+        allBtn.className = 'filter-btn active';
+        allBtn.dataset.filter = 'all';
+        allBtn.textContent = `All (${conceptsData.length})`;
+        allBtn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            allBtn.classList.add('active');
+            renderConcepts('all');
+        });
+        container.appendChild(allBtn);
+
+        // Domain buttons (sorted)
+        const sortedDomains = Object.keys(domainCounts).sort();
+        sortedDomains.forEach(domain => {
+            const btn = document.createElement('button');
+            btn.className = 'filter-btn';
+            btn.dataset.filter = domain;
+            btn.textContent = `${domain} (${domainCounts[domain]})`;
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                renderConcepts(domain);
+            });
+            container.appendChild(btn);
+        });
+    }
+
+    // ---------- RENDER CONCEPTS ----------
+    let currentFilter = 'all';
+    let searchTerm = '';
+
+    function renderConcepts(filter, search) {
+        filter = filter || currentFilter;
+        search = (search !== undefined) ? search : searchTerm;
+        currentFilter = filter;
+        searchTerm = search;
+
+        const grid = document.getElementById('concept-grid');
+        let filtered = conceptsData;
+
+        // Apply domain filter
+        if (filter !== 'all') {
+            filtered = filtered.filter(c =>
+                (c.canonical_domain || c.domain) === filter
+            );
+        }
+
+        // Apply search
+        if (search && search.trim()) {
+            const term = search.toLowerCase().trim();
+            filtered = filtered.filter(c => {
+                const title = (c.name || c.title || '').toLowerCase();
+                const def = (c.description || c.definition || '').toLowerCase();
+                const id = (c.human_id || c.id || '').toLowerCase();
+                return title.includes(term) || def.includes(term) || id.includes(term);
+            });
+        }
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<p class="empty-text">No concepts match your criteria.</p>';
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(c => {
+            const title = c.name || c.title || 'Untitled';
+            const domain = c.canonical_domain || c.domain || 'Unknown';
+            const def = c.description || c.definition || 'No definition available.';
+            const id = c.human_id || c.id || '';
+
+            html += `
+                <div class="concept-card" data-id="${id}">
+                    <h4>${escapeHtml(title)}</h4>
+                    <div class="card-domain">${escapeHtml(domain)}</div>
+                    <div class="card-definition">${escapeHtml(def.substring(0, 180))}${def.length > 180 ? '…' : ''}</div>
+                </div>
+            `;
+        });
+
+        grid.innerHTML = html;
+
+        // Click to open detail
+        grid.querySelectorAll('.concept-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const id = card.dataset.id;
+                const concept = conceptsData.find(c => (c.human_id || c.id) === id);
+                if (concept) openDetail(concept);
+            });
+        });
+    }
+
+    // ---------- SEARCH ----------
+    document.getElementById('browse-search').addEventListener('input', function() {
+        const search = this.value;
+        const activeFilter = document.querySelector('.filter-btn.active');
+        const filter = activeFilter ? activeFilter.dataset.filter : 'all';
+        renderConcepts(filter, search);
+    });
+
+    // ---------- DETAIL MODAL ----------
+    const modal = document.getElementById('detail-modal');
+    const modalClose = document.querySelector('.modal-close');
+
+    function openDetail(concept) {
+        const title = concept.name || concept.title || 'Untitled';
+        const domain = concept.canonical_domain || concept.domain || 'Unknown';
+        const type = concept.type || 'Concept';
+        const def = concept.description || concept.definition || 'No definition available.';
+        const mantra = concept.mantra || '';
+        const poetic = concept.poetic_version || '';
+        const axioms = concept.axioms || [];
+        const relationships = concept.relationships || {};
+        const metadata = concept.metadata || {};
+        const cid = concept.termCode || concept.cid || '';
+
+        document.getElementById('detail-title').textContent = title;
+
+        // Badges
+        let badges = `
+            <span style="background:#4F46E5;color:#fff;">${escapeHtml(domain)}</span>
+            <span style="background:#6366F1;color:#fff;">${escapeHtml(type)}</span>
+        `;
+        document.getElementById('detail-badges').innerHTML = badges;
+
+        // Definition
+        document.getElementById('detail-definition').textContent = def;
+
+        // Mantra
+        const mantraEl = document.getElementById('detail-mantra');
+        if (mantra) {
+            mantraEl.innerHTML = `<div class="detail-section"><h5>Mantra</h5><p><em>"${escapeHtml(mantra)}"</em></p></div>`;
+        } else {
+            mantraEl.innerHTML = '';
+        }
+
+        // Poetic version
+        const poeticEl = document.getElementById('detail-poetic');
+        if (poetic) {
+            poeticEl.innerHTML = `<div class="detail-section"><h5>Poetic Version</h5><p><em>"${escapeHtml(poetic)}"</em></p></div>`;
+        } else {
+            poeticEl.innerHTML = '';
+        }
+
+        // Axioms
+        const axiomsEl = document.getElementById('detail-axioms');
+        if (axioms && axioms.length > 0) {
+            let list = axioms.map(a => `<li>${escapeHtml(a)}</li>`).join('');
+            axiomsEl.innerHTML = `<div class="detail-section"><h5>Core Truths</h5><ul>${list}</ul></div>`;
+        } else {
+            axiomsEl.innerHTML = '';
+        }
+
+        // Relationships
+        const relEl = document.getElementById('detail-relationships');
+        let relHtml = '';
+        const relLabels = {
+            builds_upon: 'Builds Upon',
+            related_to: 'Related To',
+            contradicts: 'Contradicts'
+        };
+        for (const [key, label] of Object.entries(relLabels)) {
+            const items = relationships[key] || [];
+            if (items.length > 0) {
+                const list = items.map(i => `<li>${escapeHtml(i.title || i.id || i)}</li>`).join('');
+                relHtml += `<div class="detail-section"><h5>${label}</h5><ul>${list}</ul></div>`;
+            }
+        }
+        relEl.innerHTML = relHtml;
+
+        // Metadata
+        const metaEl = document.getElementById('detail-metadata');
+        let metaHtml = '';
+        if (metadata.created) metaHtml += `<p><strong>Created:</strong> ${escapeHtml(metadata.created)}</p>`;
+        if (metadata.creator) metaHtml += `<p><strong>Creator:</strong> ${escapeHtml(metadata.creator)}</p>`;
+        if (metadata.certainty_score !== undefined) metaHtml += `<p><strong>Certainty:</strong> ${metadata.certainty_score}</p>`;
+        if (metadata.license) metaHtml += `<p><strong>License:</strong> ${escapeHtml(metadata.license)}</p>`;
+        if (metadata.genesis) metaHtml += `<p><strong>Genesis:</strong> ${escapeHtml(metadata.genesis)}</p>`;
+        if (metaHtml) {
+            metaEl.innerHTML = `<div class="detail-section"><h5>Metadata</h5>${metaHtml}</div>`;
+        } else {
+            metaEl.innerHTML = '';
+        }
+
+        // Difficulty levels
+        const diffEl = document.getElementById('detail-difficulty');
+        const diff = concept.difficulty_levels || {};
+        let diffHtml = '';
+        for (const [level, text] of Object.entries(diff)) {
+            if (text) diffHtml += `<div class="detail-section"><h5>${level.charAt(0).toUpperCase() + level.slice(1)}</h5><p>${escapeHtml(text)}</p></div>`;
+        }
+        diffEl.innerHTML = diffHtml;
+
+        // CID
+        document.getElementById('detail-cid').innerHTML = cid ?
+            `<div class="detail-section"><h5>CID</h5><p style="font-family:monospace;font-size:12px;color:#64748B;word-break:break-all;">${escapeHtml(cid)}</p></div>` :
+            '';
+
+        modal.classList.remove('hidden');
+    }
+
+    modalClose.addEventListener('click', () => modal.classList.add('hidden'));
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.add('hidden');
+    });
+
+    // ---------- MAP STATUS ----------
+    async function checkMapStatus() {
+        const statusEl = document.getElementById('map-status');
+        try {
+            const res = await fetch('mycelium_map.html', { method: 'HEAD' });
+            if (res.ok) {
+                statusEl.innerHTML = '<span class="status-dot online">●</span> Map file found — ready to launch';
+            } else {
+                statusEl.innerHTML = '<span class="status-dot offline">●</span> Map file not found. Run the map generator.';
+            }
+        } catch {
+            statusEl.innerHTML = '<span class="status-dot offline">●</span> Map file not found. Run the map generator.';
+        }
+    }
+
+    document.getElementById('map-launch').addEventListener('click', () => {
+        window.open('mycelium_map.html', '_blank');
+    });
+
+    // ---------- ADD CONCEPT ----------
+    document.getElementById('add-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const concept = {
+            human_id: document.getElementById('add-human-id').value.trim(),
+            title: document.getElementById('add-title').value.trim(),
+            definition: document.getElementById('add-definition').value.trim(),
+            domain: document.getElementById('add-domain').value,
+            type: document.getElementById('add-type').value,
+            mantra: document.getElementById('add-mantra').value.trim(),
+            poetic_version: document.getElementById('add-poetic').value.trim(),
+            axioms: document.getElementById('add-axioms').value.split('\n').filter(s => s.trim()),
+            genesis: document.getElementById('add-genesis').value.trim(),
+            builds_upon: document.getElementById('add-builds').value.split(',').filter(s => s.trim()),
+            related_to: document.getElementById('add-related').value.split(',').filter(s => s.trim()),
+            contradicts: document.getElementById('add-contradicts').value.split(',').filter(s => s.trim()),
+            beginner: document.getElementById('add-beginner').value.trim(),
+            intermediate: document.getElementById('add-intermediate').value.trim(),
+            expert: document.getElementById('add-expert').value.trim(),
+        };
+
+        // Validate
+        if (!concept.human_id || !concept.title || !concept.definition) {
+            showResult('Please fill in Human ID, Title, and Definition.', 'error');
+            return;
+        }
+
+        // Convert human_id to snake_case
+        concept.human_id = concept.human_id.toLowerCase().replace(/[^a-z0-9_]/g, '_');
+
+        // Show success (for now — just client-side)
+        showResult(`✅ Concept "${concept.title}" (${concept.human_id}) ready for submission.`, 'success');
+        console.log('Concept data:', concept);
+
+        // Reset form (optional)
+        // this.reset();
+    });
+
+    document.getElementById('add-form').addEventListener('reset', function() {
+        document.getElementById('add-result').classList.add('hidden');
+    });
+
+    function showResult(message, type) {
+        const el = document.getElementById('add-result');
+        el.textContent = message;
+        el.className = type === 'error' ? 'error' : 'success';
+        el.classList.remove('hidden');
+    }
+
+    // ---------- CHAT (Dr. Mistral) ----------
+    const chatInput = document.getElementById('chat-input');
+    const chatSend = document.getElementById('chat-send');
+    const chatDisplay = document.getElementById('chat-display');
+    const chatStatus = document.getElementById('chat-status');
+
+    function addChatMessage(role, text) {
+        const div = document.createElement('div');
+        div.className = `chat-message ${role}`;
+        const label = role === 'user' ? 'You:' : 'Dr. Mistral:';
+        div.innerHTML = `<span class="msg-label">${label}</span><span class="msg-text">${escapeHtml(text)}</span>`;
+        chatDisplay.appendChild(div);
+        chatDisplay.scrollTop = chatDisplay.scrollHeight;
+    }
+
+    async function sendChatMessage() {
+        const query = chatInput.value.trim();
+        if (!query) return;
+
+        chatInput.value = '';
+        addChatMessage('user', query);
+
+        // Show thinking
+        const thinkingDiv = document.createElement('div');
+        thinkingDiv.className = 'chat-message assistant';
+        thinkingDiv.innerHTML = `<span class="msg-label">Dr. Mistral:</span><span class="msg-text"><em>Thinking...</em></span>`;
+        chatDisplay.appendChild(thinkingDiv);
+        chatDisplay.scrollTop = chatDisplay.scrollHeight;
+
+        chatSend.disabled = true;
+        chatStatus.textContent = '⏳ Connecting to Dr. Mistral...';
+        chatStatus.style.color = '#F59E0B';
+
+        try {
+            const model = document.getElementById('chat-model').value;
+            const tone = document.getElementById('chat-tone').value;
+            const maxConcepts = document.getElementById('chat-max').value;
+
+            // For now: simulate response (API proxy coming later)
+            // In production: POST to /api/chat
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            const responses = [
+                "Bonjour, mon ami! That's a fascinating question. Let me consult the library for you...",
+                "Ah, c'est une bonne question! The mycelium has knowledge on this. Let me think...",
+                "Here's what the mycelium knows about that. The connections are subtle but profound.",
+                "I recall something from the stacks. The librarian Willie would know this one too.",
+            ];
+            const reply = responses[Math.floor(Math.random() * responses.length)];
+
+            // Replace thinking with actual response
+            thinkingDiv.innerHTML = `<span class="msg-label">Dr. Mistral:</span><span class="msg-text">${escapeHtml(reply)}</span>`;
+
+            chatStatus.textContent = '🟢 Connected to Dr. Mistral';
+            chatStatus.style.color = '#10B981';
+
+            // Chirp (mockingbird)
+            if (window.chirp) window.chirp();
+
+        } catch (err) {
+            thinkingDiv.innerHTML = `<span class="msg-label">Dr. Mistral:</span><span class="msg-text"><em>Désolé, mon ami. I'm having trouble connecting. Please try again.</em></span>`;
+            chatStatus.textContent = '🔴 Connection error';
+            chatStatus.style.color = '#EF4444';
+            console.error('Chat error:', err);
+        }
+
+        chatSend.disabled = false;
+    }
+
+    chatSend.addEventListener('click', sendChatMessage);
+    chatInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') sendChatMessage();
+    });
+
+    // ---------- UTILITY ----------
+    function escapeHtml(str) {
+        if (!str) return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    // ---------- INIT ----------
+    loadConcepts();
+
+    // Chirp mock
+    window.chirp = function() {
+        // Use Web Audio API for a simple chirp
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            for (let i = 0; i < 5; i++) {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 800 + i * 200;
+                gain.gain.value = 0.08;
+                osc.start(ctx.currentTime + i * 0.08);
+                osc.stop(ctx.currentTime + i * 0.08 + 0.05);
+            }
+        } catch (e) {
+            // Audio not available — just vibrate or do nothing
+        }
+    };
+
+});

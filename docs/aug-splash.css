@@ -1,0 +1,95 @@
+/* ============================================================
+   SPLASH SCREEN — DeepSeek Navy + Indigo
+   ============================================================ */
+
+#splash-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #1E1B4B; /* DeepSeek Navy */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+#splash-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#splash-content {
+    text-align: center;
+    color: #FFFFFF;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    padding: 20px;
+    max-width: 600px;
+}
+
+.splash-emoji {
+    font-size: 56px;
+    margin-bottom: 8px;
+}
+
+.splash-title {
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    margin: 0;
+    color: #FFFFFF;
+}
+
+.splash-subtitle {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6366F1; /* DeepSeek Accent */
+    letter-spacing: 0.5px;
+    margin: 6px 0 20px 0;
+    line-height: 1.4;
+}
+
+.splash-divider {
+    width: 80px;
+    height: 2px;
+    background: #4F46E5; /* DeepSeek Indigo */
+    margin: 0 auto 20px auto;
+    border-radius: 2px;
+}
+
+.splash-message {
+    font-size: 18px;
+    font-weight: 400;
+    color: #E2E8F0; /* Subtle white */
+    line-height: 1.6;
+    margin: 0 0 30px 0;
+}
+
+.splash-message strong {
+    color: #4F46E5;
+    font-weight: 600;
+}
+
+.splash-whale {
+    font-size: 48px;
+    opacity: 0.6;
+}
+
+/* Fade-in animation for splash content */
+#splash-content {
+    animation: fadeUp 1s ease-out forwards;
+}
+
+@keyframes fadeUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
