@@ -1,4 +1,6 @@
-⚠️ RAW NOTE — Work in progress. May contain half-formed ideas, typos, unfiltered thoughts, and coded messages for fellow gardeners. For polished documentation, check Polished CADMIES or promote this note.
+> ⚠️ RAW NOTE — Work in progress. May contain half-formed ideas, typos,
+> unfiltered thoughts, and coded messages for fellow gardeners.
+> For polished documentation, check Polished CADMIES or promote this note.
 
 # Session-045-2026-07-31-ORCID-Integration-and-Site-Sync
 
