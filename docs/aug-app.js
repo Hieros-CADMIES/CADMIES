@@ -1,5 +1,5 @@
 // ============================================================
-// CADMIES — Main Application
+// CADMIES — Main Application (v2)
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const splash = document.getElementById('splash-overlay');
     const app = document.getElementById('app');
 
-    // Show splash for 4 seconds, then fade
     setTimeout(() => {
         splash.classList.add('hidden');
         app.classList.remove('hidden');
@@ -25,18 +24,11 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     function showPage(pageId) {
-        // Hide all pages
         Object.values(pages).forEach(p => p.classList.remove('active'));
-
-        // Show target
         if (pages[pageId]) pages[pageId].classList.add('active');
-
-        // Update nav buttons
         navBtns.forEach(btn => {
             btn.classList.toggle('active', btn.dataset.page === pageId);
         });
-
-        // Scroll to top of content
         document.getElementById('main-content').scrollTop = 0;
     }
 
@@ -46,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Quick action buttons that navigate
     document.querySelectorAll('[data-page]').forEach(el => {
         el.addEventListener('click', () => {
             const page = el.dataset.page;
@@ -57,6 +48,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // ---------- CONCEPT DATA ----------
     let conceptsData = [];
     let domainCounts = {};
+    let currentDashboardFilter = 'all';
+    let dashboardSearchTerm = '';
 
     async function loadConcepts() {
         try {
@@ -64,7 +57,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!res.ok) throw new Error('Failed to load concepts');
             const data = await res.json();
 
-            // Handle different JSON structures
             if (data['@graph']) {
                 conceptsData = data['@graph'];
             } else if (Array.isArray(data)) {
@@ -73,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 conceptsData = [data];
             }
 
-            // Count domains
             domainCounts = {};
             conceptsData.forEach(c => {
                 const d = c.canonical_domain || c.domain || 'Unknown';
@@ -84,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('stat-concepts').textContent = conceptsData.length;
             document.getElementById('stat-domains').textContent = Object.keys(domainCounts).length;
 
-            // Count relationships
             let relCount = 0;
             conceptsData.forEach(c => {
                 if (c.relationships) {
@@ -95,15 +85,19 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             document.getElementById('stat-relationships').textContent = relCount;
 
-            // Update browse count
             document.getElementById('browse-count').textContent =
                 `${conceptsData.length} concepts in the mycelium`;
 
-            // Build domain filters
-            buildDomainFilters();
+            // Build domain filters (both Dashboard and Browse)
+            buildDomainFilters('dashboard-filters', 'dashboard-grid', true);
+            buildDomainFilters('browse-filters', 'browse-grid', false);
 
-            // Render concepts
-            renderConcepts();
+            // Render both grids
+            renderDashboardConcepts();
+            renderBrowseConcepts();
+
+            // Domain list for dropdown
+            buildDomainList();
 
             // Check map status
             checkMapStatus();
@@ -111,32 +105,38 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (err) {
             console.error('Error loading concepts:', err);
             document.getElementById('browse-count').textContent = '❌ Failed to load concepts';
-            document.getElementById('concept-grid').innerHTML =
-                '<p class="error-text">Could not load concept data. Is concepts.json available?</p>';
             document.getElementById('stat-concepts').textContent = '?';
             document.getElementById('stat-domains').textContent = '?';
             document.getElementById('stat-relationships').textContent = '?';
+            document.getElementById('dashboard-grid').innerHTML =
+                '<p class="error-text">Could not load concept data.</p>';
+            document.getElementById('browse-grid').innerHTML =
+                '<p class="error-text">Could not load concept data.</p>';
         }
     }
 
     // ---------- DOMAIN FILTERS ----------
-    function buildDomainFilters() {
-        const container = document.getElementById('domain-filters');
+    function buildDomainFilters(containerId, gridId, isDashboard) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
         container.innerHTML = '';
 
-        // All button
         const allBtn = document.createElement('button');
         allBtn.className = 'filter-btn active';
         allBtn.dataset.filter = 'all';
         allBtn.textContent = `All (${conceptsData.length})`;
         allBtn.addEventListener('click', () => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             allBtn.classList.add('active');
-            renderConcepts('all');
+            if (isDashboard) {
+                currentDashboardFilter = 'all';
+                renderDashboardConcepts();
+            } else {
+                renderBrowseConcepts('all');
+            }
         });
         container.appendChild(allBtn);
 
-        // Domain buttons (sorted)
         const sortedDomains = Object.keys(domainCounts).sort();
         sortedDomains.forEach(domain => {
             const btn = document.createElement('button');
@@ -144,35 +144,89 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.dataset.filter = domain;
             btn.textContent = `${domain} (${domainCounts[domain]})`;
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                renderConcepts(domain);
+                if (isDashboard) {
+                    currentDashboardFilter = domain;
+                    renderDashboardConcepts();
+                } else {
+                    renderBrowseConcepts(domain);
+                }
             });
             container.appendChild(btn);
         });
     }
 
-    // ---------- RENDER CONCEPTS ----------
-    let currentFilter = 'all';
-    let searchTerm = '';
+    // ---------- DASHBOARD CONCEPTS ----------
+    function renderDashboardConcepts() {
+        const grid = document.getElementById('dashboard-grid');
+        const search = document.getElementById('dashboard-search');
+        const term = search ? search.value.toLowerCase().trim() : '';
 
-    function renderConcepts(filter, search) {
-        filter = filter || currentFilter;
-        search = (search !== undefined) ? search : searchTerm;
-        currentFilter = filter;
-        searchTerm = search;
+        let filtered = conceptsData;
+        if (currentDashboardFilter !== 'all') {
+            filtered = filtered.filter(c =>
+                (c.canonical_domain || c.domain) === currentDashboardFilter
+            );
+        }
+        if (term) {
+            filtered = filtered.filter(c => {
+                const title = (c.name || c.title || '').toLowerCase();
+                const def = (c.description || c.definition || '').toLowerCase();
+                const id = (c.human_id || c.id || '').toLowerCase();
+                return title.includes(term) || def.includes(term) || id.includes(term);
+            });
+        }
 
-        const grid = document.getElementById('concept-grid');
+        if (filtered.length === 0) {
+            grid.innerHTML = '<p class="empty-text">No concepts match your criteria.</p>';
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(c => {
+            const title = c.name || c.title || 'Untitled';
+            const domain = c.canonical_domain || c.domain || 'Unknown';
+            const def = c.description || c.definition || 'No definition available.';
+            const id = c.human_id || c.id || '';
+
+            html += `
+                <div class="concept-card" data-id="${id}">
+                    <h4>${escapeHtml(title)}</h4>
+                    <div class="card-domain">${escapeHtml(domain)}</div>
+                    <div class="card-definition">${escapeHtml(def.substring(0, 180))}${def.length > 180 ? '…' : ''}</div>
+                </div>
+            `;
+        });
+
+        grid.innerHTML = html;
+        grid.querySelectorAll('.concept-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const id = card.dataset.id;
+                const concept = conceptsData.find(c => (c.human_id || c.id) === id);
+                if (concept) openDetail(concept);
+            });
+        });
+    }
+
+    // ---------- BROWSE CONCEPTS ----------
+    let browseFilter = 'all';
+    let browseSearchTerm = '';
+
+    function renderBrowseConcepts(filter, search) {
+        filter = filter || browseFilter;
+        search = (search !== undefined) ? search : browseSearchTerm;
+        browseFilter = filter;
+        browseSearchTerm = search;
+
+        const grid = document.getElementById('browse-grid');
         let filtered = conceptsData;
 
-        // Apply domain filter
         if (filter !== 'all') {
             filtered = filtered.filter(c =>
                 (c.canonical_domain || c.domain) === filter
             );
         }
-
-        // Apply search
         if (search && search.trim()) {
             const term = search.toLowerCase().trim();
             filtered = filtered.filter(c => {
@@ -205,8 +259,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         grid.innerHTML = html;
-
-        // Click to open detail
         grid.querySelectorAll('.concept-card').forEach(card => {
             card.addEventListener('click', () => {
                 const id = card.dataset.id;
@@ -216,12 +268,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ---------- SEARCH ----------
+    // ---------- SEARCH (Dashboard) ----------
+    document.getElementById('dashboard-search').addEventListener('input', function() {
+        renderDashboardConcepts();
+    });
+
+    // ---------- SEARCH (Browse) ----------
     document.getElementById('browse-search').addEventListener('input', function() {
         const search = this.value;
-        const activeFilter = document.querySelector('.filter-btn.active');
+        const activeFilter = document.querySelector('#browse-filters .filter-btn.active');
         const filter = activeFilter ? activeFilter.dataset.filter : 'all';
-        renderConcepts(filter, search);
+        renderBrowseConcepts(filter, search);
     });
 
     // ---------- DETAIL MODAL ----------
@@ -242,17 +299,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         document.getElementById('detail-title').textContent = title;
 
-        // Badges
         let badges = `
             <span style="background:#4F46E5;color:#fff;">${escapeHtml(domain)}</span>
             <span style="background:#6366F1;color:#fff;">${escapeHtml(type)}</span>
         `;
         document.getElementById('detail-badges').innerHTML = badges;
-
-        // Definition
         document.getElementById('detail-definition').textContent = def;
 
-        // Mantra
         const mantraEl = document.getElementById('detail-mantra');
         if (mantra) {
             mantraEl.innerHTML = `<div class="detail-section"><h5>Mantra</h5><p><em>"${escapeHtml(mantra)}"</em></p></div>`;
@@ -260,7 +313,6 @@ document.addEventListener('DOMContentLoaded', function() {
             mantraEl.innerHTML = '';
         }
 
-        // Poetic version
         const poeticEl = document.getElementById('detail-poetic');
         if (poetic) {
             poeticEl.innerHTML = `<div class="detail-section"><h5>Poetic Version</h5><p><em>"${escapeHtml(poetic)}"</em></p></div>`;
@@ -268,7 +320,6 @@ document.addEventListener('DOMContentLoaded', function() {
             poeticEl.innerHTML = '';
         }
 
-        // Axioms
         const axiomsEl = document.getElementById('detail-axioms');
         if (axioms && axioms.length > 0) {
             let list = axioms.map(a => `<li>${escapeHtml(a)}</li>`).join('');
@@ -277,7 +328,6 @@ document.addEventListener('DOMContentLoaded', function() {
             axiomsEl.innerHTML = '';
         }
 
-        // Relationships
         const relEl = document.getElementById('detail-relationships');
         let relHtml = '';
         const relLabels = {
@@ -294,7 +344,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         relEl.innerHTML = relHtml;
 
-        // Metadata
         const metaEl = document.getElementById('detail-metadata');
         let metaHtml = '';
         if (metadata.created) metaHtml += `<p><strong>Created:</strong> ${escapeHtml(metadata.created)}</p>`;
@@ -308,7 +357,6 @@ document.addEventListener('DOMContentLoaded', function() {
             metaEl.innerHTML = '';
         }
 
-        // Difficulty levels
         const diffEl = document.getElementById('detail-difficulty');
         const diff = concept.difficulty_levels || {};
         let diffHtml = '';
@@ -317,7 +365,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         diffEl.innerHTML = diffHtml;
 
-        // CID
         document.getElementById('detail-cid').innerHTML = cid ?
             `<div class="detail-section"><h5>CID</h5><p style="font-family:monospace;font-size:12px;color:#64748B;word-break:break-all;">${escapeHtml(cid)}</p></div>` :
             '';
@@ -328,6 +375,83 @@ document.addEventListener('DOMContentLoaded', function() {
     modalClose.addEventListener('click', () => modal.classList.add('hidden'));
     modal.addEventListener('click', (e) => {
         if (e.target === modal) modal.classList.add('hidden');
+    });
+
+    // ---------- DOMAIN DROPDOWN ----------
+    function buildDomainList() {
+        const container = document.getElementById('domain-list');
+        if (!container) return;
+        const sorted = Object.keys(domainCounts).sort();
+        let html = '';
+        sorted.forEach(d => {
+            html += `<span class="domain-tag" data-domain="${d}">${d} <span class="count">(${domainCounts[d]})</span></span>`;
+        });
+        container.innerHTML = html;
+        container.querySelectorAll('.domain-tag').forEach(tag => {
+            tag.addEventListener('click', () => {
+                const domain = tag.dataset.domain;
+                // Navigate to Browse page with filter
+                showPage('browse');
+                // Set filter in Browse
+                const browseFilters = document.getElementById('browse-filters');
+                browseFilters.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.toggle('active', b.dataset.filter === domain);
+                });
+                renderBrowseConcepts(domain, '');
+                // Close dropdown
+                document.getElementById('domain-dropdown').classList.add('hidden');
+            });
+        });
+    }
+
+    // ---------- STAT CARDS ----------
+    document.querySelectorAll('.stat-card').forEach(card => {
+        card.addEventListener('click', function(e) {
+            const stat = this.dataset.stat;
+
+            if (stat === 'concepts') {
+                showPage('browse');
+                // Reset filters
+                document.querySelectorAll('#browse-filters .filter-btn').forEach(b => {
+                    b.classList.toggle('active', b.dataset.filter === 'all');
+                });
+                renderBrowseConcepts('all', '');
+            }
+
+            else if (stat === 'domains') {
+                const dropdown = document.getElementById('domain-dropdown');
+                dropdown.classList.toggle('hidden');
+            }
+
+            else if (stat === 'relationships') {
+                document.getElementById('rel-modal').classList.remove('hidden');
+            }
+
+            else if (stat === 'license') {
+                document.getElementById('license-display').classList.remove('hidden');
+            }
+
+            // ORCID is handled by the link inside the card
+        });
+    });
+
+    // ---------- RELATIONSHIP MODAL ----------
+    document.getElementById('rel-modal-btn').addEventListener('click', () => {
+        document.getElementById('rel-modal').classList.add('hidden');
+        showPage('map');
+    });
+
+    document.getElementById('rel-modal').addEventListener('click', function(e) {
+        if (e.target === this) this.classList.add('hidden');
+    });
+
+    // ---------- LICENSE DISPLAY ----------
+    document.getElementById('license-close').addEventListener('click', () => {
+        document.getElementById('license-display').classList.add('hidden');
+    });
+
+    document.getElementById('license-display').addEventListener('click', function(e) {
+        if (e.target === this) this.classList.add('hidden');
     });
 
     // ---------- MAP STATUS ----------
@@ -352,7 +476,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // ---------- ADD CONCEPT ----------
     document.getElementById('add-form').addEventListener('submit', function(e) {
         e.preventDefault();
-
         const concept = {
             human_id: document.getElementById('add-human-id').value.trim(),
             title: document.getElementById('add-title').value.trim(),
@@ -371,21 +494,14 @@ document.addEventListener('DOMContentLoaded', function() {
             expert: document.getElementById('add-expert').value.trim(),
         };
 
-        // Validate
         if (!concept.human_id || !concept.title || !concept.definition) {
             showResult('Please fill in Human ID, Title, and Definition.', 'error');
             return;
         }
 
-        // Convert human_id to snake_case
         concept.human_id = concept.human_id.toLowerCase().replace(/[^a-z0-9_]/g, '_');
-
-        // Show success (for now — just client-side)
         showResult(`✅ Concept "${concept.title}" (${concept.human_id}) ready for submission.`, 'success');
         console.log('Concept data:', concept);
-
-        // Reset form (optional)
-        // this.reset();
     });
 
     document.getElementById('add-form').addEventListener('reset', function() {
@@ -395,11 +511,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function showResult(message, type) {
         const el = document.getElementById('add-result');
         el.textContent = message;
-        el.className = type === 'error' ? 'error' : 'success';
+        el.className = type === 'error' ? 'error' : '';
         el.classList.remove('hidden');
     }
 
-    // ---------- CHAT (Dr. Mistral) ----------
+    // ---------- CHAT ----------
     const chatInput = document.getElementById('chat-input');
     const chatSend = document.getElementById('chat-send');
     const chatDisplay = document.getElementById('chat-display');
@@ -417,11 +533,9 @@ document.addEventListener('DOMContentLoaded', function() {
     async function sendChatMessage() {
         const query = chatInput.value.trim();
         if (!query) return;
-
         chatInput.value = '';
         addChatMessage('user', query);
 
-        // Show thinking
         const thinkingDiv = document.createElement('div');
         thinkingDiv.className = 'chat-message assistant';
         thinkingDiv.innerHTML = `<span class="msg-label">Dr. Mistral:</span><span class="msg-text"><em>Thinking...</em></span>`;
@@ -433,14 +547,7 @@ document.addEventListener('DOMContentLoaded', function() {
         chatStatus.style.color = '#F59E0B';
 
         try {
-            const model = document.getElementById('chat-model').value;
-            const tone = document.getElementById('chat-tone').value;
-            const maxConcepts = document.getElementById('chat-max').value;
-
-            // For now: simulate response (API proxy coming later)
-            // In production: POST to /api/chat
             await new Promise(resolve => setTimeout(resolve, 1500));
-
             const responses = [
                 "Bonjour, mon ami! That's a fascinating question. Let me consult the library for you...",
                 "Ah, c'est une bonne question! The mycelium has knowledge on this. Let me think...",
@@ -448,23 +555,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 "I recall something from the stacks. The librarian Willie would know this one too.",
             ];
             const reply = responses[Math.floor(Math.random() * responses.length)];
-
-            // Replace thinking with actual response
             thinkingDiv.innerHTML = `<span class="msg-label">Dr. Mistral:</span><span class="msg-text">${escapeHtml(reply)}</span>`;
-
             chatStatus.textContent = '🟢 Connected to Dr. Mistral';
             chatStatus.style.color = '#10B981';
-
-            // Chirp (mockingbird)
             if (window.chirp) window.chirp();
-
         } catch (err) {
             thinkingDiv.innerHTML = `<span class="msg-label">Dr. Mistral:</span><span class="msg-text"><em>Désolé, mon ami. I'm having trouble connecting. Please try again.</em></span>`;
             chatStatus.textContent = '🔴 Connection error';
             chatStatus.style.color = '#EF4444';
             console.error('Chat error:', err);
         }
-
         chatSend.disabled = false;
     }
 
@@ -481,12 +581,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return div.innerHTML;
     }
 
-    // ---------- INIT ----------
-    loadConcepts();
-
-    // Chirp mock
     window.chirp = function() {
-        // Use Web Audio API for a simple chirp
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
             for (let i = 0; i < 5; i++) {
@@ -499,9 +594,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 osc.start(ctx.currentTime + i * 0.08);
                 osc.stop(ctx.currentTime + i * 0.08 + 0.05);
             }
-        } catch (e) {
-            // Audio not available — just vibrate or do nothing
-        }
+        } catch (e) {}
     };
+
+    // ---------- INIT ----------
+    loadConcepts();
 
 });
