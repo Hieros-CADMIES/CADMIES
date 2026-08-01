@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CADMIES — Digital Mycelium</title>
 
-    <!-- Styles -->
     <link rel="stylesheet" href="aug-splash.css" />
     <link rel="stylesheet" href="aug-style.css" />
 
-    <!-- Google Font (optional clean sans) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
@@ -36,6 +34,7 @@
             <div class="sidebar-brand">
                 <span class="brand-emoji">🌱</span>
                 <span class="brand-name">CADMIES</span>
+                <span class="brand-whale">🐋</span>
             </div>
             <div class="brand-tagline">Cosmium Angelo Digital<br />Mycorrhizal Intelligence EcoSystem</div>
 
@@ -58,8 +57,7 @@
             </nav>
 
             <div class="sidebar-footer">
-                <span class="footer-whale">🐋</span>
-                <span class="footer-text">The mycelium grows.</span>
+                <span class="footer-text">Let the mycelium grow! 🌱</span>
             </div>
         </aside>
 
@@ -75,34 +73,97 @@
 
                 <!-- Stats -->
                 <div class="stats-grid" id="stats-grid">
-                    <div class="stat-card">
+                    <div class="stat-card" data-stat="concepts">
                         <div class="stat-number" id="stat-concepts">—</div>
                         <div class="stat-label">Concepts</div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card" data-stat="domains">
                         <div class="stat-number" id="stat-domains">—</div>
                         <div class="stat-label">Domains</div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card" data-stat="relationships">
                         <div class="stat-number" id="stat-relationships">—</div>
                         <div class="stat-label">Relationships</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-number">v1.2.1</div>
-                        <div class="stat-label">Dr. Mistral</div>
+                    <div class="stat-card" data-stat="license">
+                        <div class="stat-number">CC BY-SA 4.0</div>
+                        <div class="stat-label">License</div>
+                    </div>
+                    <div class="stat-card stat-orcid" data-stat="orcid">
+                        <a href="https://orcid.org/0009-0000-8877-2731" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                            <div class="stat-number">0009-0000-8877-2731</div>
+                            <div class="stat-label">
+                                <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;fill:#4F46E5;display:inline-block;vertical-align:middle;margin-right:4px;">
+                                    <path d="M256 128c0 70.686-57.314 128-128 128C57.314 256 0 198.686 0 128 0 57.314 57.314 0 128 0c70.686 0 128 57.314 128 128z" fill="#A6CE39"/>
+                                    <path d="M86.4 106.4h25.6v43.2H86.4zM86.4 86.4h25.6v12.8H86.4z" fill="#fff"/>
+                                    <path d="M130.4 106.4h25.6v43.2h-25.6zM130.4 86.4h25.6v12.8h-25.6z" fill="#fff"/>
+                                    <path d="M174.4 106.4h12.8v43.2h-12.8zM174.4 86.4h12.8v12.8h-12.8z" fill="#fff"/>
+                                </svg>
+                                ORCID iD
+                            </div>
+                        </a>
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
-                <div class="quick-actions">
-                    <h3>Quick Actions</h3>
-                    <button class="action-btn primary" data-page="mistral">👩‍🏫 Ask Dr. Mistral a Question</button>
-                    <button class="action-btn secondary" data-page="add">➕ Add a New Concept</button>
+                <!-- Domain Dropdown (hidden by default) -->
+                <div id="domain-dropdown" class="domain-dropdown hidden">
+                    <h4>All Domains</h4>
+                    <div id="domain-list" class="domain-list"></div>
+                    <p class="dropdown-hint">Click a domain to filter concepts in Browse.</p>
+                </div>
+
+                <!-- Relationship Modal (hidden by default) -->
+                <div id="rel-modal" class="rel-modal hidden">
+                    <div class="rel-modal-content">
+                        <p>🕸️ For the full relationship network, explore the <strong>Mycelium Map</strong>.</p>
+                        <button id="rel-modal-btn" class="btn-primary">Go to Mycelium Map</button>
+                    </div>
+                </div>
+
+                <!-- License Display (hidden by default) -->
+                <div id="license-display" class="license-display hidden">
+                    <div class="license-content">
+                        <div class="license-icon">📜</div>
+                        <h2>Creative Commons<br />Attribution-ShareAlike 4.0</h2>
+                        <div class="license-seal">CC BY-SA 4.0</div>
+                        <p>This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.</p>
+                        <p>You are free to:</p>
+                        <ul>
+                            <li><strong>Share</strong> — copy and redistribute the material in any medium or format</li>
+                            <li><strong>Adapt</strong> — remix, transform, and build upon the material for any purpose</li>
+                        </ul>
+                        <p>Under the following terms:</p>
+                        <ul>
+                            <li><strong>Attribution</strong> — You must give appropriate credit, provide a link to the license, and indicate if changes were made.</li>
+                            <li><strong>ShareAlike</strong> — If you remix, transform, or build upon the material, you must distribute your contributions under the same license.</li>
+                        </ul>
+                        <p class="license-link"><a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Read the full license →</a></p>
+                        <button id="license-close" class="btn-secondary">Close</button>
+                    </div>
+                </div>
+
+                <!-- Quick Actions (Floating) -->
+                <div class="quick-actions-floating">
+                    <button class="action-btn primary" data-page="mistral">👩‍🏫 Ask Dr. Mistral</button>
+                    <button class="action-btn secondary" data-page="add">➕ Add Concept</button>
                 </div>
 
                 <!-- Welcome message -->
                 <div class="welcome-message">
                     <p>The mycelium connects everything. Explore the knowledge graph, chat with Dr. Mistral, or add your own concept to the network.</p>
+                </div>
+
+                <!-- OLD SITE CONTENT (concept grid, search, filters) -->
+                <div class="old-site-content">
+                    <div class="browse-controls">
+                        <input type="text" id="dashboard-search" placeholder="Search concepts..." />
+                        <div class="domain-filters" id="dashboard-filters">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                        </div>
+                    </div>
+                    <div class="concept-grid" id="dashboard-grid">
+                        <p class="loading-text">Loading concepts...</p>
+                    </div>
                 </div>
             </section>
 
@@ -168,12 +229,12 @@
 
                 <div class="browse-controls">
                     <input type="text" id="browse-search" placeholder="Search concepts..." />
-                    <div class="domain-filters" id="domain-filters">
+                    <div class="domain-filters" id="browse-filters">
                         <button class="filter-btn active" data-filter="all">All</button>
                     </div>
                 </div>
 
-                <div class="concept-grid" id="concept-grid">
+                <div class="concept-grid" id="browse-grid">
                     <p class="loading-text">Loading concepts...</p>
                 </div>
 
@@ -311,7 +372,6 @@
         </main>
     </div>
 
-    <!-- ============ SCRIPTS ============ -->
     <script src="aug-app.js"></script>
 
 </body>
