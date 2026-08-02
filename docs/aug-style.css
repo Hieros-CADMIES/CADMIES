@@ -81,15 +81,16 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 32px 40px;
+    text-align: center;
 }
 
 .dashboard-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 32px;
     flex-wrap: wrap;
     gap: 12px;
+    margin-bottom: 32px;
 }
 
 .header-left {
@@ -119,7 +120,8 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 16px;
-    margin-bottom: 16px;
+    margin: 0 auto 16px auto;
+    max-width: 900px;
 }
 
 .stat-card {
@@ -168,7 +170,8 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 20px 24px;
-    margin-bottom: 16px;
+    margin: 0 auto 16px auto;
+    max-width: 900px;
     animation: slideDown 0.25s ease;
 }
 
@@ -192,6 +195,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    justify-content: center;
 }
 
 .domain-tag {
@@ -227,164 +231,10 @@ body {
     font-style: italic;
 }
 
-/* ---------- RELATIONSHIP MODAL ---------- */
-.rel-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10001;
-}
-
-.rel-modal.hidden {
-    display: none;
-}
-
-.rel-modal-content {
-    background: #1E1B4B;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 16px;
-    padding: 32px 40px;
-    max-width: 420px;
-    text-align: center;
-}
-
-.rel-modal-content p {
-    font-size: 16px;
-    color: #E2E8F0;
-    line-height: 1.5;
-    margin-bottom: 20px;
-}
-
-.rel-modal-content .btn-primary {
-    padding: 10px 24px;
-    background: #4F46E5;
-    color: #FFFFFF;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-}
-
-.rel-modal-content .btn-primary:hover {
-    background: #4338CA;
-}
-
-/* ---------- LICENSE DISPLAY ---------- */
-.license-display {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(6px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10002;
-}
-
-.license-display.hidden {
-    display: none;
-}
-
-.license-content {
-    background: #1E1B4B;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 20px;
-    padding: 40px 48px;
-    max-width: 560px;
-    width: 90%;
-    text-align: center;
-}
-
-.license-icon {
-    font-size: 48px;
-    margin-bottom: 8px;
-}
-
-.license-content h2 {
-    font-size: 24px;
-    font-weight: 700;
-    color: #FFFFFF;
-    margin-bottom: 4px;
-    line-height: 1.2;
-}
-
-.license-seal {
-    font-size: 14px;
-    font-weight: 600;
-    color: #4F46E5;
-    background: rgba(79, 70, 229, 0.2);
-    padding: 6px 16px;
-    border-radius: 30px;
-    display: inline-block;
-    margin: 8px 0 16px 0;
-    letter-spacing: 1px;
-}
-
-.license-content p {
-    font-size: 14px;
-    color: #CBD5E1;
-    line-height: 1.6;
-    margin: 8px 0;
-}
-
-.license-content ul {
-    text-align: left;
-    padding-left: 24px;
-    margin: 8px 0 12px 0;
-    font-size: 13px;
-    color: #CBD5E1;
-    line-height: 1.6;
-}
-
-.license-content ul li {
-    margin-bottom: 4px;
-}
-
-.license-link {
-    margin: 12px 0 16px 0;
-}
-
-.license-link a {
-    color: #4F46E5;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.license-link a:hover {
-    text-decoration: underline;
-}
-
-.license-content .btn-secondary {
-    padding: 8px 24px;
-    background: rgba(255, 255, 255, 0.08);
-    color: #E2E8F0;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-}
-
-.license-content .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
 /* ---------- CONTROL CENTER CONTROLS ---------- */
 .control-center-controls {
-    margin: 20px 0 28px 0;
+    margin: 20px auto 28px auto;
+    max-width: 900px;
 }
 
 #dashboard-search {
@@ -399,6 +249,7 @@ body {
     outline: none;
     transition: border-color 0.15s;
     margin-bottom: 12px;
+    text-align: center;
 }
 
 #dashboard-search::placeholder {
@@ -414,6 +265,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    justify-content: center;
 }
 
 .filter-btn {
@@ -445,7 +297,9 @@ body {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 16px;
-    margin: 24px 0 32px 0;
+    margin: 24px auto 32px auto;
+    max-width: 900px;
+    justify-items: center;
 }
 
 .nav-card {
@@ -453,6 +307,8 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
     padding: 28px 20px;
+    width: 100%;
+    max-width: 220px;
     text-align: center;
     cursor: pointer;
     transition: all 0.2s;
@@ -488,6 +344,8 @@ body {
     border-top: 1px solid rgba(255, 255, 255, 0.06);
     color: #64748B;
     font-size: 13px;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 /* ---------- CHAT (Dr. Mistral) ---------- */
