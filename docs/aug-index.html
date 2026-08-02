@@ -28,48 +28,22 @@
     <!-- ============ MAIN APP ============ -->
     <div id="app" class="hidden">
 
-        <!-- SIDEBAR -->
-        <aside id="sidebar">
-            <div class="sidebar-brand">
-                <span class="brand-emoji">🌱</span>
-                <span class="brand-name">CADMIES</span>
-            </div>
-            <div class="brand-tagline">Cosmium Angelo Digital<br />Mycorrhizal Intelligence EcoSystem</div>
+        <!-- ===== PAGE: DASHBOARD (CONTROL CENTER) ===== -->
+        <section id="page-dashboard" class="page active">
+            <div class="dashboard-container">
 
-            <nav class="sidebar-nav">
-                <button class="nav-btn active" data-page="dashboard">
-                    <span class="nav-icon">📌</span> Dashboard
-                </button>
-                <button class="nav-btn" data-page="mistral">
-                    <span class="nav-icon">👩‍🏫</span> Dr. Mistral
-                </button>
-                <button class="nav-btn" data-page="browse">
-                    <span class="nav-icon">📚</span> Browse
-                </button>
-                <button class="nav-btn" data-page="add">
-                    <span class="nav-icon">➕</span> Add Concept
-                </button>
-                <button class="nav-btn" data-page="map">
-                    <span class="nav-icon">🕸️</span> Mycelium Map
-                </button>
-            </nav>
-
-            <div class="sidebar-footer">
-                <span class="footer-text">Let the mycelium grow! 🌱</span>
-            </div>
-        </aside>
-
-        <!-- MAIN CONTENT -->
-        <main id="main-content">
-
-            <!-- ===== PAGE: DASHBOARD ===== -->
-            <section id="page-dashboard" class="page active">
-                <div class="page-header">
-                    <h2>📌 Cosmium Angelo</h2>
-                    <p class="page-subtitle">Welcome to Cosmium Angelo. We hope you enjoy your visit.</p>
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <div class="header-left">
+                        <span class="header-emoji">🌱</span>
+                        <h1>CADMIES</h1>
+                    </div>
+                    <div class="header-right">
+                        <span class="header-tagline">Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</span>
+                    </div>
                 </div>
 
-                <!-- Stats -->
+                <!-- Stats Grid -->
                 <div class="stats-grid" id="stats-grid">
                     <div class="stat-card" data-stat="concepts">
                         <div class="stat-number" id="stat-concepts">—</div>
@@ -103,14 +77,14 @@
                     </div>
                 </div>
 
-                <!-- Domain Dropdown (hidden by default) -->
+                <!-- Domain Dropdown -->
                 <div id="domain-dropdown" class="domain-dropdown hidden">
                     <h4>All Domains</h4>
                     <div id="domain-list" class="domain-list"></div>
                     <p class="dropdown-hint">Click a domain to filter concepts in Browse.</p>
                 </div>
 
-                <!-- Relationship Modal (hidden by default) -->
+                <!-- Relationship Modal -->
                 <div id="rel-modal" class="rel-modal hidden">
                     <div class="rel-modal-content">
                         <p>🕸️ For the full relationship network, explore the <strong>Mycelium Map</strong>.</p>
@@ -118,7 +92,7 @@
                     </div>
                 </div>
 
-                <!-- License Display (hidden by default) -->
+                <!-- License Display -->
                 <div id="license-display" class="license-display hidden">
                     <div class="license-content">
                         <div class="license-icon">📜</div>
@@ -140,15 +114,51 @@
                     </div>
                 </div>
 
-                <!-- Quick Actions (Floating) -->
-                <div class="quick-actions-floating">
-                    <button class="action-btn primary" data-page="mistral">👩‍🏫 Ask Dr. Mistral</button>
-                    <button class="action-btn secondary" data-page="add">➕ Add Concept</button>
+                <!-- Search & Filters -->
+                <div class="control-center-controls">
+                    <input type="text" id="dashboard-search" placeholder="Search concepts across the mycelium..." />
+                    <div class="domain-filters" id="dashboard-filters">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                    </div>
                 </div>
-</section>
-            <!-- ===== PAGE: DR. MISTRAL ===== -->
-            <section id="page-mistral" class="page">
-                <div class="page-header">
+
+                <!-- Navigation Cards -->
+                <div class="nav-grid">
+                    <div class="nav-card" data-page="mistral">
+                        <div class="nav-card-icon">👩‍🏫</div>
+                        <h3>Dr. Mistral</h3>
+                        <p>Chat with Dr. Mistral</p>
+                    </div>
+                    <div class="nav-card" data-page="browse">
+                        <div class="nav-card-icon">📚</div>
+                        <h3>Browse The Mycelium Library</h3>
+                        <p>Explore concepts in the library</p>
+                    </div>
+                    <div class="nav-card" data-page="add">
+                        <div class="nav-card-icon">➕</div>
+                        <h3>Add Concept</h3>
+                        <p>Noursih the network.</p>
+                    </div>
+                    <div class="nav-card" data-page="map">
+                        <div class="nav-card-icon">🕸️</div>
+                        <h3>Mycelium Map</h3>
+                        <p>See the connections! 👀</p>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="dashboard-footer">
+                    <span>Let the mycelium grow! 🌱</span>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ===== PAGE: DR. MISTRAL ===== -->
+        <section id="page-mistral" class="page">
+            <div class="full-page-container">
+                <div class="full-page-header">
+                    <button class="back-btn" data-page="dashboard">← Back to Dashboard</button>
                     <h2>👩‍🏫 Dr. Mistral</h2>
                     <p class="page-subtitle">Madame La Professeure de CADMIES</p>
                 </div>
@@ -197,11 +207,14 @@
 
                     <div class="chat-status" id="chat-status">🟢 Connected to Dr. Mistral</div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- ===== PAGE: BROWSE ===== -->
-            <section id="page-browse" class="page">
-                <div class="page-header">
+        <!-- ===== PAGE: BROWSE LIBRARY ===== -->
+        <section id="page-browse" class="page">
+            <div class="full-page-container">
+                <div class="full-page-header">
+                    <button class="back-btn" data-page="dashboard">← Back to Dashboard</button>
                     <h2>📚 Browse Library</h2>
                     <p class="page-subtitle" id="browse-count">Loading concepts...</p>
                 </div>
@@ -235,11 +248,14 @@
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- ===== PAGE: ADD CONCEPT ===== -->
-            <section id="page-add" class="page">
-                <div class="page-header">
+        <!-- ===== PAGE: ADD CONCEPT ===== -->
+        <section id="page-add" class="page">
+            <div class="full-page-container">
+                <div class="full-page-header">
+                    <button class="back-btn" data-page="dashboard">← Back to Dashboard</button>
                     <h2>➕ Add Concept</h2>
                     <p class="page-subtitle">Submit a new concept to the mycelium.</p>
                 </div>
@@ -321,11 +337,14 @@
                 </form>
 
                 <div id="add-result" class="hidden"></div>
-            </section>
+            </div>
+        </section>
 
-            <!-- ===== PAGE: MYCELIUM MAP ===== -->
-            <section id="page-map" class="page">
-                <div class="page-header">
+        <!-- ===== PAGE: MYCELIUM MAP ===== -->
+        <section id="page-map" class="page">
+            <div class="full-page-container">
+                <div class="full-page-header">
+                    <button class="back-btn" data-page="dashboard">← Back to Dashboard</button>
                     <h2>🕸️ Mycelium Map</h2>
                     <p class="page-subtitle">Interactive visualization of the CADMIES knowledge network</p>
                 </div>
@@ -346,9 +365,9 @@
                         <p class="map-note">Opens in a new tab. Requires a modern browser with JavaScript enabled.</p>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-        </main>
     </div>
 
     <script src="aug-app.js"></script>
