@@ -89,8 +89,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 `${conceptsData.length} concepts in the mycelium`;
 
             // Build domain filters (both Dashboard and Browse)
-            buildDomainFilters('dashboard-filters', 'dashboard-grid', true);
-            buildDomainFilters('browse-filters', 'browse-grid', false);
+            const canonicalDomains = [
+                "Physics", "Philosophy", "Biology", "Mathematics", "Consciousness",
+                "Chemistry", "Ethics", "Computer Science", "Psychology", "Spirituality",
+                "Neuroscience", "Sociology", "Economics", "Ecology", "Medicine"
+            ];
 
             // Render both grids
             renderDashboardConcepts();
