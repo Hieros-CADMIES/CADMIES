@@ -48,8 +48,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // ---------- CONCEPT DATA ----------
     let conceptsData = [];
     let domainCounts = {};
-    let currentDashboardFilter = 'all';
-    let dashboardSearchTerm = '';
+    let browseFilter = 'all';
+    let browseSearchTerm = '';
 
     // CANONICAL 15 DOMAINS — used for filters and dropdown
     const canonicalDomains = [
@@ -95,12 +95,10 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('browse-count').textContent =
                 `${conceptsData.length} concepts in the mycelium`;
 
-            // Build domain filters (both Dashboard and Browse) — uses canonical 15
-            buildDomainFilters('dashboard-filters', 'dashboard-grid', true);
-            buildDomainFilters('browse-filters', 'browse-grid', false);
+            // Build domain filters — Browse only (Dashboard has no grid)
+            buildDomainFilters('browse-filters', 'browse-grid');
 
-            // Render both grids
-            renderDashboardConcepts();
+            // Render Browse grid
             renderBrowseConcepts();
 
             // Domain list for dropdown — uses canonical 15
@@ -115,15 +113,13 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('stat-concepts').textContent = '?';
             document.getElementById('stat-domains').textContent = '?';
             document.getElementById('stat-relationships').textContent = '?';
-            document.getElementById('dashboard-grid').innerHTML =
-                '<p class="error-text">Could not load concept data.</p>';
             document.getElementById('browse-grid').innerHTML =
                 '<p class="error-text">Could not load concept data.</p>';
         }
     }
 
     // ---------- DOMAIN FILTERS — Canonical 15 only ----------
-    function buildDomainFilters(containerId, gridId, isDashboard) {
+    function buildDomainFilters(containerId, gridId) {
         const container = document.getElementById(containerId);
         if (!container) return;
         container.innerHTML = '';
@@ -135,12 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
         allBtn.addEventListener('click', () => {
             container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             allBtn.classList.add('active');
-            if (isDashboard) {
-                currentDashboardFilter = 'all';
-                renderDashboardConcepts();
-            } else {
-                renderBrowseConcepts('all');
-            }
+            renderBrowseConcepts('all');
         });
         container.appendChild(allBtn);
 
@@ -155,73 +146,13 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.addEventListener('click', () => {
                 container.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                if (isDashboard) {
-                    currentDashboardFilter = domain;
-                    renderDashboardConcepts();
-                } else {
-                    renderBrowseConcepts(domain);
-                }
+                renderBrowseConcepts(domain);
             });
             container.appendChild(btn);
         });
     }
 
-    // ---------- DASHBOARD CONCEPTS ----------
-    function renderDashboardConcepts() {
-        const grid = document.getElementById('dashboard-grid');
-        const search = document.getElementById('dashboard-search');
-        const term = search ? search.value.toLowerCase().trim() : '';
-
-        let filtered = conceptsData;
-        if (currentDashboardFilter !== 'all') {
-            filtered = filtered.filter(c =>
-                (c.canonical_domain || c.domain) === currentDashboardFilter
-            );
-        }
-        if (term) {
-            filtered = filtered.filter(c => {
-                const title = (c.name || c.title || '').toLowerCase();
-                const def = (c.description || c.definition || '').toLowerCase();
-                const id = (c.human_id || c.id || '').toLowerCase();
-                return title.includes(term) || def.includes(term) || id.includes(term);
-            });
-        }
-
-        if (filtered.length === 0) {
-            grid.innerHTML = '<p class="empty-text">No concepts match your criteria.</p>';
-            return;
-        }
-
-        let html = '';
-        filtered.forEach(c => {
-            const title = c.name || c.title || 'Untitled';
-            const domain = c.canonical_domain || c.domain || 'Unknown';
-            const def = c.description || c.definition || 'No definition available.';
-            const id = c.human_id || c.id || '';
-
-            html += `
-                <div class="concept-card" data-id="${id}">
-                    <h4>${escapeHtml(title)}</h4>
-                    <div class="card-domain">${escapeHtml(domain)}</div>
-                    <div class="card-definition">${escapeHtml(def.substring(0, 180))}${def.length > 180 ? '…' : ''}</div>
-                </div>
-            `;
-        });
-
-        grid.innerHTML = html;
-        grid.querySelectorAll('.concept-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const id = card.dataset.id;
-                const concept = conceptsData.find(c => (c.human_id || c.id) === id);
-                if (concept) openDetail(concept);
-            });
-        });
-    }
-
     // ---------- BROWSE CONCEPTS ----------
-    let browseFilter = 'all';
-    let browseSearchTerm = '';
-
     function renderBrowseConcepts(filter, search) {
         filter = filter || browseFilter;
         search = (search !== undefined) ? search : browseSearchTerm;
@@ -276,11 +207,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-
-    // ---------- SEARCH (Dashboard) ----------
-    document.getElementById('dashboard-search').addEventListener('input', function() {
-        renderDashboardConcepts();
-    });
 
     // ---------- SEARCH (Browse) ----------
     document.getElementById('browse-search').addEventListener('input', function() {
