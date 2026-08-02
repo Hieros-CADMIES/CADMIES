@@ -1,5 +1,5 @@
 // ============================================================
-// CADMIES — Main Application (v2)
+// CADMIES — Main Application (v3)
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -51,6 +51,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentDashboardFilter = 'all';
     let dashboardSearchTerm = '';
 
+    // CANONICAL 15 DOMAINS — used for filters and dropdown
+    const canonicalDomains = [
+        "Physics", "Philosophy", "Biology", "Mathematics", "Consciousness",
+        "Chemistry", "Ethics", "Computer Science", "Psychology", "Spirituality",
+        "Neuroscience", "Sociology", "Economics", "Ecology", "Medicine"
+    ];
+
     async function loadConcepts() {
         try {
             const res = await fetch('concepts.json');
@@ -88,18 +95,15 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('browse-count').textContent =
                 `${conceptsData.length} concepts in the mycelium`;
 
-            // Build domain filters (both Dashboard and Browse)
-            const canonicalDomains = [
-                "Physics", "Philosophy", "Biology", "Mathematics", "Consciousness",
-                "Chemistry", "Ethics", "Computer Science", "Psychology", "Spirituality",
-                "Neuroscience", "Sociology", "Economics", "Ecology", "Medicine"
-            ];
+            // Build domain filters (both Dashboard and Browse) — uses canonical 15
+            buildDomainFilters('dashboard-filters', 'dashboard-grid', true);
+            buildDomainFilters('browse-filters', 'browse-grid', false);
 
             // Render both grids
             renderDashboardConcepts();
             renderBrowseConcepts();
 
-            // Domain list for dropdown
+            // Domain list for dropdown — uses canonical 15
             buildDomainList();
 
             // Check map status
@@ -118,7 +122,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ---------- DOMAIN FILTERS ----------
+    // ---------- DOMAIN FILTERS — Canonical 15 only ----------
     function buildDomainFilters(containerId, gridId, isDashboard) {
         const container = document.getElementById(containerId);
         if (!container) return;
@@ -140,8 +144,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         container.appendChild(allBtn);
 
-        const sortedDomains = Object.keys(domainCounts).sort();
-        sortedDomains.forEach(domain => {
+        // Only show canonical domains that exist in the data
+        const existingCanonical = canonicalDomains.filter(d => domainCounts[d] > 0);
+
+        existingCanonical.forEach(domain => {
             const btn = document.createElement('button');
             btn.className = 'filter-btn';
             btn.dataset.filter = domain;
@@ -380,28 +386,28 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target === modal) modal.classList.add('hidden');
     });
 
-    // ---------- DOMAIN DROPDOWN ----------
+    // ---------- DOMAIN DROPDOWN — Canonical 15 only ----------
     function buildDomainList() {
         const container = document.getElementById('domain-list');
         if (!container) return;
-        const sorted = Object.keys(domainCounts).sort();
+
+        const existingCanonical = canonicalDomains.filter(d => domainCounts[d] > 0);
+
         let html = '';
-        sorted.forEach(d => {
+        existingCanonical.forEach(d => {
             html += `<span class="domain-tag" data-domain="${d}">${d} <span class="count">(${domainCounts[d]})</span></span>`;
         });
         container.innerHTML = html;
+
         container.querySelectorAll('.domain-tag').forEach(tag => {
             tag.addEventListener('click', () => {
                 const domain = tag.dataset.domain;
-                // Navigate to Browse page with filter
                 showPage('browse');
-                // Set filter in Browse
                 const browseFilters = document.getElementById('browse-filters');
                 browseFilters.querySelectorAll('.filter-btn').forEach(b => {
                     b.classList.toggle('active', b.dataset.filter === domain);
                 });
                 renderBrowseConcepts(domain, '');
-                // Close dropdown
                 document.getElementById('domain-dropdown').classList.add('hidden');
             });
         });
@@ -414,7 +420,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (stat === 'concepts') {
                 showPage('browse');
-                // Reset filters
                 document.querySelectorAll('#browse-filters .filter-btn').forEach(b => {
                     b.classList.toggle('active', b.dataset.filter === 'all');
                 });
@@ -433,8 +438,6 @@ document.addEventListener('DOMContentLoaded', function() {
             else if (stat === 'license') {
                 document.getElementById('license-display').classList.remove('hidden');
             }
-
-            // ORCID is handled by the link inside the card
         });
     });
 
