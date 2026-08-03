@@ -361,9 +361,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('rel-modal').classList.remove('hidden');
             }
 
-            else if (stat === 'license') {
-                document.getElementById('license-display').classList.remove('hidden');
-            }
+            document.getElementById('license-close').addEventListener('click', () => {
+                document.getElementById('license-display').classList.add('hidden');
+            });
+
+            document.getElementById('license-display').addEventListener('click', function(e) {
+                if (e.target === this) this.classList.add('hidden');
+            });
         });
     });
 
