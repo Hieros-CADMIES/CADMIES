@@ -360,6 +360,10 @@ document.addEventListener('DOMContentLoaded', function() {
             else if (stat === 'relationships') {
                 document.getElementById('rel-modal').classList.remove('hidden');
             }
+
+            else if (stat === 'license') {
+                window.open('license.html', '_blank', 'width=600,height=700,scrollbars=yes');
+            }
         });
     });
 
