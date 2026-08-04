@@ -507,6 +507,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 osc.start(ctx.currentTime + i * 0.08);
                 osc.stop(ctx.currentTime + i * 0.08 + 0.05);
             }
+            setTimeout(() => ctx.close(), 1000);
         } catch (e) {}
     };
 
