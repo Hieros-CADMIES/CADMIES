@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         navBtns.forEach(btn => {
             btn.classList.toggle('active', btn.dataset.page === pageId);
         });
-        document.getElementById('main-content').scrollTop = 0;
+        window.scrollTo(0, 0);
     }
 
     navBtns.forEach(btn => {
