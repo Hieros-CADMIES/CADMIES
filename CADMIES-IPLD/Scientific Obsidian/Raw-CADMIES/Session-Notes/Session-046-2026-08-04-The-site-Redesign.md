@@ -162,3 +162,18 @@ Part 9: Nuggets Collected
 "The mycelium is a dharma delivery system."
 
 "Let the mycelium grow! 🌱"
+
+I almost forgot. Today's special nugget is before and after shots of the site. hopefully they fit in here and load ok.
+
+**CURRENT SITE**
+<img width="1138" height="897" alt="image" src="https://github.com/user-attachments/assets/8349bf9b-1864-49c0-b0e5-7ba035ae890c" />
+
+**NEW SITE**
+<img width="1120" height="568" alt="image" src="https://github.com/user-attachments/assets/5444ddc2-deea-4136-85e9-09dfcf9be5ad" />
+<img width="1179" height="917" alt="image" src="https://github.com/user-attachments/assets/7326906c-2c28-4fdf-90c2-a0953c15dd3c" />
+<img width="1179" height="917" alt="image" src="https://github.com/user-attachments/assets/a5737378-813f-4a95-a8af-c6b0208dbb90" />
+<img width="763" height="920" alt="image" src="https://github.com/user-attachments/assets/66dd1ee7-c72c-41e5-8606-ad890e151cd7" />
+
+
+
+
