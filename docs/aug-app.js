@@ -357,16 +357,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // ---------- RELATIONSHIP MODAL ----------
-    document.getElementById('rel-modal-btn').addEventListener('click', () => {
-        document.getElementById('rel-modal').classList.add('hidden');
-        showPage('map');
-    });
-
-    document.getElementById('rel-modal').addEventListener('click', function(e) {
-        if (e.target === this) this.classList.add('hidden');
-    });
-
     // ---------- MAP STATUS ----------
     async function checkMapStatus() {
         const statusEl = document.getElementById('map-status');
