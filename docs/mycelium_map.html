@@ -9,7 +9,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #FFFFFF; overflow: hidden; }
         #cy { width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
-        #banner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5000; font-family: monospace; font-size: 13px; line-height: 1.4; white-space: pre; text-align: center; pointer-events: none; transition: opacity 1.5s ease; }
+        #banner { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 5000; font-family: monospace; font-size: 13px; line-height: 1.4; white-space: pre; text-align: center; pointer-events: none; transition: opacity 1.5s ease; }
         #banner.fade { opacity: 0; }
         #info { position: absolute; bottom: 12px; left: 12px; background: #0F172A; color: #FFFFFF; padding: 8px 14px; border-radius: 8px; font-size: 11px; z-index: 100; pointer-events: none; font-family: monospace; }
         #searchBox { position: absolute; top: 20px; left: 20px; z-index: 1000; }
@@ -906,16 +906,6 @@
             }
         });
         
-        // Fade banner after map loads
-        cy.ready(function() {
-            setTimeout(function() {
-                document.getElementById('banner').classList.add('fade');
-                setTimeout(function() { document.getElementById('banner').style.display = 'none'; }, 1500);
-            }, 3000);
-            // Start background loading after layout settles
-            setTimeout(fetchRankedData, 5000);
-        });
-
         // Auto-size on zoom
         cy.on('zoom', function() {
             var zoom = cy.zoom();
