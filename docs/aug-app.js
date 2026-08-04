@@ -358,7 +358,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             else if (stat === 'relationships') {
-                document.getElementById('rel-modal').classList.remove('hidden');
+                showPage('map');
             }
 
             else if (stat === 'license') {
