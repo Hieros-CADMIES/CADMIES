@@ -13,8 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
         app.classList.remove('hidden');
     }, 4000);
 
-    // ---------- SIDEBAR NAVIGATION ----------
-    const navBtns = document.querySelectorAll('.nav-btn');
+    // ---------- NAVIGATION ----------
     const pages = {
         dashboard: document.getElementById('page-dashboard'),
         mistral: document.getElementById('page-mistral'),
@@ -26,17 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function showPage(pageId) {
         Object.values(pages).forEach(p => p.classList.remove('active'));
         if (pages[pageId]) pages[pageId].classList.add('active');
-        navBtns.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.page === pageId);
-        });
         window.scrollTo(0, 0);
     }
-
-    navBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            showPage(btn.dataset.page);
-        });
-    });
 
     document.querySelectorAll('[data-page]').forEach(el => {
         el.addEventListener('click', () => {
