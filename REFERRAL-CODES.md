@@ -36,7 +36,7 @@ We use a handful of cloud and infrastructure services to keep Project Hierion ru
 
 ---
 
-### Spheron
+### Spheron AI
 
 **What it is:** Per-usage GPU access. Pay per second, per minute, or per hour. Tons of top-of-the-line GPUs.
 
@@ -44,7 +44,7 @@ We use a handful of cloud and infrastructure services to keep Project Hierion ru
 
 **The Deal:** Not gonna lie, we're not really sure.
 
-**Hierion's Referral Link:** [Spheron](https://app.spheron.ai/signup?ref=ENXyV3608)
+**Hierion's Referral Link:** [Spheron AI](https://app.spheron.ai/signup?ref=ENXyV3608)
 
 ---
 
