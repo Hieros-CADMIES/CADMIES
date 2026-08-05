@@ -4,35 +4,33 @@
 
 ---
 
-## 🍄 What's This All About?
+## What's This All About?
 
 We use a handful of cloud and infrastructure services to keep Project Hierion running. Some offer referral programs — you get a bonus, we get a bonus, everyone wins. No pressure. Just sharing what works for us.
 
 ---
 
-## ☁️ Cloud & Infrastructure
+## Cloud Computing & Infrastructure
 
-### Paperspace
-**What it is:** Cloud GPU provider — used for model training, fine-tuning, and running Dr. Mistral.
+### Paperspace and DigitalOcean
 
-**Referral Link:** [https://www.paperspace.com/...](https://www.paperspace.com/...)
+**What it is:** GPUs for LLM and harvester processing. Cloud VPS hosting — used for the CADMIES public gateway, databases, and various microservices.
 
-**Your bonus:** 
-
-**Our bonus:** 
-
-**Why we use it:** $8/mo gets you access to top GPUs like the A4000 that we use. Tons of other stuff. Great for LLM-related projects
-
----
-
-### DigitalOcean
-**What it is:** Cloud VPS hosting — used for the CADMIES public gateway, databases, and various microservices.
-
-**Why we use it:** Can host multiple sites and projects in one droplet. Our droplet runs the entire public gateway.
+**Why we use it:** The top GPUs at one ridicously low price. Thed Droplet can host multiple sites and projects. One tiny droplet runs the entire public gateway.
 
 **The Deal:** Invite someone to DigitalOcean. Once they spend and pay their first $25, you'll also receive $25 in credit.
 
-**Hierion's Referral Link:** [![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=fd70c6e2650a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
+**Hierion's Referral - Click The Button:** [![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=fd70c6e2650a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
+
+### Cape Wireless
+
+**What it is:** Privacy-first mobile carrier.
+
+**Why we use it:** ULTIMATE PRIVACY. No data collection. ULTIMATE ENCRYPTION.
+
+**The Deal:** Sign up. We both save $20/month!!
+
+Hierion's Referral Link: [Cape Wireless ](https://cape.co/get-cape?referral=ZCWW60AA)
 
 ---
 
