@@ -28,13 +28,11 @@ We use a handful of cloud and infrastructure services to keep Project Hierion ru
 ### DigitalOcean
 **What it is:** Cloud VPS hosting — used for the CADMIES public gateway, databases, and various microservices.
 
-**Referral Link:** (https://m.do.co/c/fd70c6e2650a)
+**Why we use it:** Can host multiple sites and projects in one droplet. Our droplet runs the entire public gateway.
 
-**Your bonus:** $100 free credit (60 days)
+**The Deal:** Invite someone to DigitalOcean. Once they spend and pay their first $25, you'll also receive $25 in credit.
 
-**Our bonus:** $25 free credit
-
-**Why we use it:** Fast CPUs, plenty of VRAM, plenty of storage, can host multiple sites and projects in one droplet. Our droplet runs the entire public gateway.
+**Hierion's Referral Link:** [![DigitalOcean Referral Badge](https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg)](https://www.digitalocean.com/?refcode=fd70c6e2650a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge)
 
 ---
 
