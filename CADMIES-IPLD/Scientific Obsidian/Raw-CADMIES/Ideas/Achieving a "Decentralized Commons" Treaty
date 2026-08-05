@@ -1,0 +1,429 @@
+The Full Decentralized Commons Treaty Plan
+Phase 1: Identify the Pillars of the Commons
+The first step is to rally a core coalition of organizations that are already working on decentralized infrastructure. These are your "anchor tenants."
+
+The Core Tech & Archive Alliance
+The most crucial partnership to solidify is between the big decentralized storage networks and the institutions that hold our digital memory.
+
+The Internet Archive is arguably the central node for this effort. Its founder, Brewster Kahle, has been a vocal advocate for a decentralized web for years, framing it as a way to build a "robust and private Internet that has a history that will persist over decades and maybe centuries."
+
+This vision has already attracted major funding from decentralized tech, like the Filecoin Foundation's 50,000 FIL grant to the Internet Archive, one of the largest donations in the Archive's history. This money is specifically earmarked to make the Archive "more decentralized," showing a direct alignment of interests.
+
+Bringing in the Standard-Setters
+The tech needs to be standardized to work together. This is where formal bodies come in.
+
+The IRTF's DINRG (Decentralized Internet Infrastructure Research Group) is an official research group chartered to investigate open issues in decentralizing infrastructure like identity, naming, and storage.
+
+This group is exactly the forum you are describing. Its stated goals include investigating use cases, assessing solutions for deployment, and developing best practices. Importantly, they are aware that they need to "reach other communities and organizations," specifically mentioning bodies like the ITU and IEEE.
+
+Phase 2: Establish the "Common Ground"
+This is where you move from talking to agreeing on a shared technical and governance framework.
+
+A Charter that Starts with the Hard Truth
+The treaty's foundation should not be blind idealism. The IETF's DINRG has pointed out a crucial insight: decentralized discussions often focus only on the pros, but it is better to start with the cons. The charter should be an honest assessment of the challenges—scalability, trust management, and economic incentives—that all projects face. It would also be grounded in the reality that decentralization is "an unfolding process," not a destination.
+
+A Technical Stack for the Commons
+Based on the existing work, the treaty would likely commit to:
+
+A Shared Naming and Lookup System: This is a primary focus of DINRG's research.
+
+Interoperable Decentralized Storage: Committing to common standards to avoid fragmentation, building on the collaboration already happening between the Archive and projects like Filecoin, IPFS, and GUN.
+
+Economic Incentive Primitives: This is a "recurrent artifact" (recurring issue) in these discussions. A successful commons needs a shared understanding of how to reward node operators and participants, avoiding the "every project reinvents the wheel" problem.
+
+Governance Model: The Steward as Community Node
+The "steward" is a role, not a legal entity:
+
+Rotating—no permanent power holders
+
+Transparent—all decisions public, all meetings recorded
+
+Accountable—if the steward acts badly, the community forks them out
+
+Interest-neutral—the steward has no financial stake in any protocol
+
+Voting: One person, one vote. Not token-weighted. Not corporate-weighted. Big players get the same say as solo developers.
+
+Enforcement: Not legal. Social. If you violate the treaty, the community ignores your implementation. You become incompatible. You lose relevance.
+
+Phase 3: Build a Self-Sustaining System
+The final phase is to make the treaty a living, working reality.
+
+dweb.archive.org: Your Proof of Concept
+This is not a theoretical proposal. The Internet Archive has already built a working prototype: dweb.archive.org.
+
+This decentralized version of Archive.org uses a combination of peer-to-peer protocols like IPFS, WebTorrent, and GUN to deliver content.
+
+It serves as a "minimum viable product" and the most compelling thing to show any potential stakeholder. It proves the concept works, even if it's "a bit slower" than the centralized version—a clear area for the treaty to address.
+
+The "What's in it for Me?" Pitch
+When you talk to people and organizations, your message should be:
+
+To Tech Builders: "Join a formal, neutral forum (like DINRG) to help define the standards that will make your project part of a larger, more resilient web, rather than a silo."
+
+To Archivists and Librarians: "You are key to this. Help us build a 'networked' solution that guarantees the integrity of information beyond the control of any single entity."
+
+To Funders and Foundations: "Invest in the infrastructure of this new web, not just individual projects. By funding the treaty process itself, you are funding the foundational layer for a more open and resilient internet."
+
+Phase 4: Gather Intel and Interest (Parallel Process)
+Think of your initial detective work as a parallel process:
+
+Institutional path: The IRTF's DINRG is your ideal forum. It's already an active, open platform for discussing causes, mitigation solutions, and coordinating efforts. Formal talks here require less upfront negotiation.
+
+Community path: Relationships are already seeded. The Internet Archive and Filecoin have a multi-year partnership and share the goal of preserving the web's history. The DWeb community has been holding global summits and camps since 2016, proving these conversations are not new.
+
+Estimated time: 6–12 months. You don't need to start from scratch.
+
+Phase 5: Get the "Top Players" in the Room
+This is where you move from gathering to convening.
+
+Formal track: For a standards body like the ISO, the recommended timeframe to develop a standard is 36 months from proposal to publication. DINRG is a research group, but expect a similar cadence for serious, binding agreements.
+
+Community track: The model here is the 2016 Decentralized Web Summit, where 350 pioneers from tech, academia, and civil society gathered. A serious "summit" of top players could be organized as a dedicated working meeting.
+
+Estimated time: 1–2 years using existing forums; 2–3 years for a standalone summit.
+
+Phase 6: Investigate Needs and Plan Future Phases
+The post-summit phase is where you produce tangible outputs.
+
+A critical pre-step: Develop a common terminology and foster a better understanding of the constraints of different technologies.
+
+Planning future phases: Move from diagnosis (root causes) to treatment (mitigation solutions). Document outcomes (research papers, RFCs) and interact with the broader community.
+
+Estimated time: 2–5 years to go from high-level charter to documented standards.
+
+Phase 7: Draft and Ratify the Treaty
+The treaty itself is a living document:
+
+Draft the charter in plain English. No legalese.
+
+Publish it publicly on GitHub, IPFS, Archive.org.
+
+Open comment period for 6–12 months.
+
+Revise based on feedback.
+
+Ratify through community vote (rough consensus, not unanimity).
+
+Implement reference implementations.
+
+Iterate—the treaty is never "finished."
+
+Phase 8: Build the Steward Entity
+Create a minimal legal entity only if needed (to hold funds, sign contracts). Otherwise, keep it as a social contract enforced by reputation and interoperability.
+
+The steward's only job:
+
+Convene meetings
+
+Maintain the charter
+
+Facilitate dispute resolution
+
+Report transparently on all activities
+
+No power. Just coordination.
+
+The Honest Timeline
+Phase	Duration	Deliverable
+Intel & Soft Promises	1–2 years	Map of players, expressed interest, informal alignment
+First Serious Summit	Year 2–3	All top players in one room, shared problem statement
+Charter Drafting	Years 3–5	First full draft of the treaty (technical + governance)
+Standards Formalization	Years 5–7	RFCs, specs, reference implementations
+Adoption & Iteration	Years 7–10+	Real-world deployment, revisions, broader buy-in
+7–10 years for a ratified, working treaty.
+
+The Optimistic Take
+You don't need the full treaty to start seeing impact.
+
+Year 2–3: A Memorandum of Understanding (MoU) between 5–10 major players commits to shared CID standards, mutual peering, and pooled funding.
+
+Year 4–5: First working prototype of a federated decentralized web—not perfect, but demonstrably interoperable.
+
+Year 7+: The treaty becomes the formal ratification of what's already been built in practice.
+
+Historical Precedent
+Effort	Time to Success
+TCP/IP standardization	~10 years (1970s–1980s)
+HTTP/HTML (W3C)	~5 years to first spec, 10+ to universal adoption
+Wikipedia	~5 years to critical mass, 15+ to global standard
+GDPR	~4 years drafting, 2 years enforcement—but decades of advocacy before
+10 years is normal for this scale of social+technical coordination.
+
+The Current Landscape
+Formal Standards & Research: The DINRG
+The most direct match. It's an official, active research group under the IRTF. The group is formally chartered to investigate the root causes of internet centralization, develop common terminology, and facilitate discussions between researchers and organizations.
+
+Key point: The goal is to create a common understanding and a forum for large-scale coordination—the "common ground" you identified as essential.
+
+Summits & Community Collaboration: The Decentralized Web Summit
+In 2016, the Internet Archive hosted the first Decentralized Web Summit, bringing together over 300 "web architects, activists, archivists, and policy makers." Internet pioneers like Tim Berners-Lee and Vint Cerf attended.
+
+Tim Berners-Lee summarized the core challenge: "The web is already decentralized... The problem is the dominance of one search engine, one big social network... We don't have a technology problem, we have a social problem."
+
+Building the Commons: Decentralized Storage & Archiving
+The most concrete is the partnership between the Internet Archive and the Filecoin Foundation to preserve public datasets on decentralized storage networks.
+
+The government of Bermuda is currently uploading public records to this network through the Democracy's Library project to ensure they are "permanently accessible, tamper-resistant, and verifiable."
+
+The Status: An Ongoing, Slow-Moving Process
+DINRG has spent years examining the problem, but at a recent meeting, the chairs noted that discussions have "stayed at a high level, without identifying specific actionable steps."
+
+The Decentralized Web Summit was held in 2016, but there is no indication it became a recurring, formal "treaty negotiation" event.
+
+The gap: The process is fragmented—research, storage infrastructure, and summits exist separately. No one has unified them into a single treaty effort.
+
+Why No One Has Unified It Yet
+Reason	Explanation
+Ideological Purity	"Taking command" is seen as centralization, even if it's coordination.
+Competing Incentives	Crypto projects want their token to win. Academics want their paper cited. Corporations want their edge.
+NIH Syndrome	Builders love their own architecture. Admitting someone else's is better feels like surrender.
+Funding Fragmentation	Grants are project-specific. No one funds coordination—it's not sexy.
+Fear of Capture	Even a neutral convener will be attacked as "the new centralizer."
+The Fix: A Social Contract, Not a Legal One
+You don't need lawyers. You need trust.
+
+Legal Binding	Social Contract (Your Model)
+Enforced by courts	Enforced by reputation and community shunning
+Slow, expensive	Fast, cooperative
+Requires jurisdiction	No jurisdiction—global by design
+Can be gamed by lawyers	Can only be gamed by losing trust
+The real enforcement: If you ignore the treaty, the community ignores you. Your project becomes irrelevant.
+
+Summary: The Plan in Action
+Phase	Objective	Key Actions
+1. Core Coalition	Unite the Tech & Archives	Formalize partnerships between the Internet Archive, Filecoin, and other DWeb pioneers.
+2. Common Ground	Build a Technical & Governance Charter	Engage with the IRTF's DINRG to leverage its existing research and framework for a new treaty.
+3. Proof of Concept	Show, Don't Tell	Use dweb.archive.org as the flagship demonstration.
+4. Gather Intel	Map the players	Parallel institutional and community outreach.
+5. Convene Summit	Get top players in one room	Host a working meeting modeled on the 2016 DWeb Summit.
+6. Investigate Needs	Understand constraints	Develop common terminology and document outcomes.
+7. Draft & Ratify	Produce the treaty	Open RFC-style review, community vote.
+8. Build Steward	Create coordination role	Rotating, transparent, accountable, interest-neutral.
+The Only Thing Missing
+Someone to start the clock.
+
+The clock doesn't start when the treaty is signed. It starts when someone writes the first draft of the charter and sends it to 10 key people with a calendar invite.
+
+---
+
+**Example of such a treaty**
+
+The Treaty of the Decentralized Commons
+A Social Contract for an Interoperable, Resilient, and People-Governed Web
+
+Preamble
+We, the builders, archivists, researchers, and stewards of decentralized infrastructure, recognize that:
+
+The internet was designed as an open, distributed network, yet power has concentrated in a handful of corporate platforms
+
+Decentralized technologies (storage, compute, naming, identity) exist but remain fragmented, each operating as its own silo
+
+No single project can decentralize the entire web alone
+
+The barrier is not technical—it is social coordination
+
+We therefore establish this Treaty to create a common foundation for interoperability, shared standards, and community governance.
+
+This is not a legal document. It is a social contract. Its enforcement comes not from courts, but from the collective will of the community. Those who violate its principles will find themselves ignored, incompatible, and irrelevant.
+
+Article I: Principles
+Interoperability First — No project shall lock data, identity, or functionality behind proprietary walls. All systems must speak common protocols.
+
+Interest-Neutral Stewardship — The coordination of the commons shall be managed by a Steward (or body of Stewards) with no financial or competitive stake in any protocol or platform.
+
+People Govern — Governance is by rough consensus of active participants. One person, one voice. No token-weighting. No corporate veto.
+
+Transparency — All decisions, meetings, budgets, and disputes shall be public and auditable.
+
+Forkability — Any group that disagrees with the direction of the commons may fork the treaty, the standards, or the implementation. The best fork wins by adoption, not by force.
+
+Iterative Evolution — The treaty is never finished. It grows, adapts, and improves through use, feedback, and formal revision.
+
+Preservation of History — The commons shall prioritize the permanent, tamper-resistant preservation of public knowledge.
+
+Article II: Technical Commitments
+All signatories agree to adopt and implement the following standards, or to work toward their adoption in good faith.
+
+2.1 Content Addressing
+All data shall be addressed by its content, using CIDs (Content Identifiers) as defined by the IPFS specification (or an equivalent interoperable standard)
+
+This ensures that data is location-independent and verifiable
+
+2.2 Naming and Lookup
+The commons shall maintain an interoperable naming and discovery system, building on the research of the IRTF's DINRG
+
+This may include DHTs, ENS, Handshake, or other decentralized naming systems—as long as they are interoperable
+
+2.3 Storage
+Signatories shall support at least one decentralized storage protocol (IPFS, Filecoin, Arweave, Storj, or equivalent) for public data
+
+Data shall be replicated across at least three independent nodes or networks
+
+2.4 Retrieval
+All data shall be retrievable via common retrieval protocols (bitswap, graphsync, or equivalent)
+
+The commons shall maintain a shared retrieval index or network
+
+2.5 Identity
+Signatories shall support decentralized identity (DIDs, UCANs, or equivalent)
+
+Identity shall be portable—users own their identity, not the platform
+
+2.6 Economic Incentives
+The commons shall develop shared primitives for rewarding node operators, storage providers, and contributors
+
+These primitives shall be interoperable across projects, avoiding the "every project reinvents the wheel" problem
+
+Article III: Governance
+3.1 The Steward
+A Steward (or body of Stewards) shall be appointed to coordinate the commons.
+
+Duties:
+
+Convene meetings and summits
+
+Maintain the charter and standards documents
+
+Facilitate dispute resolution
+
+Report transparently on all activities
+
+Maintain a public registry of signatories
+
+Restrictions:
+
+The Steward shall have no financial stake in any protocol, platform, or token
+
+The Steward shall not favor one project over another
+
+The Steward shall serve a fixed term (e.g., 2 years) and may be renewed by community vote
+
+Removal: The Steward may be removed by a supermajority vote (75%) of active participants.
+
+3.2 Decision-Making
+Rough Consensus — Decisions are made by rough consensus, not unanimity. Sustained opposition blocks a decision; mere disagreement does not.
+
+Voting — When formal votes are needed, all active participants (individuals, not organizations) have one vote
+
+Corporate Participation — Corporations and large organizations may participate, but they receive no special voting weight
+
+3.3 Amendments
+Amendments to this Treaty shall be proposed in writing
+
+An open comment period of at least 6 months shall follow
+
+Ratification requires rough consensus of active participants
+
+No amendment shall violate the core principles of interoperability, neutrality, or forkability
+
+Article IV: Dispute Resolution
+4.1 Technical Disputes
+When two implementations disagree on a standard, the community shall convene a technical working group to resolve the issue
+
+The working group's recommendation shall be published for comment
+
+If consensus cannot be reached, both implementations may coexist until the community converges on one
+
+4.2 Governance Disputes
+If a Steward is accused of bias or misconduct, the community shall investigate
+
+If the accusation is substantiated, the Steward shall be removed
+
+No legal action shall be pursued—the enforcement is social
+
+4.3 Violations of the Treaty
+A signatory that violates the Treaty shall be publicly identified
+
+Other signatories may choose to cease interoperability with the violator
+
+The violator may regain standing by correcting the violation and making amends
+
+Article V: Funding
+5.1 Shared Funding Pool
+Signatories may contribute to a shared fund to support:
+
+Steward operations
+
+Infrastructure (lookup servers, indexers, archival nodes)
+
+Grants for interoperability work
+
+Legal defense (if needed) for the commons
+
+5.2 No Profit
+The Steward shall not generate profit from the commons
+
+Any funds raised shall be used solely for the operation and maintenance of the commons
+
+All budgets shall be public
+
+5.3 Independent Audits
+The commons shall undergo annual financial and technical audits
+
+Audits shall be published publicly
+
+Article VI: Ratification
+6.1 Signatories
+Any project, organization, or individual that agrees to the principles and technical commitments of this Treaty may become a Signatory
+
+Signatories shall be listed in a public registry maintained by the Steward
+
+6.2 Initial Ratification
+This Treaty shall be open for public comment for a period of 12 months
+
+After 12 months, it shall be ratified by rough consensus of the community
+
+Ratification shall be indicated by a public declaration, not by legal signature
+
+6.3 Ongoing Ratification
+New Signatories may join at any time by public declaration
+
+The Treaty shall be reviewed every 3 years for relevance and revised as needed
+
+Article VII: The Future
+7.1 Vision
+A web where data lives on the commons, not in corporate silos
+
+A web where users own their identity and control their data
+
+A web that persists for decades, immune to censorship and corporate failure
+
+7.2 Commitment
+We commit to building this web, piece by piece, standard by standard, conversation by conversation
+
+We commit to patience, persistence, and good faith
+
+We commit to putting the commons above any single project, company, or ideology
+
+Signatories
+(To be filled in by individuals, projects, and organizations that ratify this Treaty)
+
+Name	Role/Project	Date of Ratification
+[Your Name Here]	[Your Role]	[Date]
+Appendix A: Glossary
+Term	Definition
+CID	Content Identifier—a way to address data by its content, not its location
+DHT	Distributed Hash Table—a decentralized lookup system
+DINRG	Decentralized Internet Infrastructure Research Group (IRTF)
+DWeb	Decentralized Web
+ENS	Ethereum Name Service—a decentralized naming system
+IPFS	InterPlanetary File System—a decentralized storage and retrieval protocol
+IRC	Internet Relay Chat—a simple, open protocol for real-time messaging
+IETF	Internet Engineering Task Force—the standards body for the internet
+IRTF	Internet Research Task Force—the research arm of the IETF
+RFC	Request for Comments—a formal document from the IETF or IRTF
+Steward	An interest-neutral coordinator of the commons
+Appendix B: How to Join
+Read this Treaty
+
+Discuss it with your community
+
+Submit feedback (via GitHub, IRC, or email to the Steward)
+
+Declare your ratification (publicly, in any form—a tweet, a blog post, a GitHub star)
+
+Be listed in the public registry
+
+You don't need permission. Just show up.
+
