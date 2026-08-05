@@ -904,3 +904,37 @@ body {
         padding: 4px 10px;
     }
 }
+
+/* ---------- REFERRAL FOOTER ---------- */
+.referral-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 40px;
+    margin-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.referral-footer a {
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    color: #94A3B8;
+    text-decoration: none;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+}
+
+.referral-footer a:hover {
+    opacity: 1;
+    color: #FFFFFF;
+}
+
+.referral-footer img {
+    height: 40px;
+    width: auto;
+}
