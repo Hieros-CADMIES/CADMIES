@@ -85,6 +85,6 @@ Automate publishing with GitHub Actions
 Reply to vmx with success update
 
 Related
-[[Session-044 — 2026-07-31 — Matadisco Integration Foundation]]
+[[Session-044-2026-07-31-Matadisco-Integration-Foundation-and-Blueprint]]
 
 [[Phase-73-Matadisco-Integration]]
