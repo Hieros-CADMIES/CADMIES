@@ -2,7 +2,7 @@
 """
 File: generate_public_gateway.py
 Tool: CADMIES Public Mycelium Gateway Generator
-Version: 3.1.2
+Version: 3.2.0
 System: CADMIES - tools
 Status: ACTIVE
 
@@ -12,6 +12,10 @@ Purpose: Generates a single-page public-facing website from the blockstore.
 
          Domain filter pills now actually filter the concept cards.
          Subdomain tier is designed but not yet implemented.
+
+         translate.js integration — client-side multilingual support.
+         Toggle placed left of the CADMIES title. Language preference stored in localStorage.
+         Default: disabled. User clicks to activate translation dropdown.
 
          No personal information. No internal tooling references.
          Just the knowledge the mycelium wants to share with the world.
@@ -23,6 +27,9 @@ Output:
     ../docs/ — static site served by web server
 
 Version History:
+  v3.2.0 (2026-08-09): Added translate.js integration — client-side multilingual support.
+      Toggle left of CADMIES title. localStorage language persistence.
+      Privacy note in footer. Default disabled.
   v3.1.2 (2026-07-31): Added ORCID iD to stats bar (0009-0000-8877-2731).
   v3.1.1 (2026-07-29): Updated SITE_URL to project-hierion.org. Final migration from DuckDNS to official domain.
   v3.1.0 (2026-07-27): Domain filter pills now functional. Added domain and
@@ -386,8 +393,53 @@ def build_index_page(concepts, domain_counts, subdomain_index):
 
         /* Header */
         header {{ background: linear-gradient(135deg, #161b22 0%, #0d1117 100%); border-bottom: 1px solid #30363d; padding: 50px 20px 40px; text-align: center; }}
-        header h1 {{ font-size: 2.4em; color: #e6edf3; margin-bottom: 8px; }}
-        header .subtitle {{ color: #8b949e; font-size: 1.05em; max-width: 600px; margin: 0 auto 20px; }}
+        .header-content {{ display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }}
+        header h1 {{ font-size: 2.4em; color: #e6edf3; margin: 0; }}
+        .header-sprout {{ font-size: 2.4em; line-height: 1; }}
+        .header-subtitle {{ color: #8b949e; font-size: 1.05em; max-width: 600px; margin: 8px auto 20px; }}
+
+        /* Translate Toggle */
+        .translate-toggle {{
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 0.9em;
+            color: #8b949e;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            line-height: 1.5;
+            margin-right: 4px;
+        }}
+        .translate-toggle:hover {{
+            color: #c9d1d9;
+            border-color: #58a6ff;
+        }}
+        .translate-toggle.active {{
+            border-color: #58a6ff;
+            color: #58a6ff;
+        }}
+        .translate-toggle .icon {{ font-size: 1em; }}
+
+        /* translate.js overrides — match dark theme */
+        #translate-select {{
+            background: #161b22 !important;
+            color: #c9d1d9 !important;
+            border: 1px solid #30363d !important;
+            border-radius: 6px !important;
+            padding: 4px 8px !important;
+            font-size: 0.85em !important;
+            font-family: inherit !important;
+        }}
+        #translate-select option {{
+            background: #161b22;
+            color: #c9d1d9;
+        }}
+
         .map-link {{ display: inline-block; margin-top: 12px; padding: 10px 24px; background: #238636; color: #ffffff; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.95em; transition: background 0.2s; }}
         .map-link:hover {{ background: #2ea043; }}
 
@@ -481,6 +533,7 @@ def build_index_page(concepts, domain_counts, subdomain_index):
         footer {{ text-align: center; padding: 40px 20px; color: #484f58; font-size: 0.85em; border-top: 1px solid #30363d; margin-top: 40px; }}
         footer a {{ color: #58a6ff; text-decoration: none; }}
         footer a:hover {{ text-decoration: underline; }}
+        .footer-privacy {{ font-size: 0.85em; color: #484f58; margin-top: 8px; }}
 
         /* Results count */
         .results-count {{ color: #8b949e; font-size: 0.85em; margin: 4px 0 16px; }}
@@ -490,14 +543,22 @@ def build_index_page(concepts, domain_counts, subdomain_index):
             header h1 {{ font-size: 1.6em; }}
             .stats {{ gap: 10px; }}
             .stat {{ padding: 10px 16px; }}
+            .header-content {{ gap: 8px; }}
+            .translate-toggle {{ font-size: 0.8em; padding: 3px 10px; }}
         }}
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <h1>CADMIES</h1>
-            <p class="subtitle">A decentralized knowledge graph of interconnected scientific and philosophical concepts.<br>Content-addressed. Open-source. Forever.</p>
+            <div class="header-content">
+                <button class="translate-toggle" id="translateToggle" onclick="toggleTranslation()">
+                    <span class="icon">🌐</span> <span id="toggleLabel">Translate</span>
+                </button>
+                <span class="header-sprout">🌱</span>
+                <h1>CADMIES</h1>
+            </div>
+            <p class="header-subtitle">A decentralized knowledge graph of interconnected scientific and philosophical concepts.<br>Content-addressed. Open-source. Forever.</p>
             <a href="mycelium_map.html" class="map-link">Explore the Interactive Mycelium Map</a>
             <div class="stats">
                 <div class="stat"><div class="stat-number">{len(concepts)}</div><div class="stat-label">Concepts</div></div>
@@ -541,12 +602,98 @@ def build_index_page(concepts, domain_counts, subdomain_index):
             <p>CADMIES — Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</p>
             <p>All concepts licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Each concept has a permanent CID (Content Identifier) — the hash proves nothing was altered.</p>
             <p><a href="sitemap.xml">Sitemap</a> · <a href="concepts.json">JSON Feed</a> · <a href="https://github.com/Project-Hierion/Hierion-CADMIES">GitHub</a></p>
+            <p class="footer-privacy">🌐 Translation powered by <a href="https://translate.zvo.cn" target="_blank" rel="noopener noreferrer">translate.js</a> — all processing occurs client-side. No data is sent to CADMIES servers.</p>
         </div>
     </footer>
     <script>
         let currentFilter = 'all';
         const totalConcepts = {len(concepts)};
 
+        // === TRANSLATE.JS INTEGRATION ===
+        let translationActive = false;
+
+        function toggleTranslation() {{
+            if (!translationActive) {{
+                // Load translate.js if not already loaded
+                if (typeof translate === 'undefined') {{
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.staticfile.net/translate.js/3.15.6/translate.min.js';
+                    script.onload = function() {{
+                        translate.execute();
+                        translationActive = true;
+                        updateToggleUI(true);
+                        // Store preference
+                        try {{ localStorage.setItem('translateActive', 'true'); }} catch(e) {{}}
+                    }};
+                    document.head.appendChild(script);
+                }} else {{
+                    translate.execute();
+                    translationActive = true;
+                    updateToggleUI(true);
+                    try {{ localStorage.setItem('translateActive', 'true'); }} catch(e) {{}}
+                }}
+            }} else {{
+                // Reset to English
+                if (typeof translate !== 'undefined' && translate.reset) {{
+                    translate.reset();
+                }} else {{
+                    location.reload();
+                }}
+                translationActive = false;
+                updateToggleUI(false);
+                try {{ localStorage.setItem('translateActive', 'false'); }} catch(e) {{}}
+            }}
+        }}
+
+        function updateToggleUI(active) {{
+            const btn = document.getElementById('translateToggle');
+            const label = document.getElementById('toggleLabel');
+            if (active) {{
+                btn.classList.add('active');
+                label.textContent = 'English';
+            }} else {{
+                btn.classList.remove('active');
+                label.textContent = 'Translate';
+            }}
+        }}
+
+        // Restore preference on load
+        (function() {{
+            try {{
+                const saved = localStorage.getItem('translateActive');
+                if (saved === 'true') {{
+                    // Wait for page to settle then activate
+                    setTimeout(function() {{
+                        if (typeof translate !== 'undefined') {{
+                            translate.execute();
+                            translationActive = true;
+                            updateToggleUI(true);
+                        }} else {{
+                            // Load and activate
+                            const script = document.createElement('script');
+                            script.src = 'https://cdn.staticfile.net/translate.js/3.15.6/translate.min.js';
+                            script.onload = function() {{
+                                translate.execute();
+                                translationActive = true;
+                                updateToggleUI(true);
+                            }};
+                            document.head.appendChild(script);
+                        }}
+                    }}, 500);
+                }}
+            }} catch(e) {{ /* localStorage not available */ }}
+        }})();
+
+        // Listen for translate.js language change events if available
+        document.addEventListener('translateLanguageChange', function(e) {{
+            if (e.detail && e.detail.language) {{
+                const label = document.getElementById('toggleLabel');
+                label.textContent = e.detail.language;
+                document.getElementById('translateToggle').classList.add('active');
+            }}
+        }});
+
+        // === FILTER LOGIC ===
         function setFilter(filter, btn) {{
             currentFilter = filter;
 
@@ -632,8 +779,9 @@ def build_sitemap(concepts):
 
 def main():
     print("=" * 60)
-    print("CADMIES PUBLIC MYCELIUM GATEWAY GENERATOR v3.1.2")
+    print("CADMIES PUBLIC MYCELIUM GATEWAY GENERATOR v3.2.0")
     print(f"Output: {OUTPUT_DIR}")
+    print("translate.js integration: ENABLED (client-side, privacy-respecting)")
     print("=" * 60)
 
     concepts, domain_counts, subdomain_index = gather_public_concepts()
@@ -647,7 +795,7 @@ def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     # Build single-page index
-    print("Generating index.html (single-page gateway)...")
+    print("Generating index.html (single-page gateway with translate.js)...")
     index_html = build_index_page(concepts, domain_counts, subdomain_index)
     with open(OUTPUT_DIR / "index.html", "w") as f:
         f.write(index_html)
@@ -676,6 +824,10 @@ def main():
     print(f"   .nojekyll — bypass Jekyll processing")
     print(f"\nDomain filter pills now functional. Click a domain to filter cards.")
     print(f"   Subdomain tier is designed but not yet implemented.")
+    print(f"\n🌐 translate.js integration:")
+    print(f"   Toggle left of CADMIES title — click to activate client-side translation")
+    print(f"   Language preference stored in localStorage")
+    print(f"   All processing occurs client-side — no data sent to CADMIES servers")
     print(f"\nDeploy: push to GitHub, Pages serves from /docs folder")
 
 
