@@ -2,12 +2,12 @@
 """
 File: generate_relationships.py
 Tool: CADMIES Relationship Generator
-Version: 1.2.5
+Version: 1.2.6
 System: CADMIES / tools
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
 
-Purpose: Feeds minted concepts to Codestral in small batches to propose
+Purpose: Feeds minted concepts to an LLM (Codestral/Mistral) in small batches to propose
          cross-reference relationships. Two-phase strategy:
            Phase 1: Intra-batch edges (10 concepts per batch)
            Phase 2: Cross-batch bridges (8 ambassadors per call)
@@ -18,6 +18,7 @@ Usage:
     python tools/generate_relationships.py --incremental    # Only sparse concepts
 
 Version History:
+  v1.2.6 (2026-08-08): Renamed call_mistral() to call_llm() for model-agnostic naming.
   v1.2.5 (2026-05-28): build_intra_batch_prompt now includes domain and definition.
       build_bridge_prompt already included domains; added definitions.
       Reduced BATCH_SIZE from 15 to 10 for more focused proposals.
@@ -71,7 +72,7 @@ def gather_concept_summaries():
 
 
 def build_intra_batch_prompt(batch_ids, summaries):
-    """Send concept IDs WITH their domains and definitions so Codestral can reason."""
+    """Send concept IDs WITH their domains and definitions so the LLM can reason."""
     lines = []
     for hid in batch_ids:
         s = summaries.get(hid, {})
@@ -123,13 +124,13 @@ Do NOT invent new IDs or types. Include EVERY concept as a key, even if empty ar
 Return ONLY the JSON (no markdown, no commentary):"""
 
 
-def call_mistral(prompt, step_name):
-    """Send prompt to Codestral and parse JSON response."""
+def call_llm(prompt, step_name):
+    """Send prompt to the configured LLM and parse JSON response."""
     import ollama
     import re
 
     est_tokens = len(prompt.split())
-    print(f"  Codestral <- {est_tokens} tokens...", end=" ", flush=True)
+    print(f"  {MODEL} <- {est_tokens} tokens...", end=" ", flush=True)
 
     raw = None
     try:
@@ -224,7 +225,7 @@ def main():
     incremental = "--incremental" in sys.argv
 
     print("=" * 60)
-    print("CADMIES RELATIONSHIP GENERATOR v1.2.5")
+    print("CADMIES RELATIONSHIP GENERATOR v1.2.6")
     print(f"Model: {MODEL}  |  Batch: {BATCH_SIZE}  |  Delay: {DELAY}s")
     print(f"Mode: {'WRITE' if write_mode else 'DRY RUN (preview only)'}")
     print(f"Filter: {'INCREMENTAL (sparse only)' if incremental else 'FULL (all concepts)'}")
@@ -266,7 +267,7 @@ def main():
         step = f"batch{i+1}"
         print(f"\nBatch {i+1}/{len(batches)} ({len(batch)} concepts)")
         prompt = build_intra_batch_prompt(batch, summaries)
-        relationships = call_mistral(prompt, step)
+        relationships = call_llm(prompt, step)
         filtered = filter_valid_edges(relationships, set(batch))
         for source, edges in filtered.items():
             all_relationships[source].extend(edges)
@@ -286,7 +287,7 @@ def main():
             step = f"bridge{i+1}"
             print(f"\nBridge {i+1}/{len(bridge_batches)} ({len(bridge)} ambassadors)")
             prompt = build_bridge_prompt(bridge, summaries)
-            relationships = call_mistral(prompt, step)
+            relationships = call_llm(prompt, step)
             filtered = filter_valid_edges(relationships, set(bridge))
             for source, edges in filtered.items():
                 all_relationships[source].extend(edges)
