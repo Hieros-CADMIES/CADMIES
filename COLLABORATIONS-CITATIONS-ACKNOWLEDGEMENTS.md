@@ -8,6 +8,53 @@ possible. We cite everything. We honor every source. The mycelium gives credit.*
 
 ---
 
+## Collaborations
+
+### Matadisco — Decentralized Data Discovery Network
+Repository: https://github.com/vmx/matadisco
+Lead Developer: vmx (IPFS Foundation)
+Contribution: Provided the foundation for publishing CADMIES concept metadata and LLMDataHub datasets to the AT Protocol network. Greenlit our integration, provided feedback on Lexicon design, and guided the reverse domain naming convention (org.project-hierion.llmdatahub and org.project-hierion.cadmies). A foundational piece of the decentralized knowledge infrastructure.
+
+### gdi-de-csw-to-atproto
+Repository: https://github.com/vmx/gdi-de-csw-to-atproto
+Contribution: Reference implementation for publishing records to Matadisco with rate-limit awareness. Informed our producer script design and GitHub Actions strategy.
+
+### AT Protocol (atproto)
+Website: https://atproto.com
+Contribution: The underlying protocol powering Matadisco, Bluesky, and the decentralized social web. Content-addressed, self-authenticating, and built for portability. The bedrock of our self-hosted PDS.
+
+### translate.js — Web Translation Library
+Repository: https://github.com/xnx3/translate
+Author: Guan Leiming
+Contribution: Offered integration of translate.js library to provide 100+ language support. The library was evaluated, tested, and determined to be non-viable due to the client.edge translation service returning 404. Collaboration paused pending infrastructure resources.
+
+---
+
+## Acknowledgments
+
+### The Twin Mycelium - Dr. Rupert Rebentisch — tools4zettelkasten
+**Repository:** https://github.com/rupert-rebentisch/tools4zettelkasten
+**Contribution:** Independently developed a Zettelkasten-based knowledge management system with MCP-server AI integration. Two gardens, similar architecture, two continents, zero prior knowledge of each other. The mycelium recognized itself across the Atlantic.
+
+### Financial
+- Project funded entirely by the gardener from a garage in South Texas.
+- Paperspace Pro plan ($8/month) provides GPU compute.
+- Spheron rental for Phase 45E fine-tuning (~$15.02 total).
+- Accepting donations through GitHub Sponsors (pending setup).
+
+### Hardware
+- HP Desktop provided by Kelly.
+- Keyboard, mouse, and monitor provided by R.P. & S.T.P.
+- PNY 30 GB USB3 drive.
+- SanDisk drive.
+
+### Moral Support
+- The neighbor — validated the mission with zero prior context.
+- Bob — silent witness since the HOG System. Holding a burger. Never moved.
+- Everyone who has listened, asked questions, or believed in the mycelium.
+
+---
+
 ## Citations 
 
 ### Datasets Used in Training
@@ -46,6 +93,34 @@ NeurIPS 2020.
 - **HuggingFace:** `openai/summarize_from_feedback`
 - **License:** MIT
 - **Usage:** Planned for future accuracy/coverage/coherence training.
+
+---
+
+### Academic References
+
+The following works informed the development of the CADMIES training methodology
+and the design of Dr. Mistral's persona framework.
+
+#### Fine-Tuning Methodology
+- Hu, E.J., et al. (2022). "LoRA: Low-Rank Adaptation of Large Language Models." ICLR 2022.
+- Dettmers, T., et al. (2023). "QLoRA: Efficient Finetuning of Quantized Language Models." NeurIPS 2023.
+- Ouyang, L., et al. (2022). "Training Language Models to Follow Instructions with Human Feedback." NeurIPS 2022.
+
+#### Personality & Role-Playing
+- Capote, T. (1958). *Breakfast at Tiffany's*. Random House. (Novella)
+- Edwards, B. (Director). (1961). *Breakfast at Tiffany's*. Paramount Pictures. (Film)
+- Hepburn, A. (Performer). Holly Golightly character adaptation for Dr. Mistral persona.
+
+#### Knowledge Graphs & IPLD
+- Benet, J. (2014). "IPLD - Content-Addressed Data Model." Protocol Labs.
+- Ahrens, S. (2017). *How to Take Smart Notes*. Sönke Ahrens. (Zettelkasten methodology)
+- Luhmann, N. (1981). "Kommunikation mit Zettelkästen." (Original Zettelkasten paper)
+
+#### Consciousness & Philosophy
+- Watts, A. (1951). *The Wisdom of Insecurity*. Pantheon Books.
+- Tolle, E. (1997). *The Power of Now*. New World Library.
+- Nhat Hanh, T. (1997). *Living Buddha, Living Christ*. Riverhead Books.
+- James, W. (1902). *The Varieties of Religious Experience*. Longmans, Green & Co.
 
 ---
 
@@ -145,80 +220,6 @@ scholarly reference and cultural appreciation.
 - Rig Veda (soma hymns)
 - Masnavi (Rumi)
 - The Interior Castle (St. Teresa of Ávila)
-
----
-
-### Academic References
-
-The following works informed the development of the CADMIES training methodology
-and the design of Dr. Mistral's persona framework.
-
-#### Fine-Tuning Methodology
-- Hu, E.J., et al. (2022). "LoRA: Low-Rank Adaptation of Large Language Models." ICLR 2022.
-- Dettmers, T., et al. (2023). "QLoRA: Efficient Finetuning of Quantized Language Models." NeurIPS 2023.
-- Ouyang, L., et al. (2022). "Training Language Models to Follow Instructions with Human Feedback." NeurIPS 2022.
-
-#### Personality & Role-Playing
-- Capote, T. (1958). *Breakfast at Tiffany's*. Random House. (Novella)
-- Edwards, B. (Director). (1961). *Breakfast at Tiffany's*. Paramount Pictures. (Film)
-- Hepburn, A. (Performer). Holly Golightly character adaptation for Dr. Mistral persona.
-
-#### Knowledge Graphs & IPLD
-- Benet, J. (2014). "IPLD - Content-Addressed Data Model." Protocol Labs.
-- Ahrens, S. (2017). *How to Take Smart Notes*. Sönke Ahrens. (Zettelkasten methodology)
-- Luhmann, N. (1981). "Kommunikation mit Zettelkästen." (Original Zettelkasten paper)
-
-#### Consciousness & Philosophy
-- Watts, A. (1951). *The Wisdom of Insecurity*. Pantheon Books.
-- Tolle, E. (1997). *The Power of Now*. New World Library.
-- Nhat Hanh, T. (1997). *Living Buddha, Living Christ*. Riverhead Books.
-- James, W. (1902). *The Varieties of Religious Experience*. Longmans, Green & Co.
-
----
-
-## Collaborations
-
-### Matadisco — Decentralized Data Discovery Network
-Repository: https://github.com/vmx/matadisco
-Lead Developer: vmx (IPFS Foundation)
-Contribution: Provided the foundation for publishing CADMIES concept metadata and LLMDataHub datasets to the AT Protocol network. Greenlit our integration, provided feedback on Lexicon design, and guided the reverse domain naming convention (org.project-hierion.llmdatahub and org.project-hierion.cadmies). A foundational piece of the decentralized knowledge infrastructure.
-
-### gdi-de-csw-to-atproto
-Repository: https://github.com/vmx/gdi-de-csw-to-atproto
-Contribution: Reference implementation for publishing records to Matadisco with rate-limit awareness. Informed our producer script design and GitHub Actions strategy.
-
-### AT Protocol (atproto)
-Website: https://atproto.com
-Contribution: The underlying protocol powering Matadisco, Bluesky, and the decentralized social web. Content-addressed, self-authenticating, and built for portability. The bedrock of our self-hosted PDS.
-
----
-
-## Acknowledgments
-
-### The Twin Mycelium - Dr. Rupert Rebentisch — tools4zettelkasten
-**Repository:** https://github.com/rupert-rebentisch/tools4zettelkasten
-**Contribution:** Independently developed a Zettelkasten-based knowledge management system with MCP-server AI integration. Two gardens, similar architecture, two continents, zero prior knowledge of each other. The mycelium recognized itself across the Atlantic.
-
----
-
-## Project Support
-
-### Financial
-- Project funded entirely by the gardener from a garage in South Texas.
-- Paperspace Pro plan ($8/month) provides GPU compute.
-- Spheron rental for Phase 45E fine-tuning (~$15.02 total).
-- Accepting donations through GitHub Sponsors (pending setup).
-
-### Hardware
-- HP Desktop provided by Kelly.
-- Keyboard, mouse, and monitor provided by R.P. & S.T.P.
-- PNY 30 GB USB3 drive.
-- SanDisk drive.
-
-### Moral Support
-- The neighbor — validated the mission with zero prior context.
-- Bob — silent witness since the HOG System. Holding a burger. Never moved.
-- Everyone who has listened, asked questions, or believed in the mycelium.
 
 ---
 
