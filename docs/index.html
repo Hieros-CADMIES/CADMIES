@@ -13,6 +13,77 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+
+    <style>
+        /* Translate toggle — matches the dark theme */
+        .translate-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
+            padding: 4px 12px;
+            font-size: 0.9em;
+            color: #94A3B8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+            margin-right: 4px;
+        }
+        .translate-toggle:hover {
+            color: #FFFFFF;
+            border-color: #4F46E5;
+        }
+        .translate-toggle.active {
+            border-color: #4F46E5;
+            color: #4F46E5;
+        }
+        .translate-toggle .icon {
+            font-size: 1em;
+        }
+
+        /* Header flex layout */
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .header-sprout {
+            font-size: 32px;
+            line-height: 1;
+        }
+
+        .header-title-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-privacy {
+            font-size: 0.85em;
+            color: #484f58;
+            margin-top: 8px;
+        }
+
+        #translate-select {
+            background: #161b22 !important;
+            color: #c9d1d9 !important;
+            border: 1px solid #30363d !important;
+            border-radius: 6px !important;
+            padding: 4px 8px !important;
+            font-size: 0.85em !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+        #translate-select option {
+            background: #161b22;
+            color: #c9d1d9;
+        }
+    </style>
 </head>
 <body>
 
@@ -30,20 +101,25 @@
     <!-- ============ MAIN APP ============ -->
     <div id="app" class="hidden">
 
-        <!-- ===== PAGE: DASHBOARD (CONTROL CENTER) ===== -->
+        <!-- ===== PAGE: DASHBOARD ===== -->
         <section id="page-dashboard" class="page active">
             <div class="dashboard-container">
 
-                <!-- Dashboard Header -->
-<div class="dashboard-header">
-    <div class="header-center">
-        <div class="header-title">
-            <span class="header-emoji">🌱</span>
-            <h1>CADMIES</h1>
-        </div>
-        <div class="header-tagline">Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</div>
-    </div>
-</div>
+                <!-- Dashboard Header with Translate Toggle -->
+                <div class="dashboard-header">
+                    <div class="header-center">
+                        <div class="header-content">
+                            <button class="translate-toggle" id="translateToggle" onclick="toggleTranslation()">
+                                <span class="icon">🌐</span> <span id="toggleLabel">Translate</span>
+                            </button>
+                            <span class="header-sprout">🌱</span>
+                            <div class="header-title-group">
+                                <h1>CADMIES</h1>
+                            </div>
+                        </div>
+                        <div class="header-tagline">Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</div>
+                    </div>
+                </div>
 
                 <!-- Stats Grid -->
                 <div class="stats-grid" id="stats-grid">
@@ -110,20 +186,27 @@
                     </div>
                 </div>
 
-                            <!-- Footer -->
-            <div class="dashboard-footer">
-                <span>Let the mycelium grow! 🌱</span>
-            </div>
+                <!-- Footer -->
+                <div class="dashboard-footer">
+                    <span>Let the mycelium grow! 🌱</span>
+                </div>
 
-            <!-- Referral Footer -->
-            <div class="referral-footer">
-                <a href="https://www.digitalocean.com/?refcode=fd70c6e2650a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge" target="_blank" rel="noopener noreferrer">
-                    <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" />
-                </a>
-                <a href="https://cape.co/get-cape?referral=ZCWW60AA" target="_blank" rel="noopener noreferrer">Cape Wireless</a>
-                <a href="https://app.spheron.ai/signup?ref=ENXyV3608" target="_blank" rel="noopener noreferrer">Spheron AI</a>
+                <!-- Referral Footer -->
+                <div class="referral-footer">
+                    <a href="https://www.digitalocean.com/?refcode=fd70c6e2650a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge" target="_blank" rel="noopener noreferrer">
+                        <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" />
+                    </a>
+                    <a href="https://cape.co/get-cape?referral=ZCWW60AA" target="_blank" rel="noopener noreferrer">Cape Wireless</a>
+                    <a href="https://app.spheron.ai/signup?ref=ENXyV3608" target="_blank" rel="noopener noreferrer">Spheron AI</a>
+                </div>
+
+                <!-- Privacy Note -->
+                <div class="footer-privacy" style="text-align:center;padding:12px 20px;max-width:900px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.06);">
+                    🌐 Translation powered by <a href="https://translate.zvo.cn" target="_blank" rel="noopener noreferrer" style="color:#58a6ff;text-decoration:none;">translate.js</a> — all processing occurs client-side. No data is sent to CADMIES servers.
+                </div>
+
             </div>
-    </section>
+        </section>
 
         <!-- ===== PAGE: DR. MISTRAL ===== -->
         <section id="page-mistral" class="page">
@@ -342,6 +425,92 @@
     </div>
 
     <script src="app.js?t=20260803"></script>
+
+    <!-- ============ TRANSLATE.JS ============ -->
+    <script>
+        // === TRANSLATE.JS INTEGRATION ===
+        let translationActive = false;
+
+        function toggleTranslation() {
+            if (!translationActive) {
+                // Load translate.js if not already loaded
+                if (typeof translate === 'undefined') {
+                    const script = document.createElement('script');
+                    script.src = 'https://cdn.staticfile.net/translate.js/3.15.6/translate.min.js';
+                    script.onload = function() {
+                        translate.execute();
+                        translationActive = true;
+                        updateToggleUI(true);
+                        try { localStorage.setItem('translateActive', 'true'); } catch(e) {}
+                    };
+                    document.head.appendChild(script);
+                } else {
+                    translate.execute();
+                    translationActive = true;
+                    updateToggleUI(true);
+                    try { localStorage.setItem('translateActive', 'true'); } catch(e) {}
+                }
+            } else {
+                // Reset to English
+                if (typeof translate !== 'undefined' && translate.reset) {
+                    translate.reset();
+                } else {
+                    location.reload();
+                }
+                translationActive = false;
+                updateToggleUI(false);
+                try { localStorage.setItem('translateActive', 'false'); } catch(e) {}
+            }
+        }
+
+        function updateToggleUI(active) {
+            const btn = document.getElementById('translateToggle');
+            const label = document.getElementById('toggleLabel');
+            if (active) {
+                btn.classList.add('active');
+                label.textContent = 'English';
+            } else {
+                btn.classList.remove('active');
+                label.textContent = 'Translate';
+            }
+        }
+
+        // Restore preference on load
+        (function() {
+            try {
+                const saved = localStorage.getItem('translateActive');
+                if (saved === 'true') {
+                    // Wait for page to settle then activate
+                    setTimeout(function() {
+                        if (typeof translate !== 'undefined') {
+                            translate.execute();
+                            translationActive = true;
+                            updateToggleUI(true);
+                        } else {
+                            // Load and activate
+                            const script = document.createElement('script');
+                            script.src = 'https://cdn.staticfile.net/translate.js/3.15.6/translate.min.js';
+                            script.onload = function() {
+                                translate.execute();
+                                translationActive = true;
+                                updateToggleUI(true);
+                            };
+                            document.head.appendChild(script);
+                        }
+                    }, 500);
+                }
+            } catch(e) { /* localStorage not available */ }
+        })();
+
+        // Listen for translate.js language change events if available
+        document.addEventListener('translateLanguageChange', function(e) {
+            if (e.detail && e.detail.language) {
+                const label = document.getElementById('toggleLabel');
+                label.textContent = e.detail.language;
+                document.getElementById('translateToggle').classList.add('active');
+            }
+        });
+    </script>
 
 </body>
 </html>
