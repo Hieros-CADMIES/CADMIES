@@ -14,7 +14,6 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
 
-    <!-- Version: v3.3.0 — translate.js integration with dropdown toggle -->
     <style>
         /* Translate controls — side by side */
         .translate-controls {
@@ -62,7 +61,7 @@
             font-family: 'Inter', sans-serif !important;
             cursor: pointer;
             outline: none;
-            display: none; /* Hidden by default, shown by toggle */
+            display: none;
         }
         #translate-select:hover {
             border-color: #4F46E5 !important;
@@ -429,7 +428,7 @@
 
     <!-- ============ TRANSLATE.JS ============ -->
     <script>
-        // === TRANSLATE.JS INTEGRATION v3.3.0 ===
+        // === TRANSLATE.JS INTEGRATION ===
         // Load translate.js library
         (function loadTranslateLibrary() {
             if (typeof translate !== 'undefined') return;
@@ -437,7 +436,9 @@
             script.src = 'https://cdnjs.cloudflare.com/ajax/libs/translate.js/3.15.6/translate.min.js';
             script.onload = function() {
                 console.log('translate.js loaded');
-                // After library loads, check for saved language preference
+                // Initialize after library loads
+                initTranslate();
+                // Check for saved language preference
                 checkSavedLanguage();
             };
             document.head.appendChild(script);
@@ -448,10 +449,20 @@
         let currentLanguage = '';
         const dropdown = document.getElementById('translate-select');
 
+        // === INITIALIZE TRANSLATE.JS ===
+        function initTranslate() {
+            if (typeof translate === 'undefined') return;
+            // Set local language (the language your page is written in)
+            translate.language.setLocal('english');
+            // Set translation service (free default)
+            translate.service.use('client.edge');
+            // Start listener for dynamic content
+            translate.listener.start();
+        }
+
         // === TOGGLE TRANSLATE ===
         function toggleTranslate() {
             if (typeof translate === 'undefined') {
-                // Library not loaded yet — wait
                 console.warn('translate.js not loaded yet');
                 return;
             }
@@ -475,20 +486,18 @@
 
         // === POPULATE LANGUAGE DROPDOWN ===
         function populateLanguages() {
-            // translate.js provides a list of supported languages
-            // We'll use the library's built-in language list
             const languages = [
-                { code: 'zh-cn', name: '简体中文' },
-                { code: 'zh-tw', name: '繁體中文' },
                 { code: 'en', name: 'English' },
-                { code: 'ja', name: '日本語' },
-                { code: 'ko', name: '한국어' },
+                { code: 'es', name: 'Español' },
                 { code: 'fr', name: 'Français' },
                 { code: 'de', name: 'Deutsch' },
-                { code: 'es', name: 'Español' },
-                { code: 'pt', name: 'Português' },
                 { code: 'it', name: 'Italiano' },
+                { code: 'pt', name: 'Português' },
                 { code: 'ru', name: 'Русский' },
+                { code: 'ja', name: '日本語' },
+                { code: 'ko', name: '한국어' },
+                { code: 'zh-cn', name: '简体中文' },
+                { code: 'zh-tw', name: '繁體中文' },
                 { code: 'ar', name: 'العربية' },
                 { code: 'hi', name: 'हिन्दी' },
                 { code: 'bn', name: 'বাংলা' },
@@ -526,9 +535,7 @@
                 { code: 'ur', name: 'اردو' }
             ];
 
-            // Clear existing options (keep first "Select Language" option)
             dropdown.innerHTML = '<option value="">Select Language</option>';
-
             languages.forEach(function(lang) {
                 const option = document.createElement('option');
                 option.value = lang.code;
@@ -537,18 +544,72 @@
             });
         }
 
+        // === MAP LANGUAGE CODES TO TRANSLATE.JS NAMES ===
+        function getTranslateLangName(code) {
+            const map = {
+                'en': 'english',
+                'es': 'spanish',
+                'fr': 'french',
+                'de': 'deutsch',
+                'it': 'italian',
+                'pt': 'portuguese',
+                'ru': 'russian',
+                'ja': 'japanese',
+                'ko': 'korean',
+                'zh-cn': 'chinese_simplified',
+                'zh-tw': 'chinese_traditional',
+                'ar': 'arabic',
+                'hi': 'hindi',
+                'bn': 'bengali',
+                'pa': 'punjabi',
+                'ta': 'tamil',
+                'te': 'telugu',
+                'ml': 'malayalam',
+                'kn': 'kannada',
+                'mr': 'marathi',
+                'gu': 'gujarati',
+                'or': 'oriya',
+                'as': 'assamese',
+                'mai': 'maithili',
+                'sat': 'santali',
+                'th': 'thai',
+                'lo': 'lao',
+                'my': 'burmese',
+                'km': 'khmer',
+                'vi': 'vietnamese',
+                'id': 'indonesian',
+                'ms': 'malay',
+                'tl': 'tagalog',
+                'pl': 'polish',
+                'uk': 'ukrainian',
+                'ro': 'romanian',
+                'nl': 'dutch',
+                'sv': 'swedish',
+                'no': 'norwegian',
+                'da': 'danish',
+                'fi': 'finnish',
+                'el': 'greek',
+                'tr': 'turkish',
+                'he': 'hebrew',
+                'fa': 'persian',
+                'ur': 'urdu'
+            };
+            return map[code] || code;
+        }
+
         // === HANDLE LANGUAGE SELECTION ===
         function handleLanguageChange(langCode) {
             if (!langCode) return;
 
             currentLanguage = langCode;
             translationActive = true;
-            
-            // Execute translation
+
+            // Get the language name translate.js expects
+            const langName = getTranslateLangName(langCode);
+
             if (typeof translate !== 'undefined') {
-                // translate.js uses language codes like 'en', 'zh-cn', etc.
-                // We need to map our codes to what translate.js expects
-                translate.execute(langCode);
+                // Use changeLanguage to switch the target language
+                translate.changeLanguage(langName);
             }
 
             // Hide dropdown after selection
@@ -575,11 +636,11 @@
                 if (savedLang && savedActive === 'true') {
                     currentLanguage = savedLang;
                     translationActive = true;
-                    
-                    // Auto-translate to saved language
+                    // Auto-translate to saved language after a delay
                     setTimeout(function() {
                         if (typeof translate !== 'undefined') {
-                            translate.execute(savedLang);
+                            const langName = getTranslateLangName(savedLang);
+                            translate.changeLanguage(langName);
                         }
                     }, 500);
                 }
@@ -605,11 +666,9 @@
         }
 
         // === INITIAL SETUP ===
-        // Set local language to English
+        // Initialize translate.js if already loaded
         if (typeof translate !== 'undefined') {
-            translate.language.setLocal('english');
-            translate.service.use('client.edge');
-            translate.listener.start();
+            initTranslate();
         }
 
         // Check for saved language after a short delay
