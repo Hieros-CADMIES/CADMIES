@@ -13,73 +13,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
-
-    <style>
-        /* Translate controls — side by side */
-        .translate-controls {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-
-        /* Translate toggle button */
-        .translate-toggle {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 6px;
-            padding: 6px 16px;
-            font-size: 0.9em;
-            color: #94A3B8;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: 'Inter', sans-serif;
-            line-height: 1.5;
-        }
-        .translate-toggle:hover {
-            color: #FFFFFF;
-            border-color: #4F46E5;
-        }
-        .translate-toggle.active {
-            border-color: #4F46E5;
-            color: #4F46E5;
-        }
-
-        /* translate.js dropdown — dark theme override */
-        #translate-select {
-            background: rgba(255, 255, 255, 0.06) !important;
-            color: #E2E8F0 !important;
-            border: 1px solid rgba(255, 255, 255, 0.12) !important;
-            border-radius: 6px !important;
-            padding: 6px 12px !important;
-            font-size: 0.9em !important;
-            font-family: 'Inter', sans-serif !important;
-            cursor: pointer;
-            outline: none;
-            display: none;
-        }
-        #translate-select:hover {
-            border-color: #4F46E5 !important;
-        }
-        #translate-select option {
-            background: #1E1B4B;
-            color: #E2E8F0;
-        }
-        #translate-select.visible {
-            display: inline-block;
-        }
-
-        .footer-privacy {
-            font-size: 0.85em;
-            color: #484f58;
-            margin-top: 8px;
-        }
-    </style>
 </head>
 <body>
 
@@ -97,29 +30,20 @@
     <!-- ============ MAIN APP ============ -->
     <div id="app" class="hidden">
 
-        <!-- ===== PAGE: DASHBOARD ===== -->
+        <!-- ===== PAGE: DASHBOARD (CONTROL CENTER) ===== -->
         <section id="page-dashboard" class="page active">
             <div class="dashboard-container">
 
                 <!-- Dashboard Header -->
-                <div class="dashboard-header">
-                    <div class="header-center">
-                        <div class="header-title">
-                            <span class="header-emoji">🌱</span>
-                            <h1>CADMIES</h1>
-                        </div>
-                        <div class="header-tagline">Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</div>
-                        <!-- Translate controls: button + dropdown side by side -->
-                        <div class="translate-controls">
-                            <button class="translate-toggle" id="translateToggle" onclick="toggleTranslate()">
-                                <span class="icon">🌐</span> <span>Translate</span>
-                            </button>
-                            <select id="translate-select" onchange="handleLanguageChange(this.value)">
-                                <option value="">Select Language</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+<div class="dashboard-header">
+    <div class="header-center">
+        <div class="header-title">
+            <span class="header-emoji">🌱</span>
+            <h1>CADMIES</h1>
+        </div>
+        <div class="header-tagline">Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</div>
+    </div>
+</div>
 
                 <!-- Stats Grid -->
                 <div class="stats-grid" id="stats-grid">
@@ -186,27 +110,20 @@
                     </div>
                 </div>
 
-                <!-- Footer -->
-                <div class="dashboard-footer">
-                    <span>Let the mycelium grow! 🌱</span>
-                </div>
-
-                <!-- Referral Footer -->
-                <div class="referral-footer">
-                    <a href="https://www.digitalocean.com/?refcode=fd70c6e2650a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge" target="_blank" rel="noopener noreferrer">
-                        <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" />
-                    </a>
-                    <a href="https://cape.co/get-cape?referral=ZCWW60AA" target="_blank" rel="noopener noreferrer">Cape Wireless</a>
-                    <a href="https://app.spheron.ai/signup?ref=ENXyV3608" target="_blank" rel="noopener noreferrer">Spheron AI</a>
-                </div>
-
-                <!-- Privacy Note -->
-                <div class="footer-privacy" style="text-align:center;padding:12px 20px;max-width:900px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.06);">
-                    🌐 Translation powered by <a href="https://translate.zvo.cn" target="_blank" rel="noopener noreferrer" style="color:#58a6ff;text-decoration:none;">translate.js</a> — all processing occurs client-side. No data is sent to CADMIES servers.
-                </div>
-
+                            <!-- Footer -->
+            <div class="dashboard-footer">
+                <span>Let the mycelium grow! 🌱</span>
             </div>
-        </section>
+
+            <!-- Referral Footer -->
+            <div class="referral-footer">
+                <a href="https://www.digitalocean.com/?refcode=fd70c6e2650a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge" target="_blank" rel="noopener noreferrer">
+                    <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" />
+                </a>
+                <a href="https://cape.co/get-cape?referral=ZCWW60AA" target="_blank" rel="noopener noreferrer">Cape Wireless</a>
+                <a href="https://app.spheron.ai/signup?ref=ENXyV3608" target="_blank" rel="noopener noreferrer">Spheron AI</a>
+            </div>
+    </section>
 
         <!-- ===== PAGE: DR. MISTRAL ===== -->
         <section id="page-mistral" class="page">
@@ -425,275 +342,6 @@
     </div>
 
     <script src="app.js?t=20260803"></script>
-
-    <!-- ============ TRANSLATE.JS ============ -->
-    <script>
-        // === TRANSLATE.JS INTEGRATION ===
-        // Load translate.js library
-        (function loadTranslateLibrary() {
-            if (typeof translate !== 'undefined') return;
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/translate.js/3.15.6/translate.min.js';
-            script.onload = function() {
-                console.log('translate.js loaded');
-                // Initialize after library loads
-                initTranslate();
-                // Check for saved language preference
-                checkSavedLanguage();
-            };
-            document.head.appendChild(script);
-        })();
-
-        // === STATE ===
-        let translationActive = false;
-        let currentLanguage = '';
-        const dropdown = document.getElementById('translate-select');
-
-        // === INITIALIZE TRANSLATE.JS ===
-        function initTranslate() {
-            if (typeof translate === 'undefined') return;
-            // Set local language (the language your page is written in)
-            translate.language.setLocal('english');
-            // Set translation service (free default)
-            translate.service.use('client.edge');
-            // Start listener for dynamic content
-            translate.listener.start();
-        }
-
-        // === TOGGLE TRANSLATE ===
-        function toggleTranslate() {
-            if (typeof translate === 'undefined') {
-                console.warn('translate.js not loaded yet');
-                return;
-            }
-
-            if (!translationActive) {
-                // Show dropdown
-                dropdown.classList.add('visible');
-                // Populate languages if empty
-                if (dropdown.options.length <= 1) {
-                    populateLanguages();
-                }
-                // Set to "Select Language" if no selection
-                if (!currentLanguage) {
-                    dropdown.value = '';
-                }
-            } else {
-                // Hide dropdown
-                dropdown.classList.remove('visible');
-            }
-        }
-
-        // === POPULATE LANGUAGE DROPDOWN ===
-        function populateLanguages() {
-            const languages = [
-                { code: 'en', name: 'English' },
-                { code: 'es', name: 'Español' },
-                { code: 'fr', name: 'Français' },
-                { code: 'de', name: 'Deutsch' },
-                { code: 'it', name: 'Italiano' },
-                { code: 'pt', name: 'Português' },
-                { code: 'ru', name: 'Русский' },
-                { code: 'ja', name: '日本語' },
-                { code: 'ko', name: '한국어' },
-                { code: 'zh-cn', name: '简体中文' },
-                { code: 'zh-tw', name: '繁體中文' },
-                { code: 'ar', name: 'العربية' },
-                { code: 'hi', name: 'हिन्दी' },
-                { code: 'bn', name: 'বাংলা' },
-                { code: 'pa', name: 'ਪੰਜਾਬੀ' },
-                { code: 'ta', name: 'தமிழ்' },
-                { code: 'te', name: 'తెలుగు' },
-                { code: 'ml', name: 'മലയാളം' },
-                { code: 'kn', name: 'ಕನ್ನಡ' },
-                { code: 'mr', name: 'मराठी' },
-                { code: 'gu', name: 'ગુજરાતી' },
-                { code: 'or', name: 'ଓଡ଼ିଆ' },
-                { code: 'as', name: 'অসমীয়া' },
-                { code: 'mai', name: 'मैथिली' },
-                { code: 'sat', name: 'ᱥᱟᱱᱛᱟᱲᱤ' },
-                { code: 'th', name: 'ไทย' },
-                { code: 'lo', name: 'ລາວ' },
-                { code: 'my', name: 'မြန်မာ' },
-                { code: 'km', name: 'ខ្មែរ' },
-                { code: 'vi', name: 'Tiếng Việt' },
-                { code: 'id', name: 'Bahasa Indonesia' },
-                { code: 'ms', name: 'Bahasa Melayu' },
-                { code: 'tl', name: 'Tagalog' },
-                { code: 'pl', name: 'Polski' },
-                { code: 'uk', name: 'Українська' },
-                { code: 'ro', name: 'Română' },
-                { code: 'nl', name: 'Nederlands' },
-                { code: 'sv', name: 'Svenska' },
-                { code: 'no', name: 'Norsk' },
-                { code: 'da', name: 'Dansk' },
-                { code: 'fi', name: 'Suomi' },
-                { code: 'el', name: 'Ελληνικά' },
-                { code: 'tr', name: 'Türkçe' },
-                { code: 'he', name: 'עברית' },
-                { code: 'fa', name: 'فارسی' },
-                { code: 'ur', name: 'اردو' }
-            ];
-
-            dropdown.innerHTML = '<option value="">Select Language</option>';
-            languages.forEach(function(lang) {
-                const option = document.createElement('option');
-                option.value = lang.code;
-                option.textContent = lang.name;
-                dropdown.appendChild(option);
-            });
-        }
-
-        // === MAP LANGUAGE CODES TO TRANSLATE.JS NAMES ===
-        function getTranslateLangName(code) {
-            const map = {
-                'en': 'english',
-                'es': 'spanish',
-                'fr': 'french',
-                'de': 'deutsch',
-                'it': 'italian',
-                'pt': 'portuguese',
-                'ru': 'russian',
-                'ja': 'japanese',
-                'ko': 'korean',
-                'zh-cn': 'chinese_simplified',
-                'zh-tw': 'chinese_traditional',
-                'ar': 'arabic',
-                'hi': 'hindi',
-                'bn': 'bengali',
-                'pa': 'punjabi',
-                'ta': 'tamil',
-                'te': 'telugu',
-                'ml': 'malayalam',
-                'kn': 'kannada',
-                'mr': 'marathi',
-                'gu': 'gujarati',
-                'or': 'oriya',
-                'as': 'assamese',
-                'mai': 'maithili',
-                'sat': 'santali',
-                'th': 'thai',
-                'lo': 'lao',
-                'my': 'burmese',
-                'km': 'khmer',
-                'vi': 'vietnamese',
-                'id': 'indonesian',
-                'ms': 'malay',
-                'tl': 'tagalog',
-                'pl': 'polish',
-                'uk': 'ukrainian',
-                'ro': 'romanian',
-                'nl': 'dutch',
-                'sv': 'swedish',
-                'no': 'norwegian',
-                'da': 'danish',
-                'fi': 'finnish',
-                'el': 'greek',
-                'tr': 'turkish',
-                'he': 'hebrew',
-                'fa': 'persian',
-                'ur': 'urdu'
-            };
-            return map[code] || code;
-        }
-
-        // === HANDLE LANGUAGE SELECTION ===
-        function handleLanguageChange(langCode) {
-            if (!langCode) return;
-
-            currentLanguage = langCode;
-            translationActive = true;
-
-            // Get the language name translate.js expects
-            const langName = getTranslateLangName(langCode);
-
-            if (typeof translate !== 'undefined') {
-                // Use changeLanguage to switch the target language
-                translate.changeLanguage(langName);
-            }
-
-            // Hide dropdown after selection
-            dropdown.classList.remove('visible');
-
-            // Save preference
-            try {
-                localStorage.setItem('translateLanguage', langCode);
-                localStorage.setItem('translateActive', 'true');
-            } catch(e) {}
-
-            // Fire event for any listeners
-            document.dispatchEvent(new CustomEvent('translateLanguageChange', {
-                detail: { language: langCode }
-            }));
-        }
-
-        // === CHECK SAVED LANGUAGE ===
-        function checkSavedLanguage() {
-            try {
-                const savedLang = localStorage.getItem('translateLanguage');
-                const savedActive = localStorage.getItem('translateActive');
-
-                if (savedLang && savedActive === 'true') {
-                    currentLanguage = savedLang;
-                    translationActive = true;
-                    // Auto-translate to saved language after a delay
-                    setTimeout(function() {
-                        if (typeof translate !== 'undefined') {
-                            const langName = getTranslateLangName(savedLang);
-                            translate.changeLanguage(langName);
-                        }
-                    }, 500);
-                }
-            } catch(e) {
-                // localStorage not available
-            }
-        }
-
-        // === RESET TRANSLATION (for toggling off) ===
-        function resetTranslation() {
-            if (typeof translate !== 'undefined' && translate.reset) {
-                translate.reset();
-            } else {
-                location.reload();
-            }
-            translationActive = false;
-            currentLanguage = '';
-            dropdown.value = '';
-            try {
-                localStorage.setItem('translateActive', 'false');
-                localStorage.removeItem('translateLanguage');
-            } catch(e) {}
-        }
-
-        // === INITIAL SETUP ===
-        // Initialize translate.js if already loaded
-        if (typeof translate !== 'undefined') {
-            initTranslate();
-        }
-
-        // Check for saved language after a short delay
-        setTimeout(checkSavedLanguage, 1000);
-
-        // === LISTEN FOR TRANSLATE.JS EVENTS ===
-        document.addEventListener('translateLanguageChange', function(e) {
-            if (e.detail && e.detail.language) {
-                currentLanguage = e.detail.language;
-                translationActive = true;
-                try {
-                    localStorage.setItem('translateLanguage', e.detail.language);
-                    localStorage.setItem('translateActive', 'true');
-                } catch(e) {}
-            }
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
-            const controls = document.querySelector('.translate-controls');
-            if (controls && !controls.contains(e.target)) {
-                dropdown.classList.remove('visible');
-            }
-        });
-    </script>
 
 </body>
 </html>
