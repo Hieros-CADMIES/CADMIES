@@ -422,7 +422,7 @@
                 // Load translate.js if not already loaded
                 if (typeof translate === 'undefined') {
                     const script = document.createElement('script');
-                    script.src = 'https://cdn.staticfile.net/translate.js/3.15.6/translate.min.js';
+                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/translate.js/3.15.6/translate.min.js';
                     script.onload = function() {
                         translate.execute();
                         translationActive = true;
@@ -475,7 +475,7 @@
                         } else {
                             // Load and activate
                             const script = document.createElement('script');
-                            script.src = 'https://cdn.staticfile.net/translate.js/3.15.6/translate.min.js';
+                            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/translate.js/3.15.6/translate.min.js';
                             script.onload = function() {
                                 translate.execute();
                                 translationActive = true;
