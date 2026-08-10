@@ -23,14 +23,14 @@
             background: transparent;
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 6px;
-            padding: 4px 12px;
+            padding: 6px 16px;
             font-size: 0.9em;
             color: #94A3B8;
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: 'Inter', sans-serif;
             line-height: 1.5;
-            margin-right: 4px;
+            margin-top: 8px;
         }
         .translate-toggle:hover {
             color: #FFFFFF;
@@ -44,24 +44,9 @@
             font-size: 1em;
         }
 
-        /* Header flex layout */
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .header-sprout {
-            font-size: 32px;
-            line-height: 1;
-        }
-
-        .header-title-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .translate-wrapper {
+            text-align: center;
+            margin-top: 4px;
         }
 
         .footer-privacy {
@@ -105,19 +90,20 @@
         <section id="page-dashboard" class="page active">
             <div class="dashboard-container">
 
-                <!-- Dashboard Header with Translate Toggle -->
+                <!-- Dashboard Header -->
                 <div class="dashboard-header">
                     <div class="header-center">
-                        <div class="header-content">
+                        <div class="header-title">
+                            <span class="header-emoji">🌱</span>
+                            <h1>CADMIES</h1>
+                        </div>
+                        <div class="header-tagline">Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</div>
+                        <!-- Translate toggle below the tagline, centered -->
+                        <div class="translate-wrapper">
                             <button class="translate-toggle" id="translateToggle" onclick="toggleTranslation()">
                                 <span class="icon">🌐</span> <span id="toggleLabel">Translate</span>
                             </button>
-                            <span class="header-sprout">🌱</span>
-                            <div class="header-title-group">
-                                <h1>CADMIES</h1>
-                            </div>
                         </div>
-                        <div class="header-tagline">Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</div>
                     </div>
                 </div>
 
