@@ -14,8 +14,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
 
+    <!-- Version: v3.3.0 — translate.js integration with dropdown toggle -->
     <style>
-        /* Translate toggle — matches the dark theme */
+        /* Translate controls — side by side */
+        .translate-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* Translate toggle button */
         .translate-toggle {
             display: inline-flex;
             align-items: center;
@@ -30,7 +41,6 @@
             transition: all 0.2s ease;
             font-family: 'Inter', sans-serif;
             line-height: 1.5;
-            margin-top: 8px;
         }
         .translate-toggle:hover {
             color: #FFFFFF;
@@ -40,33 +50,35 @@
             border-color: #4F46E5;
             color: #4F46E5;
         }
-        .translate-toggle .icon {
-            font-size: 1em;
-        }
 
-        .translate-wrapper {
-            text-align: center;
-            margin-top: 4px;
+        /* translate.js dropdown — dark theme override */
+        #translate-select {
+            background: rgba(255, 255, 255, 0.06) !important;
+            color: #E2E8F0 !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            border-radius: 6px !important;
+            padding: 6px 12px !important;
+            font-size: 0.9em !important;
+            font-family: 'Inter', sans-serif !important;
+            cursor: pointer;
+            outline: none;
+            display: none; /* Hidden by default, shown by toggle */
+        }
+        #translate-select:hover {
+            border-color: #4F46E5 !important;
+        }
+        #translate-select option {
+            background: #1E1B4B;
+            color: #E2E8F0;
+        }
+        #translate-select.visible {
+            display: inline-block;
         }
 
         .footer-privacy {
             font-size: 0.85em;
             color: #484f58;
             margin-top: 8px;
-        }
-
-        #translate-select {
-            background: #161b22 !important;
-            color: #c9d1d9 !important;
-            border: 1px solid #30363d !important;
-            border-radius: 6px !important;
-            padding: 4px 8px !important;
-            font-size: 0.85em !important;
-            font-family: 'Inter', sans-serif !important;
-        }
-        #translate-select option {
-            background: #161b22;
-            color: #c9d1d9;
         }
     </style>
 </head>
@@ -98,11 +110,14 @@
                             <h1>CADMIES</h1>
                         </div>
                         <div class="header-tagline">Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</div>
-                        <!-- Translate toggle below the tagline, centered -->
-                        <div class="translate-wrapper">
-                            <button class="translate-toggle" id="translateToggle" onclick="toggleTranslation()">
-                                <span class="icon">🌐</span> <span id="toggleLabel">Translate</span>
+                        <!-- Translate controls: button + dropdown side by side -->
+                        <div class="translate-controls">
+                            <button class="translate-toggle" id="translateToggle" onclick="toggleTranslate()">
+                                <span class="icon">🌐</span> <span>Translate</span>
                             </button>
+                            <select id="translate-select" onchange="handleLanguageChange(this.value)">
+                                <option value="">Select Language</option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -414,86 +429,209 @@
 
     <!-- ============ TRANSLATE.JS ============ -->
     <script>
-        // === TRANSLATE.JS INTEGRATION ===
+        // === TRANSLATE.JS INTEGRATION v3.3.0 ===
+        // Load translate.js library
+        (function loadTranslateLibrary() {
+            if (typeof translate !== 'undefined') return;
+            const script = document.createElement('script');
+            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/translate.js/3.15.6/translate.min.js';
+            script.onload = function() {
+                console.log('translate.js loaded');
+                // After library loads, check for saved language preference
+                checkSavedLanguage();
+            };
+            document.head.appendChild(script);
+        })();
+
+        // === STATE ===
         let translationActive = false;
+        let currentLanguage = '';
+        const dropdown = document.getElementById('translate-select');
 
-        function toggleTranslation() {
+        // === TOGGLE TRANSLATE ===
+        function toggleTranslate() {
+            if (typeof translate === 'undefined') {
+                // Library not loaded yet — wait
+                console.warn('translate.js not loaded yet');
+                return;
+            }
+
             if (!translationActive) {
-                // Load translate.js if not already loaded
-                if (typeof translate === 'undefined') {
-                    const script = document.createElement('script');
-                    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/translate.js/3.15.6/translate.min.js';
-                    script.onload = function() {
-                        translate.execute();
-                        translationActive = true;
-                        updateToggleUI(true);
-                        try { localStorage.setItem('translateActive', 'true'); } catch(e) {}
-                    };
-                    document.head.appendChild(script);
-                } else {
-                    translate.execute();
-                    translationActive = true;
-                    updateToggleUI(true);
-                    try { localStorage.setItem('translateActive', 'true'); } catch(e) {}
+                // Show dropdown
+                dropdown.classList.add('visible');
+                // Populate languages if empty
+                if (dropdown.options.length <= 1) {
+                    populateLanguages();
+                }
+                // Set to "Select Language" if no selection
+                if (!currentLanguage) {
+                    dropdown.value = '';
                 }
             } else {
-                // Reset to English
-                if (typeof translate !== 'undefined' && translate.reset) {
-                    translate.reset();
-                } else {
-                    location.reload();
-                }
-                translationActive = false;
-                updateToggleUI(false);
-                try { localStorage.setItem('translateActive', 'false'); } catch(e) {}
+                // Hide dropdown
+                dropdown.classList.remove('visible');
             }
         }
 
-        function updateToggleUI(active) {
-            const btn = document.getElementById('translateToggle');
-            const label = document.getElementById('toggleLabel');
-            if (active) {
-                btn.classList.add('active');
-                label.textContent = 'English';
-            } else {
-                btn.classList.remove('active');
-                label.textContent = 'Translate';
-            }
+        // === POPULATE LANGUAGE DROPDOWN ===
+        function populateLanguages() {
+            // translate.js provides a list of supported languages
+            // We'll use the library's built-in language list
+            const languages = [
+                { code: 'zh-cn', name: '简体中文' },
+                { code: 'zh-tw', name: '繁體中文' },
+                { code: 'en', name: 'English' },
+                { code: 'ja', name: '日本語' },
+                { code: 'ko', name: '한국어' },
+                { code: 'fr', name: 'Français' },
+                { code: 'de', name: 'Deutsch' },
+                { code: 'es', name: 'Español' },
+                { code: 'pt', name: 'Português' },
+                { code: 'it', name: 'Italiano' },
+                { code: 'ru', name: 'Русский' },
+                { code: 'ar', name: 'العربية' },
+                { code: 'hi', name: 'हिन्दी' },
+                { code: 'bn', name: 'বাংলা' },
+                { code: 'pa', name: 'ਪੰਜਾਬੀ' },
+                { code: 'ta', name: 'தமிழ்' },
+                { code: 'te', name: 'తెలుగు' },
+                { code: 'ml', name: 'മലയാളം' },
+                { code: 'kn', name: 'ಕನ್ನಡ' },
+                { code: 'mr', name: 'मराठी' },
+                { code: 'gu', name: 'ગુજરાતી' },
+                { code: 'or', name: 'ଓଡ଼ିଆ' },
+                { code: 'as', name: 'অসমীয়া' },
+                { code: 'mai', name: 'मैथिली' },
+                { code: 'sat', name: 'ᱥᱟᱱᱛᱟᱲᱤ' },
+                { code: 'th', name: 'ไทย' },
+                { code: 'lo', name: 'ລາວ' },
+                { code: 'my', name: 'မြန်မာ' },
+                { code: 'km', name: 'ខ្មែរ' },
+                { code: 'vi', name: 'Tiếng Việt' },
+                { code: 'id', name: 'Bahasa Indonesia' },
+                { code: 'ms', name: 'Bahasa Melayu' },
+                { code: 'tl', name: 'Tagalog' },
+                { code: 'pl', name: 'Polski' },
+                { code: 'uk', name: 'Українська' },
+                { code: 'ro', name: 'Română' },
+                { code: 'nl', name: 'Nederlands' },
+                { code: 'sv', name: 'Svenska' },
+                { code: 'no', name: 'Norsk' },
+                { code: 'da', name: 'Dansk' },
+                { code: 'fi', name: 'Suomi' },
+                { code: 'el', name: 'Ελληνικά' },
+                { code: 'tr', name: 'Türkçe' },
+                { code: 'he', name: 'עברית' },
+                { code: 'fa', name: 'فارسی' },
+                { code: 'ur', name: 'اردو' }
+            ];
+
+            // Clear existing options (keep first "Select Language" option)
+            dropdown.innerHTML = '<option value="">Select Language</option>';
+
+            languages.forEach(function(lang) {
+                const option = document.createElement('option');
+                option.value = lang.code;
+                option.textContent = lang.name;
+                dropdown.appendChild(option);
+            });
         }
 
-        // Restore preference on load
-        (function() {
+        // === HANDLE LANGUAGE SELECTION ===
+        function handleLanguageChange(langCode) {
+            if (!langCode) return;
+
+            currentLanguage = langCode;
+            translationActive = true;
+            
+            // Execute translation
+            if (typeof translate !== 'undefined') {
+                // translate.js uses language codes like 'en', 'zh-cn', etc.
+                // We need to map our codes to what translate.js expects
+                translate.execute(langCode);
+            }
+
+            // Hide dropdown after selection
+            dropdown.classList.remove('visible');
+
+            // Save preference
             try {
-                const saved = localStorage.getItem('translateActive');
-                if (saved === 'true') {
-                    // Wait for page to settle then activate
+                localStorage.setItem('translateLanguage', langCode);
+                localStorage.setItem('translateActive', 'true');
+            } catch(e) {}
+
+            // Fire event for any listeners
+            document.dispatchEvent(new CustomEvent('translateLanguageChange', {
+                detail: { language: langCode }
+            }));
+        }
+
+        // === CHECK SAVED LANGUAGE ===
+        function checkSavedLanguage() {
+            try {
+                const savedLang = localStorage.getItem('translateLanguage');
+                const savedActive = localStorage.getItem('translateActive');
+
+                if (savedLang && savedActive === 'true') {
+                    currentLanguage = savedLang;
+                    translationActive = true;
+                    
+                    // Auto-translate to saved language
                     setTimeout(function() {
                         if (typeof translate !== 'undefined') {
-                            translate.execute();
-                            translationActive = true;
-                            updateToggleUI(true);
-                        } else {
-                            // Load and activate
-                            const script = document.createElement('script');
-                            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/translate.js/3.15.6/translate.min.js';
-                            script.onload = function() {
-                                translate.execute();
-                                translationActive = true;
-                                updateToggleUI(true);
-                            };
-                            document.head.appendChild(script);
+                            translate.execute(savedLang);
                         }
                     }, 500);
                 }
-            } catch(e) { /* localStorage not available */ }
-        })();
+            } catch(e) {
+                // localStorage not available
+            }
+        }
 
-        // Listen for translate.js language change events if available
+        // === RESET TRANSLATION (for toggling off) ===
+        function resetTranslation() {
+            if (typeof translate !== 'undefined' && translate.reset) {
+                translate.reset();
+            } else {
+                location.reload();
+            }
+            translationActive = false;
+            currentLanguage = '';
+            dropdown.value = '';
+            try {
+                localStorage.setItem('translateActive', 'false');
+                localStorage.removeItem('translateLanguage');
+            } catch(e) {}
+        }
+
+        // === INITIAL SETUP ===
+        // Set local language to English
+        if (typeof translate !== 'undefined') {
+            translate.language.setLocal('english');
+            translate.service.use('client.edge');
+            translate.listener.start();
+        }
+
+        // Check for saved language after a short delay
+        setTimeout(checkSavedLanguage, 1000);
+
+        // === LISTEN FOR TRANSLATE.JS EVENTS ===
         document.addEventListener('translateLanguageChange', function(e) {
             if (e.detail && e.detail.language) {
-                const label = document.getElementById('toggleLabel');
-                label.textContent = e.detail.language;
-                document.getElementById('translateToggle').classList.add('active');
+                currentLanguage = e.detail.language;
+                translationActive = true;
+                try {
+                    localStorage.setItem('translateLanguage', e.detail.language);
+                    localStorage.setItem('translateActive', 'true');
+                } catch(e) {}
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            const controls = document.querySelector('.translate-controls');
+            if (controls && !controls.contains(e.target)) {
+                dropdown.classList.remove('visible');
             }
         });
     </script>
