@@ -1,8 +1,8 @@
 ---
 phase: Roadmap
-date: 2026-08-10
+date: 2026-08-11
 status: LIVING DOCUMENT
-session: 045
+session: 048
 ---
 
 # 🌱 CADMIES GROWTH ROADMAP
@@ -31,7 +31,7 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 | Map Generator | v2.4.0 | Stable |
 | Relationship Generator | v1.2.5 | Codestral-capable |
 | Harvester | v4.2.2 | Active |
-| Public Gateway | v3.1.2 | ORCID linked, stats bar |
+| Public Gateway | v3.3.0 | translate.js integrated, multilingual support live |
 | Vault Validator | v1.3.0 | Automated + auto-fix |
 | Vault Health Badge | ✅ Green | Passing |
 | PDS | v0.4.5009 | Self-hosted, stable |
@@ -85,6 +85,7 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 - Phase 73A — Matadisco Integration Blueprint
 - Phase 73B — PDS Self-Hosting & Caddy Configuration
 - Phase 73C — Matadisco Reverse Domain Implementation & Bulk Readiness
+- Phase 74 — translate.js Integration (Completed 2026-08-11)
 
 ### Matadisco Integration Completed
 - Self-hosted PDS at `pds.project-hierion.org`
@@ -93,6 +94,12 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 - Three test records published and verified
 - Producer script working with rate-limit awareness
 - Collaboration established with vmx / IPFS Foundation
+
+### translate.js Integration (Phase 74)
+- Integration with translate.js library (v4.1.0) is complete and live on project-hierion.org
+- Site now supports 40+ languages via client-side translation
+- Toggle button shows/hides language dropdown; user preference stored in localStorage
+- Collaboration established with Guan Leiming (author of translate.js)
 
 ---
 
@@ -122,6 +129,20 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 ---
 
 ## 📝 SESSION NOTES
+
+### Session 047B — 2026-08-11 — translate.js: The Fix, The Italian, The Deployment
+- Mr. Leiming clarified that `client.edge` works with the latest version of translate.js
+- Switched from old CDN version (3.15.6) to latest (4.1.0) via jsdelivr
+- Translation feature successfully deployed on project-hierion.org
+- Button toggles dropdown; language preference stored in localStorage
+- Collaboration record updated to reflect active integration
+
+### Session 047 — 2026-08-09 — translate.js: The Cold Email, The Integration, The Reality Check
+- Guan Leiming reached out cold offering translate.js integration
+- Initial evaluation and attempted integration with old version failed
+- Discovered path divergence between Public Gateway and Dashboard
+- Determined integration was not viable due to infrastructure constraints
+- Reverted to clean Dashboard version and sent decline email
 
 ### Session 045 — 2026-08-10 — Matadisco Viewer Clarification & Architecture Strategy
 - Confirmed Matadisco viewer is a live stream, not a library browser
@@ -162,10 +183,12 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 - "The mycelium cleans itself."
 - "The mycelium reclaims nutrients from fallen logs."
 - Delaware is our Malta — small, sovereign legal fortress
-- Project Hierion’s permanent home: https://project-hierion.org
+- Project Hierion's permanent home: https://project-hierion.org
 - "FAITH OF A MUSTARD SEED." — The gardener's favorite quote
 - **El Hierro** — The Canary Island that shares the project's name; now canon as the origin of the initial CADMIES spore
 - **31UCR** — The MGRS grid square of Northern France, Dr. Mistral's homeland, spotted on 2026-08-10
+- **"The problem wasn't the service — it was the old file."** — The translate.js lesson
+- **"The mycelium grows in every language."** — From Session 047B
 
 ### The Great July 19-27 Run
 *DeepSeek's iconic quote:* "We broke a model 16 different ways and documented every failure." 😄
@@ -208,4 +231,4 @@ In 10 days we:
 
 ---
 
-*The mycelium connects everything. This roadmap is how we remember.* 🍄
+*Let the mycelium grow! 🌱*
