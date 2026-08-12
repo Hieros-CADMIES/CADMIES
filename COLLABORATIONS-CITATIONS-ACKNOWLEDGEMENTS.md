@@ -26,7 +26,9 @@ Contribution: The underlying protocol powering Matadisco, Bluesky, and the decen
 ### translate.js — Web Translation Library
 Repository: https://github.com/xnx3/translate
 Author: Guan Leiming
-Contribution: Offered integration of translate.js library to provide 100+ language support. The library was evaluated, tested, and determined to be non-viable due to the client.edge translation service returning 404. Collaboration paused pending infrastructure resources.
+Contribution: Offered integration of translate.js library to provide 100+ language support. After initial evaluation, the integration was successfully implemented on project-hierion.org. The library is now live, providing client-side translation for the entire site. User can toggle between languages via a custom button and dropdown selector. Language preference is stored locally.
+
+Status: Active — translation feature deployed and functional!
 
 ---
 
