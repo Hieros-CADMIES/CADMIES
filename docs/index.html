@@ -429,12 +429,14 @@
     <!-- ============ TRANSLATE.JS ============ -->
     <script src="https://cdn.jsdelivr.net/gh/xnx3/translate/translate.js/translate.js"></script>
     <script>
-        // === TRANSLATE.JS INTEGRATION ===
-        // Set local language (the language your page is written in)
-        translate.language.setLocal('english');
-        
-        // Execute translation — this creates the language selector
-        translate.execute();
+        document.addEventListener('DOMContentLoaded', function() {
+            // === TRANSLATE.JS INTEGRATION ===
+            // Set local language (the language your page is written in)
+            translate.language.setLocal('english');
+            
+            // Execute translation — this creates the language selector
+            translate.execute();
+        });
 
         // === STATE ===
         let translationActive = false;
