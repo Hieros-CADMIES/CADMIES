@@ -448,20 +448,17 @@
                 return;
             }
 
-            if (!translationActive) {
-                // Show dropdown
+            // Toggle dropdown visibility
+            if (dropdown.classList.contains('visible')) {
+                dropdown.classList.remove('visible');
+            } else {
                 dropdown.classList.add('visible');
-                // Populate languages if empty
                 if (dropdown.options.length <= 1) {
                     populateLanguages();
                 }
-                // Set to "Select Language" if no selection
                 if (!currentLanguage) {
                     dropdown.value = '';
                 }
-            } else {
-                // Hide dropdown
-                dropdown.classList.remove('visible');
             }
         }
 
