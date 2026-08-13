@@ -1,41 +1,64 @@
+#!/usr/bin/env python3
+---
+System: CADMIES / agents/code
+Document_ID: CA-2026-034-AGENT
+Version: 1.3.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, cid_generator.py]
+---
 """
 File: cadmies_concept_reader.py
 Agent: Willie the Research Assistant
 Author: CADMIES Research Group
 Created: 2026-05-01
-Updated: 2026-05-05 — Tuned hybrid search weights + smarter expansion prompt
-Version: 1.2.1
-System: CADMIES - LLM Bridge Agent
+Updated: 2026-08-12 — Switched to paths.py, added YAML metadata block
+Version: 1.3.0
+System: CADMIES / agents/code
 Agent Type: concept_reader
 Status: ACTIVE
+License: AGPLv3 with Commons Clause
 
 Purpose: Bridge between natural language and CADMIES.
          Reads concepts from blockstore, feeds them as context to a local
          LLM via Ollama, and returns informed answers with CID references.
 
-Version 1.2.1 Changes:
-  - Semantic weight bumped 0.4 → 0.5 for better cross-domain recall
-  - Keyword weight adjusted 0.6 → 0.5 (now equal weighting)
-  - Smarter expansion prompt: informs Mistral about actual mycelium domains
-  - Expansion now accepts optional domain context for better targeting
+Version History:
+  v1.3.0 (2026-08-12): Added scientific documentation YAML metadata block.
+      Switched to paths.py for PROJECT_ROOT, BLOCKSTORE_PATH, INDEX_PATH.
+      Made version display dynamic via VERSION constant.
+  v1.2.1: Semantic weight bumped 0.4 → 0.5. Keyword weight 0.6 → 0.5.
+      Smarter expansion prompt with actual mycelium domains.
+      Expansion accepts optional domain context.
+  v1.2.0: Hybrid search (keyword + semantic expansion).
+      Accuracy tags system. Improved system prompt.
+  v1.0.0: Initial release.
 
-Version 1.2.0 Changes (merge):
-  - Hybrid search: keyword matching + Mistral-powered semantic query expansion
-  - Accuracy tags system: (empirical), (philosophical), (speculative), (CADMIES-defined)
-  - Improved system prompt with four-step answer structure and full CADMIES name
-
-Dependencies: ollama (pip install ollama), dag_cbor, json, re, collections
+Dependencies: ollama, dag_cbor, json, re, collections
 Air-Gapped: Yes (Ollama runs on localhost, no external APIs)
 """
 
 import json
 import re
 import time
+import sys
 from collections import Counter
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Set
 
-__version__ = "1.2.1"
+# Add tools/core to path for paths.py import
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "tools" / "core"))
+
+from paths import PROJECT_ROOT, BLOCKS_DIR, INDEX_FILE
+
+VERSION = "1.3.0"
+
+BLOCKSTORE_PATH = BLOCKS_DIR
+INDEX_PATH = INDEX_FILE
 
 # Try importing dag_cbor for block reading
 try:
@@ -52,18 +75,6 @@ try:
 except ImportError:
     OLLAMA_AVAILABLE = False
     print("WARNING: ollama not installed. Install with: pip install ollama")
-
-
-def get_project_root() -> Path:
-    """Get the CADMIES project root directory."""
-    current_file = Path(__file__).resolve()
-    project_root = current_file.parent.parent.parent
-    return project_root
-
-
-PROJECT_ROOT = get_project_root()
-BLOCKSTORE_PATH = PROJECT_ROOT / "store" / "blocks"
-INDEX_PATH = PROJECT_ROOT / "store" / "index" / "human_id_to_cid.json"
 
 # Willie's personality quotes for response flavor
 WILLIE_QUOTES = [
@@ -161,14 +172,6 @@ def expand_query_semantically(text: str, model: str = "mistral:7b", domain_conte
     Use LLM to expand a query or conversation snippet into related search terms,
     synonyms, and domain-specific vocabulary. Bridges the gap between everyday
     language and technical/philosophical terminology.
-    
-    Args:
-        text: The query or conversation text to expand
-        model: Ollama model to use for expansion (default: mistral:7b)
-        domain_context: Optional string describing the mycelium's domains
-        
-    Returns:
-        List of expanded search terms
     """
     if not OLLAMA_AVAILABLE:
         return []
@@ -207,7 +210,6 @@ def expand_query_semantically(text: str, model: str = "mistral:7b", domain_conte
         )
         raw = response.get('response', '').strip()
         
-        # Parse comma-separated list
         terms = []
         for term in raw.split(','):
             cleaned = term.strip().strip('"').strip("'").lower()
@@ -225,13 +227,6 @@ def keyword_search(query: str, all_cids: List[str]) -> List[Dict[str, Any]]:
     """
     Original keyword-based search. Tokenizes query and matches against
     title, definition, human_id, and domain. Precision-focused.
-    
-    Args:
-        query: User's question or conversation text
-        all_cids: List of all CIDs to search through
-        
-    Returns:
-        List of relevant concepts with relevance scores
     """
     query_terms = set(re.findall(r'[a-zA-Z]{3,}', query.lower()))
     
@@ -280,27 +275,11 @@ def search_mycelium(
     """
     Hybrid search: combines keyword matching (precision) with semantic query
     expansion (recall) to find relevant concepts across vocabulary boundaries.
-    
-    Uses equal weighting (0.5/0.5) to give semantic-only discoveries a fair
-    chance at ranking well.
-    
-    Args:
-        query: User's question or conversation text
-        all_cids: List of all CIDs to search through
-        use_semantic: Enable semantic query expansion (default: True)
-        semantic_model: Ollama model for query expansion
-        keyword_weight: Weight for keyword match scores (default: 0.5)
-        semantic_weight: Weight for semantic match scores (default: 0.5)
-        
-    Returns:
-        List of relevant concepts with combined relevance scores,
-        deduplicated across both search methods, with match_type labels
     """
     
     # === KEYWORD SEARCH (always runs) ===
     keyword_results = keyword_search(query, all_cids)
     
-    # Track which CIDs we've found and their current best scores
     combined = {}
     for r in keyword_results:
         combined[r['cid']] = {
@@ -318,31 +297,25 @@ def search_mycelium(
     if use_semantic and OLLAMA_AVAILABLE:
         print("  Expanding query for semantic search...")
         
-        # Get domain context to improve expansion quality
         domain_context = get_mycelium_domains(all_cids)
         expanded_terms = expand_query_semantically(query, semantic_model, domain_context)
         
         if expanded_terms:
             print(f"  Semantic terms: {', '.join(expanded_terms[:10])}")
-            # Run keyword search using the expanded terms
             expanded_query = ' '.join(expanded_terms)
             semantic_results = keyword_search(expanded_query, all_cids)
             
-            # Merge with combined dict, applying semantic weight
             for r in semantic_results:
                 cid = r['cid']
                 semantic_score = r['relevance_score'] * semantic_weight
                 
                 if cid in combined:
-                    # Add semantic score to existing keyword score
                     combined[cid]['relevance_score'] += semantic_score
                     combined[cid]['match_type'] = 'hybrid'
-                    # Merge matched terms
                     existing_terms = set(combined[cid].get('matched_terms', []))
                     new_terms = set(r.get('matched_terms', []))
                     combined[cid]['matched_terms'] = list(existing_terms | new_terms)[:8]
                 else:
-                    # New concept found only via semantic search
                     combined[cid] = {
                         'cid': r['cid'],
                         'title': r['title'],
@@ -356,11 +329,9 @@ def search_mycelium(
         else:
             print("  (No semantic terms generated — using keyword results only)")
     
-    # Convert back to sorted list
     results = list(combined.values())
     results.sort(key=lambda x: x['relevance_score'], reverse=True)
     
-    # Report match types for debugging
     if use_semantic:
         kw_count = sum(1 for r in results if r['match_type'] == 'keyword')
         hy_count = sum(1 for r in results if r['match_type'] == 'hybrid')
@@ -373,13 +344,6 @@ def search_mycelium(
 def build_context_for_llm(relevant_concepts: List[Dict], max_concepts: int = 3) -> str:
     """
     Build a context string from relevant concepts for the LLM prompt.
-    
-    Args:
-        relevant_concepts: List of concept dicts from search_mycelium
-        max_concepts: Maximum number of concepts to include
-        
-    Returns:
-        Formatted context string
     """
     if not relevant_concepts:
         return "No relevant concepts found in the mycelium."
@@ -403,19 +367,6 @@ def query_mycelium(concept_cids: List[str] = None, context: Dict[str, Any] = Non
     Takes a natural language query, searches the mycelium for relevant
     concepts using hybrid search, feeds them to the LLM via Ollama, and
     returns an informed answer with CID references and accuracy tags.
-    
-    Args:
-        concept_cids: Optional list of specific CIDs to search (uses all if None)
-        context: Execution context with keys:
-            - user_query: Natural language question (required)
-            - model: Ollama model name (default: "tinyllama:1.1b")
-            - max_concepts: Max concepts to feed LLM (default: 3)
-            - tone: Response tone (default: "helpful")
-            - analysis_depth: basic/detailed/comprehensive (default: "basic")
-            - use_semantic: Enable hybrid search (default: True)
-        
-    Returns:
-        Dict with query, answer, concepts_used, and metadata
     """
     start_time = time.time()
     
@@ -444,14 +395,13 @@ def query_mycelium(concept_cids: List[str] = None, context: Dict[str, Any] = Non
         }
     
     print(f"\n{'='*60}")
-    print(f"WILLIE THE RESEARCH ASSISTANT v{__version__} - QUERY")
+    print(f"WILLIE THE RESEARCH ASSISTANT v{VERSION} - QUERY")
     print(f"{'='*60}")
     print(f"Query: {user_query}")
     print(f"Model: {model}")
     print(f"Max Concepts: {max_concepts}")
     print(f"Hybrid Search: {'ON' if use_semantic else 'OFF (keyword only)'}")
     
-    # Step 1: Get CIDs to search
     if concept_cids:
         search_cids = concept_cids
         print(f"Searching {len(search_cids)} specified CIDs")
@@ -459,7 +409,6 @@ def query_mycelium(concept_cids: List[str] = None, context: Dict[str, Any] = Non
         search_cids = load_all_concept_cids()
         print(f"Searching all {len(search_cids)} indexed concepts")
     
-    # Step 2: Hybrid search
     print("\nSEARCHING CADMIES...")
     relevant = search_mycelium(
         user_query,
@@ -487,10 +436,8 @@ def query_mycelium(concept_cids: List[str] = None, context: Dict[str, Any] = Non
     for r in relevant[:5]:
         print(f"  - {r['title']} [{r.get('match_type', 'unknown')}] (score: {r['relevance_score']:.3f})")
     
-    # Step 3: Build context for LLM
     context_str = build_context_for_llm(relevant, max_concepts)
     
-    # Step 4: Build prompt with accuracy tags
     system_prompt = (
         f"You are Willie the Librarian, caretaker of CADMIES (Cosmium Angelo Digital "
         f"Mycorrhizal Intelligence EcoSystem) — a content-addressed "
@@ -529,7 +476,6 @@ def query_mycelium(concept_cids: List[str] = None, context: Dict[str, Any] = Non
     
     full_prompt = f"{context_str}\n\nUser Question: {user_query}\n\nWillie's Answer:"
     
-    # Step 5: Query Ollama
     print(f"\nASKING {model}...")
     
     try:
@@ -560,7 +506,6 @@ def query_mycelium(concept_cids: List[str] = None, context: Dict[str, Any] = Non
     print(f"\nANSWER ({execution_time}s):")
     print(answer[:200] + "..." if len(answer) > 200 else answer)
     
-    # Step 6: Return results
     return {
         'success': True,
         'query': user_query,
@@ -580,7 +525,7 @@ def query_mycelium(concept_cids: List[str] = None, context: Dict[str, Any] = Non
             'model': model,
             'tone': tone,
             'execution_time_seconds': execution_time,
-            'agent_version': __version__,
+            'agent_version': VERSION,
             'hybrid_search': use_semantic,
             'willie_says': WILLIE_QUOTES[hash(user_query) % len(WILLIE_QUOTES)]
         }
@@ -593,14 +538,13 @@ def test_agent() -> Dict[str, Any]:
     with hybrid search operational.
     """
     print("=" * 60)
-    print(f"WILLIE THE RESEARCH ASSISTANT v{__version__} - SELF TEST")
+    print(f"WILLIE THE RESEARCH ASSISTANT v{VERSION} - SELF TEST")
     print("=" * 60)
     
     if not OLLAMA_AVAILABLE:
         print("FAILED: Ollama not installed")
         return {'success': False, 'error': 'Ollama not installed'}
     
-    # Test 1: Check Ollama connection
     print("\nTEST 1: Ollama connectivity...")
     try:
         list_response = ollama.list()
@@ -610,7 +554,6 @@ def test_agent() -> Dict[str, Any]:
         print(f"  FAILED: {e}")
         return {'success': False, 'error': f'Ollama connection failed: {e}'}
     
-    # Test 2: Load mycelium index
     print("\nTEST 2: Mycelium access...")
     all_cids = load_all_concept_cids()
     print(f"  Found {len(all_cids)} indexed concepts")
@@ -618,20 +561,17 @@ def test_agent() -> Dict[str, Any]:
     if len(all_cids) < 1:
         print("  WARNING: No concepts in index — run import_from_github.py first")
     
-    # Test 3: Keyword search
     print("\nTEST 3: Keyword search...")
     test_query = "natural selection"
     results = keyword_search(test_query, all_cids)
     print(f"  Query '{test_query}' found {len(results)} keyword results")
     
-    # Test 4: Hybrid search
     print("\nTEST 4: Hybrid search (keyword + semantic)...")
     results = search_mycelium(test_query, all_cids, use_semantic=True)
     print(f"  Hybrid search found {len(results)} total results")
     for r in results[:3]:
         print(f"    - {r['title']} [{r.get('match_type', '?')}] score={r['relevance_score']:.3f}")
     
-    # Test 5: Full LLM query
     print("\nTEST 5: LLM query test...")
     test_context = {
         'user_query': "What concepts in the mycelium relate to evolution or natural selection?",
@@ -658,16 +598,16 @@ if __name__ == "__main__":
     import argparse
     
     parser = argparse.ArgumentParser(
-        description="Willie the research assistant - Ask CADMIES questions via local LLM",
+        description=f"Willie the research assistant v{VERSION} - Ask CADMIES questions via local LLM",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python llm_mycelium_reader.py --test
-  python llm_mycelium_reader.py --query "What is natural selection?"
-  python llm_mycelium_reader.py --query "Explain entropy" --model mistral:7b
-  python llm_mycelium_reader.py --query "Find concepts about evolution" --max-concepts 5
-  python llm_mycelium_reader.py --query "vampire feeding" --semantic
-  python llm_mycelium_reader.py --query "Fact-check concept X" --tone scholarly
+  python cadmies_concept_reader.py --test
+  python cadmies_concept_reader.py --query "What is natural selection?"
+  python cadmies_concept_reader.py --query "Explain entropy" --model mistral:7b
+  python cadmies_concept_reader.py --query "Find concepts about evolution" --max-concepts 5
+  python cadmies_concept_reader.py --query "vampire feeding" --semantic
+  python cadmies_concept_reader.py --query "Fact-check concept X" --tone scholarly
         """
     )
     
@@ -688,7 +628,6 @@ Examples:
     
     args = parser.parse_args()
     
-    # Handle --keyword-only override
     use_semantic = args.semantic and not args.keyword_only
     
     if args.test:
@@ -720,7 +659,6 @@ Examples:
         else:
             print(f"ERROR: {result.get('error')}")
         
-        # Save results
         results_dir = PROJECT_ROOT / "analysis_results"
         results_dir.mkdir(exist_ok=True)
         timestamp = time.strftime('%Y%m%d_%H%M%S')
