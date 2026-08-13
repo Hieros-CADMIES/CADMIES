@@ -5,7 +5,7 @@ Document_ID: CA-2026-022-TOOL
 Version: 1.2.0
 Classification: INTERNAL
 Author: The Gardener
-Reviewers: [DeepSeek, Codestral]
+Reviewers: [The Gardener, DeepSeek]
 Status: ACTIVE
 Created: 2026-08-12
 Modified: 2026-08-12
