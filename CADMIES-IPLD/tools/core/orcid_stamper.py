@@ -1,19 +1,49 @@
 #!/usr/bin/env python3
-# orcid_stamper.py
-# ORCID Public API integration - creates verification blocks
-# Limitations: Public API cannot prove ownership (OAuth required for that)
-# Badge shows 🟢 but indicates "claimed" not "owner-verified"
+---
+System: CADMIES / tools/core
+Document_ID: CA-2026-045-TOOL
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [verification_manager.py, orcid_device_flow.py]
+---
+"""
+File: orcid_stamper.py
+Tool: CADMIES ORCID Stamper
+Version: 1.1.0
+System: CADMIES / tools/core
+Status: ACTIVE
+License: AGPLv3 with Commons Clause
+
+Purpose: ORCID Public API integration for concept verification.
+         Creates verification blocks using public ORCID data.
+         Note: Public API cannot prove ownership (OAuth required).
+
+Usage:
+    python tools/core/orcid_stamper.py <concept_cid> <orcid_id>
+
+Version History:
+    v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+        Added VERSION constant for dynamic version display.
+        Standardized timestamps to UTC.
+    v1.0.0: Initial release. Public API ORCID stamping.
+"""
 
 import sys
 import json
 import hashlib
 import requests
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
-# Add tools/core to path
-sys.path.append(str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent))
 from verification_manager import add_verification_statement
+
+VERSION = "1.1.0"
 
 ORCID_API_URL = "https://pub.orcid.org/v3.0"
 
@@ -22,7 +52,6 @@ def fetch_orcid_profile(orcid_id):
     Fetch public ORCID profile.
     Returns (name, record_hash, raw_data) or (None, None, None) if not found.
     """
-    # Format ORCID ID with hyphens if not already
     if '-' not in orcid_id and len(orcid_id) == 16:
         orcid_id = f"{orcid_id[:4]}-{orcid_id[4:8]}-{orcid_id[8:12]}-{orcid_id[12:]}"
     
@@ -35,11 +64,10 @@ def fetch_orcid_profile(orcid_id):
         if response.status_code == 200:
             data = response.json()
             
-            # Extract name from person record
             person_url = f"{ORCID_API_URL}/{orcid_id}/person"
             person_response = requests.get(person_url, headers=headers, timeout=10)
             
-            name = orcid_id  # fallback
+            name = orcid_id
             if person_response.status_code == 200:
                 person_data = person_response.json()
                 name_parts = person_data.get('name', {})
@@ -48,7 +76,6 @@ def fetch_orcid_profile(orcid_id):
                 if given or family:
                     name = f"{given} {family}".strip()
             
-            # Create hash of record for offline verification
             record_hash = hashlib.sha256(json.dumps(data, sort_keys=True).encode()).hexdigest()
             
             return (name, record_hash, data)
@@ -76,7 +103,7 @@ def stamp_with_orcid(concept_cid, orcid_id, verifier_key="orcid-public-api"):
         "orcid_record_hash": record_hash,
         "verification_method": "public_api_claimed",
         "limitation_note": "Public API cannot prove ownership. Full verification requires OAuth.",
-        "fetch_timestamp": datetime.now().isoformat() + "Z"
+        "fetch_timestamp": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
     }
     
     provenance_cid = add_verification_statement(
@@ -87,16 +114,16 @@ def stamp_with_orcid(concept_cid, orcid_id, verifier_key="orcid-public-api"):
         metadata=metadata
     )
     
-    print(f"✅ ORCID stamp added for {name} ({orcid_id})")
+    print(f"ORCID stamp added for {name} ({orcid_id})")
     print(f"   Provenance CID: {provenance_cid}")
-    print(f"   ⚠️ Note: This is claimed verification, not owner-verified")
+    print(f"   Note: This is claimed verification, not owner-verified")
     
     return provenance_cid
 
 if __name__ == "__main__":
     import argparse
     
-    parser = argparse.ArgumentParser(description="Stamp concept with ORCID verification (public API)")
+    parser = argparse.ArgumentParser(description=f"Stamp concept with ORCID verification v{VERSION} (public API)")
     parser.add_argument("concept_cid", help="CID of concept to verify")
     parser.add_argument("orcid_id", help="ORCID ID (e.g., 0000-0001-5000-0007)")
     parser.add_argument("--verifier-key", default="orcid-public-api", help="Key used for verification")
