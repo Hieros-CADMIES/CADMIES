@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools
+Document_ID: CA-2026-033-TOOL
+Version: 1.2.7
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, cid_generator.py, generate_mycelium_map.py]
+---
 """
 File: generate_relationships.py
 Tool: CADMIES Relationship Generator
-Version: 1.2.6
+Version: 1.2.7
 System: CADMIES / tools
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -18,6 +30,11 @@ Usage:
     python tools/generate_relationships.py --incremental    # Only sparse concepts
 
 Version History:
+  v1.2.7 (2026-08-12): Added scientific documentation YAML metadata block.
+      Made version display dynamic via VERSION constant.
+      Terminal emojis retained for user experience.
+      NOTE: Write mode mutates blocks in place without new CID generation.
+      This is a known tension with content-addressing. Flagged, not changed.
   v1.2.6 (2026-08-08): Renamed call_mistral() to call_llm() for model-agnostic naming.
   v1.2.5 (2026-05-28): build_intra_batch_prompt now includes domain and definition.
       build_bridge_prompt already included domains; added definitions.
@@ -42,6 +59,8 @@ from cadmies_concept_reader import load_concept, load_all_concept_cids
 from paths import BLOCKS_DIR
 from cid_generator import CIDGenerator
 import dag_cbor
+
+VERSION = "1.2.7"
 
 # === CONFIG ===
 MODEL = "codestral"
@@ -225,7 +244,7 @@ def main():
     incremental = "--incremental" in sys.argv
 
     print("=" * 60)
-    print("CADMIES RELATIONSHIP GENERATOR v1.2.6")
+    print(f"CADMIES RELATIONSHIP GENERATOR v{VERSION}")
     print(f"Model: {MODEL}  |  Batch: {BATCH_SIZE}  |  Delay: {DELAY}s")
     print(f"Mode: {'WRITE' if write_mode else 'DRY RUN (preview only)'}")
     print(f"Filter: {'INCREMENTAL (sparse only)' if incremental else 'FULL (all concepts)'}")
