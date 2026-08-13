@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools
+Document_ID: CA-2026-036-TOOL
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, cadmies_concept_reader.py, generate_relationships.py]
+---
 """
 File: strip_all_orphans.py
 Tool: CADMIES Orphan Edge Stripper
-Version: 1.0.0
+Version: 1.1.0
 System: CADMIES / tools
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -13,13 +25,21 @@ Purpose: Strip all edges pointing to non-existent targets.
 Usage:
     python tools/strip_all_orphans.py           # dry run
     python tools/strip_all_orphans.py --apply   # strip with backup
+
+Version History:
+    v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+        Added VERSION constant. Standardized timestamps to UTC.
+        Removed unused STORE_DIR import.
+    v1.0.0: Initial release. Orphan edge stripping with backup.
 """
 
 import json, sys, subprocess
 from pathlib import Path
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timezone
 import dag_cbor
+
+VERSION = "1.1.0"
 
 TOOLS_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = TOOLS_DIR.parent
@@ -27,12 +47,12 @@ sys.path.insert(0, str(PROJECT_ROOT / "agents" / "code"))
 sys.path.insert(0, str(PROJECT_ROOT / "tools" / "core"))
 
 from cadmies_concept_reader import load_concept, load_all_concept_cids
-from paths import BLOCKS_DIR, STORE_DIR
+from paths import BLOCKS_DIR
 
 BACKUP_DIR = PROJECT_ROOT / "store" / "index" / "backups"
 apply = "--apply" in sys.argv
 
-print(f"=== Strip All Orphan Edges {'— APPLY' if apply else '— DRY RUN'} ===\n")
+print(f"=== Strip All Orphan Edges ({'APPLY' if apply else 'DRY RUN'}) ===\n")
 
 all_cids = load_all_concept_cids()
 node_ids = set()
@@ -69,7 +89,7 @@ if not apply:
     print(f'\nDry run. Add --apply to strip with backup.')
     sys.exit(0)
 
-timestamp = datetime.now().strftime('%Y%m%dT%H%M%S')
+timestamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
 backup_name = f'blocks_pre_orphan_strip_{timestamp}.tar.gz'
 backup_path = BACKUP_DIR / backup_name
 BACKUP_DIR.mkdir(parents=True, exist_ok=True)
