@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools/core
+Document_ID: CA-2026-027-TOOL
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [cid_generator.py, universal_scientific_concept_schema_v1.0.0.json]
+---
 """
 File: scientific_validator.py
 Tool: CADMIES Scientific Validator
-Version: 1.0.0
+Version: 1.1.0
 System: CADMIES / tools/core
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -19,11 +31,19 @@ Validation Levels:
     STANDARD — Field types and constraints
     RIGOROUS — Scientific quality checks
     STRICT   — Maximum scientific rigor
+
+Version History:
+    v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+        Made version display dynamic via VERSION constant.
+        Standardized timestamps to UTC.
+    v1.0.0: Initial release. Four-level scientific validation.
 """
 
 import json
 from typing import Dict, Any, List, Tuple
-from datetime import datetime
+from datetime import datetime, timezone
+
+VERSION = "1.1.0"
 
 class ScientificValidator:
     """
@@ -61,7 +81,7 @@ class ScientificValidator:
         self.validation_level = validation_level.upper()
         self.validation_rules = self._get_validation_rules()
         
-        print(f"Scientific Validator v1.0.0 initialized")
+        print(f"Scientific Validator v{VERSION} initialized")
         print(f"   Level: {self.validation_level}")
         print(f"   Mission: Ensure only rigorous concepts enter the garden")
     
@@ -103,7 +123,7 @@ class ScientificValidator:
             "concept_title": concept.get("title", "Unknown"),
             "human_id": concept.get("human_id", "Unknown"),
             "validation_level": self.validation_level,
-            "timestamp": datetime.now().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
             "checks_passed": [],
             "checks_failed": [],
             "warnings": [],
@@ -328,7 +348,7 @@ class ScientificValidator:
 def test_validation():
     """Test the validator with sample concepts"""
     print("=" * 60)
-    print("CADMIES SCIENTIFIC VALIDATOR v1.0.0")
+    print(f"CADMIES SCIENTIFIC VALIDATOR v{VERSION}")
     print("Quality Gatekeeper for the Knowledge Garden")
     print("=" * 60)
     
@@ -350,7 +370,7 @@ def test_validation():
             }
         ],
         "metadata": {
-            "created": datetime.now().isoformat() + "Z",
+            "created": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
             "creator": "Test System",
             "certainty_score": 0.9,
             "version": 1
