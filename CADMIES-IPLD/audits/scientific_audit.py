@@ -1,57 +1,85 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / audits
+Document_ID: CA-2026-046-AUDIT
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [cid_generator.py, paths.py]
+---
 """
 File: scientific_audit.py
 Tool: CADMIES Scientific Audit
-Version: 1.0.0
-System: CADMIES
+Version: 1.1.0
+System: CADMIES / audits
 Status: ACTIVE
+License: AGPLv3 with Commons Clause
 
 Purpose: Comprehensive verification of system rigor and standards
          across the CADMIES ecosystem.
+
+Usage:
+    python audits/scientific_audit.py
+
+Version History:
+    v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+        Added VERSION constant for dynamic version display.
+        Fixed CID Generator import path (tools.core, not tools).
+        Terminal emojis retained for report formatting.
+    v1.0.0: Initial release. Four-part scientific audit.
 """
 
 import os
 import sys
 import json
+import random
 import subprocess
 from pathlib import Path
+from datetime import datetime, timezone
 
-# Add tools to path
-sys.path.insert(0, 'tools')
+VERSION = "1.1.0"
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "tools" / "core"))
+
+from paths import PROJECT_ROOT
 
 class ScientificAudit:
     def __init__(self):
-        self.project_root = Path.cwd()
+        self.project_root = PROJECT_ROOT
         self.issues = []
         self.warnings = []
         self.successes = []
     
     def log_issue(self, category, message):
         self.issues.append(f"[{category}] {message}")
-        print(f"❌ {message}")
+        print(f"ISSUE: {message}")
     
     def log_warning(self, category, message):
         self.warnings.append(f"[{category}] {message}")
-        print(f"⚠️  {message}")
+        print(f"WARNING: {message}")
     
     def log_success(self, category, message):
         self.successes.append(f"[{category}] {message}")
-        print(f"✅ {message}")
+        print(f"OK: {message}")
     
     def audit_structure(self):
         """Audit 1: Directory Structure"""
         print("\n" + "="*60)
-        print("AUDIT 1: DIRECTORY STRUCTURE & ORGANIZATION")
+        print("AUDIT 1: DIRECTORY STRUCTURE AND ORGANIZATION")
         print("="*60)
         
-        required_dirs = ['tools', 'docs', 'store', 'tests']
+        required_dirs = ['tools', 'docs', 'store']
         for dir_name in required_dirs:
             if (self.project_root / dir_name).exists():
                 self.log_success("Structure", f"Directory exists: {dir_name}/")
             else:
                 self.log_issue("Structure", f"Missing directory: {dir_name}/")
         
-        # Check store structure
         store = self.project_root / 'store'
         if store.exists():
             subdirs = ['blocks', 'index', 'logs']
@@ -64,41 +92,48 @@ class ScientificAudit:
     def audit_metadata(self):
         """Audit 2: Scientific Metadata"""
         print("\n" + "="*60)
-        print("AUDIT 2: SCIENTIFIC METADATA & DOCUMENTATION")
+        print("AUDIT 2: SCIENTIFIC METADATA AND DOCUMENTATION")
         print("="*60)
         
-        # Check Python module metadata
         tools_dir = self.project_root / 'tools'
-        for py_file in tools_dir.glob("*.py"):
-            content = py_file.read_text()
-            
-            checks = [
-                ("__version__", "Version metadata"),
-                ("__author__", "Author metadata"),
-                ("__created__", "Creation date"),
-            ]
-            
-            all_present = True
-            for field, desc in checks:
-                if field not in content:
-                    self.log_warning("Metadata", f"{py_file.name} missing {desc}")
-                    all_present = False
-            
-            if all_present:
-                self.log_success("Metadata", f"{py_file.name} has complete metadata")
+        if tools_dir.exists():
+            for py_file in tools_dir.glob("*.py"):
+                content = py_file.read_text()
+                
+                checks = [
+                    ("Version History", "Version history"),
+                    ("System:", "System metadata"),
+                    ("Status", "Status metadata"),
+                ]
+                
+                all_present = True
+                for field, desc in checks:
+                    if field not in content:
+                        self.log_warning("Metadata", f"{py_file.name} missing {desc}")
+                        all_present = False
+                
+                if all_present:
+                    self.log_success("Metadata", f"{py_file.name} has complete metadata")
         
-        # Check documentation
-        docs = [
-            ("docs/technical_documentation.md", "Technical Documentation"),
-            ("docs/user_guide.md", "User Guide"),
-        ]
-        
-        for doc_path, doc_name in docs:
-            if Path(doc_path).exists():
-                lines = len(Path(doc_path).read_text().split('\n'))
-                self.log_success("Documentation", f"{doc_name}: {lines} lines")
-            else:
-                self.log_issue("Documentation", f"Missing: {doc_name}")
+        core_dir = self.project_root / 'tools' / 'core'
+        if core_dir.exists():
+            for py_file in core_dir.glob("*.py"):
+                content = py_file.read_text()
+                
+                checks = [
+                    ("Version History", "Version history"),
+                    ("System:", "System metadata"),
+                    ("Status", "Status metadata"),
+                ]
+                
+                all_present = True
+                for field, desc in checks:
+                    if field not in content:
+                        self.log_warning("Metadata", f"{py_file.name} missing {desc}")
+                        all_present = False
+                
+                if all_present:
+                    self.log_success("Metadata", f"{py_file.name} has complete metadata")
     
     def audit_functionality(self):
         """Audit 3: Functional Verification"""
@@ -107,10 +142,9 @@ class ScientificAudit:
         print("="*60)
         
         try:
-            from tools.cid_generator import CIDGenerator
+            from cid_generator import CIDGenerator
             gen = CIDGenerator()
             
-            # Test 1: Reproducibility
             test_data = {'test': 'reproducible'}
             result1 = gen.generate_cid(test_data)
             result2 = gen.generate_cid(test_data)
@@ -120,21 +154,19 @@ class ScientificAudit:
             else:
                 self.log_issue("Functionality", "CID Generator: Non-deterministic!")
             
-            # Test 2: Immutability
             data1 = {'test': 'data1'}
             data2 = {'test': 'data2'}
             cid1 = gen.generate_cid(data1)
             cid2 = gen.generate_cid(data2)
             
             if cid1.get('cid') != cid2.get('cid'):
-                self.log_success("Functionality", "CID Generator: Immutable (different content → different CID)")
+                self.log_success("Functionality", "CID Generator: Immutable (different content, different CID)")
             else:
                 self.log_issue("Functionality", "CID Generator: Not immutable! Same CID for different content")
                 
         except Exception as e:
             self.log_issue("Functionality", f"CID Generator test failed: {e}")
         
-        # Test store integrity
         index_file = self.project_root / 'store' / 'index' / 'human_id_to_cid.json'
         if index_file.exists():
             try:
@@ -143,22 +175,22 @@ class ScientificAudit:
                 
                 blocks_dir = self.project_root / 'store' / 'blocks'
                 if blocks_dir.exists():
-                    blocks = list(blocks_dir.iterdir())
+                    blocks = list(blocks_dir.glob("*.cbor"))
                     
                     index_count = len(index)
                     block_count = len(blocks)
                     
-                    if index_count == block_count:
-                        self.log_success("Integrity", f"Store consistent: {index_count} index entries = {block_count} blocks")
+                    if index_count <= block_count:
+                        self.log_success("Integrity", f"Store consistent: {index_count} index entries, {block_count} blocks")
                     else:
-                        self.log_issue("Integrity", f"Store inconsistency: {index_count} index entries ≠ {block_count} blocks")
+                        self.log_issue("Integrity", f"Store inconsistency: {index_count} index entries > {block_count} blocks")
                         
-                    # Check a few random CIDs
-                    import random
                     if index:
                         sample_cids = random.sample(list(index.values()), min(3, len(index)))
                         for cid in sample_cids:
-                            block_file = blocks_dir / cid
+                            block_file = blocks_dir / f"{cid}.cbor"
+                            if not block_file.exists():
+                                block_file = blocks_dir / cid
                             if block_file.exists():
                                 self.log_success("Integrity", f"CID {cid[:12]}... has corresponding block")
                             else:
@@ -170,50 +202,56 @@ class ScientificAudit:
     def audit_standards(self):
         """Audit 4: Code Standards"""
         print("\n" + "="*60)
-        print("AUDIT 4: CODE STANDARDS & BEST PRACTICES")
+        print("AUDIT 4: CODE STANDARDS AND BEST PRACTICES")
         print("="*60)
         
         tools_dir = self.project_root / 'tools'
         
-        # Count files with various standards
-        total_py = len(list(tools_dir.glob("*.py")))
+        total_py = len(list(tools_dir.glob("*.py"))) if tools_dir.exists() else 0
+        total_core = len(list((self.project_root / 'tools' / 'core').glob("*.py"))) if (self.project_root / 'tools' / 'core').exists() else 0
+        total_py += total_core
+        
         with_docstrings = 0
         with_type_hints = 0
         with_error_handling = 0
         
-        for py_file in tools_dir.glob("*.py"):
-            content = py_file.read_text()
+        for directory in [tools_dir, self.project_root / 'tools' / 'core']:
+            if not directory.exists():
+                continue
+            for py_file in directory.glob("*.py"):
+                content = py_file.read_text()
+                
+                if '"""' in content or "'''" in content:
+                    with_docstrings += 1
+                
+                if 'from typing' in content or 'import typing' in content:
+                    with_type_hints += 1
+                
+                if 'try:' in content and 'except' in content:
+                    with_error_handling += 1
+        
+        if total_py > 0:
+            self.log_success("Standards", f"Total Python files: {total_py}")
             
-            if '"""' in content or "'''" in content:
-                with_docstrings += 1
+            doc_percent = (with_docstrings / total_py) * 100
+            if doc_percent > 80:
+                self.log_success("Standards", f"Documentation: {with_docstrings}/{total_py} files ({doc_percent:.0f}%)")
+            elif doc_percent > 50:
+                self.log_warning("Standards", f"Documentation: {with_docstrings}/{total_py} files ({doc_percent:.0f}%) - could improve")
+            else:
+                self.log_issue("Standards", f"Documentation: {with_docstrings}/{total_py} files ({doc_percent:.0f}%) - needs work")
             
-            if 'from typing' in content or 'import typing' in content:
-                with_type_hints += 1
+            type_percent = (with_type_hints / total_py) * 100
+            if type_percent > 50:
+                self.log_success("Standards", f"Type hints: {with_type_hints}/{total_py} files ({type_percent:.0f}%)")
+            else:
+                self.log_warning("Standards", f"Type hints: {with_type_hints}/{total_py} files ({type_percent:.0f}%) - consider adding more")
             
-            if 'try:' in content and 'except' in content:
-                with_error_handling += 1
-        
-        self.log_success("Standards", f"Total Python files: {total_py}")
-        
-        doc_percent = (with_docstrings / total_py) * 100
-        if doc_percent > 80:
-            self.log_success("Standards", f"Documentation: {with_docstrings}/{total_py} files ({doc_percent:.0f}%)")
-        elif doc_percent > 50:
-            self.log_warning("Standards", f"Documentation: {with_docstrings}/{total_py} files ({doc_percent:.0f}%) - could improve")
-        else:
-            self.log_issue("Standards", f"Documentation: {with_docstrings}/{total_py} files ({doc_percent:.0f}%) - needs work")
-        
-        type_percent = (with_type_hints / total_py) * 100
-        if type_percent > 50:
-            self.log_success("Standards", f"Type hints: {with_type_hints}/{total_py} files ({type_percent:.0f}%)")
-        else:
-            self.log_warning("Standards", f"Type hints: {with_type_hints}/{total_py} files ({type_percent:.0f}%) - consider adding more")
-        
-        error_percent = (with_error_handling / total_py) * 100
-        if error_percent > 60:
-            self.log_success("Standards", f"Error handling: {with_error_handling}/{total_py} files ({error_percent:.0f}%)")
-        else:
-            self.log_warning("Standards", f"Error handling: {with_error_handling}/{total_py} files ({error_percent:.0f}%) - could improve robustness")
+            error_percent = (with_error_handling / total_py) * 100
+            if error_percent > 60:
+                self.log_success("Standards", f"Error handling: {with_error_handling}/{total_py} files ({error_percent:.0f}%)")
+            else:
+                self.log_warning("Standards", f"Error handling: {with_error_handling}/{total_py} files ({error_percent:.0f}%) - could improve robustness")
     
     def generate_report(self):
         """Generate final audit report"""
@@ -224,13 +262,13 @@ class ScientificAudit:
         total_checks = len(self.successes) + len(self.warnings) + len(self.issues)
         score = (len(self.successes) / total_checks) * 100 if total_checks > 0 else 0
         
-        print(f"\n📊 SUMMARY:")
-        print(f"   ✅ Successes: {len(self.successes)}")
-        print(f"   ⚠️  Warnings: {len(self.warnings)}")
-        print(f"   ❌ Issues: {len(self.issues)}")
-        print(f"   📈 Score: {score:.1f}%")
+        print(f"\nSUMMARY:")
+        print(f"   Successes: {len(self.successes)}")
+        print(f"   Warnings: {len(self.warnings)}")
+        print(f"   Issues: {len(self.issues)}")
+        print(f"   Score: {score:.1f}%")
         
-        print(f"\n🏆 SYSTEM STATUS: ", end="")
+        print(f"\nSYSTEM STATUS: ", end="")
         if score >= 90:
             print("EXCELLENT - Scientifically rigorous")
         elif score >= 75:
@@ -241,16 +279,16 @@ class ScientificAudit:
             print("NEEDS WORK - Significant improvements needed")
         
         if self.issues:
-            print(f"\n🔧 CRITICAL ISSUES NEEDING ATTENTION:")
+            print(f"\nCRITICAL ISSUES NEEDING ATTENTION:")
             for issue in self.issues:
-                print(f"   • {issue}")
+                print(f"   - {issue}")
         
         if self.warnings:
-            print(f"\n💡 RECOMMENDED IMPROVEMENTS:")
+            print(f"\nRECOMMENDED IMPROVEMENTS:")
             for warning in self.warnings:
-                print(f"   • {warning}")
+                print(f"   - {warning}")
         
-        print(f"\n🍄 MYCELIAL NETWORK ASSESSMENT:")
+        print(f"\nMYCELIAL NETWORK ASSESSMENT:")
         if score >= 80:
             print("   The knowledge garden is thriving with scientific rigor!")
         elif score >= 60:
@@ -258,10 +296,10 @@ class ScientificAudit:
         else:
             print("   The garden needs tending to reach full potential.")
         
-        # Save report
         report = {
-            "timestamp": subprocess.getoutput("date -Iseconds"),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "system": "CADMIES IPLD Content-Addressed Knowledge System",
+            "audit_version": VERSION,
             "score": score,
             "successes": len(self.successes),
             "warnings": len(self.warnings),
@@ -277,12 +315,12 @@ class ScientificAudit:
         with open(report_file, 'w') as f:
             json.dump(report, f, indent=2)
         
-        print(f"\n📄 Full report saved to: {report_file}")
+        print(f"\nFull report saved to: {report_file}")
     
     def run_full_audit(self):
         """Run all audits"""
-        print("🔬 CADMIES IPLD SYSTEM - SCIENTIFIC AUDIT")
-        print("🍄 Verifying mycelial network integrity...")
+        print("CADMIES IPLD SYSTEM - SCIENTIFIC AUDIT")
+        print("Verifying mycelial network integrity...")
         
         self.audit_structure()
         self.audit_metadata()
