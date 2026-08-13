@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools
+Document_ID: CA-2026-043-TOOL
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, import_from_car.py]
+---
 """
 File: import_from_github.py
 Tool: CADMIES GitHub CAR Downloader
-Version: 1.0.0
+Version: 1.1.0
 System: CADMIES / tools
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -14,6 +26,13 @@ Usage:
     python tools/import_from_github.py --url <CAR_url>
     python tools/import_from_github.py --url <CAR_url> --keep
     python tools/import_from_github.py --url <CAR_url> --dry-run
+
+Version History:
+    v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+        Added VERSION constant for dynamic version display.
+        Switched to paths.py for PROJECT_ROOT.
+        Terminal emojis retained for user experience.
+    v1.0.0: Initial release. Download and import CAR files.
 """
 
 import argparse
@@ -23,29 +42,33 @@ from pathlib import Path
 import urllib.request
 import urllib.error
 
-PROJECT_ROOT = Path(__file__).parent.parent
+VERSION = "1.1.0"
+
+sys.path.insert(0, str(Path(__file__).parent / "core"))
+from paths import PROJECT_ROOT
+
 INCOMING_DIR = PROJECT_ROOT / "incoming_cars"
 
 
 def ensure_incoming_dir():
     """Create incoming_cars directory if it doesn't exist."""
     INCOMING_DIR.mkdir(parents=True, exist_ok=True)
-    print(f"📁 Incoming CARs directory: {INCOMING_DIR}")
+    print(f"Incoming CARs directory: {INCOMING_DIR}")
 
 
 def download_file(url: str, destination: Path) -> bool:
     """Download a file from URL to destination."""
     try:
-        print(f"🌐 Downloading from: {url}")
+        print(f"Downloading from: {url}")
         urllib.request.urlretrieve(url, destination)
-        print(f"✅ Downloaded to: {destination}")
+        print(f"Downloaded to: {destination}")
         print(f"   File size: {destination.stat().st_size:,} bytes")
         return True
     except urllib.error.URLError as e:
-        print(f"❌ Download failed: {e}")
+        print(f"Download failed: {e}")
         return False
     except Exception as e:
-        print(f"❌ Unexpected error: {e}")
+        print(f"Unexpected error: {e}")
         return False
 
 
@@ -54,7 +77,7 @@ def import_car(car_path: Path, dry_run: bool = False, verbose: bool = False) -> 
     import_script = PROJECT_ROOT / "tools" / "import_from_car.py"
     
     if not import_script.exists():
-        print(f"❌ import_from_car.py not found at {import_script}")
+        print(f"ERROR: import_from_car.py not found at {import_script}")
         return False
     
     cmd = [sys.executable, str(import_script), str(car_path)]
@@ -63,19 +86,19 @@ def import_car(car_path: Path, dry_run: bool = False, verbose: bool = False) -> 
     if verbose:
         cmd.append("--verbose")
     
-    print(f"🔄 Running: {' '.join(cmd)}")
+    print(f"Running: {' '.join(cmd)}")
     
     try:
         result = subprocess.run(cmd, capture_output=False, text=True)
         return result.returncode == 0
     except Exception as e:
-        print(f"❌ Import failed: {e}")
+        print(f"Import failed: {e}")
         return False
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="CADMIES GitHub CAR Downloader v1.0.0",
+        description=f"CADMIES GitHub CAR Downloader v{VERSION}",
         epilog="""
 Examples:
   python tools/import_from_github.py --url https://github.com/.../file.car
@@ -106,18 +129,18 @@ Examples:
     success = import_car(car_path, dry_run=args.dry_run, verbose=args.verbose)
     
     if not success:
-        print("❌ Import failed")
+        print("Import failed")
         sys.exit(1)
     
     if not args.keep and not args.dry_run:
         car_path.unlink()
-        print(f"🗑️  Deleted CAR file: {car_path}")
+        print(f"Deleted CAR file: {car_path}")
     elif args.keep:
-        print(f"📁 Kept CAR file: {car_path}")
+        print(f"Kept CAR file: {car_path}")
     elif args.dry_run:
-        print(f"📁 CAR file preserved (dry-run): {car_path}")
+        print(f"CAR file preserved (dry-run): {car_path}")
     
-    print("\n✅ Done!")
+    print("\nDone!")
     sys.exit(0)
 
 
