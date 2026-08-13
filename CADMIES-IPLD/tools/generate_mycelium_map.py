@@ -1,10 +1,23 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools
+Document_ID: CA-2026-032-TOOL
+Version: 2.4.1
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, generate_public_gateway.py]
+---
 """
 File: generate_mycelium_map.py
 Tool: CADMIES Mycelium Map Generator
-Version: 2.4.0
-System: CADMIES-IPLD / tools
-Status: ACTIVE — Phase 44: canonical 15-domain legend, directional arrows, concept cards
+Version: 2.4.1
+System: CADMIES / tools
+Status: ACTIVE
+License: AGPLv3 with Commons Clause
 
 Purpose: Dynamically generates mycelium_map.html from the live blockstore.
          Enhanced features: zoom buttons, concept search, hover tooltips,
@@ -19,6 +32,8 @@ Output:
     mycelium_map.html (project root) — open in any modern browser
 
 Version History:
+  v2.4.1 (2026-08-12): Added scientific documentation YAML metadata block.
+      Made version display dynamic via VERSION constant.
   v2.4.0 (2026-05-27): Map UX improvements — node collision spacing (nodeOverlap),
       click-to-highlight with non-connected fade, legend domain filter with
       cross-domain ghosting, gradient edge fade from clicked node.
@@ -41,6 +56,8 @@ sys.path.insert(0, str(PROJECT_ROOT / "tools" / "core"))
 
 from cadmies_concept_reader import load_concept, load_all_concept_cids
 from paths import BLOCKS_DIR
+
+VERSION = "2.4.1"
 
 # === CONFIG ===
 OUTPUT_FILE = PROJECT_ROOT / "mycelium_map.html"
@@ -385,7 +402,6 @@ def build_html_template():
             }
         });
 
-        // Auto-size on zoom
         cy.on('zoom', function() {
             var zoom = cy.zoom();
             var base = Math.max(40, 60 / Math.sqrt(zoom));
@@ -396,7 +412,6 @@ def build_html_template():
             }).update();
         });
 
-        // Search
         var searchInput = document.getElementById('searchInput');
         searchInput.addEventListener('input', function() {
             var q = this.value.toLowerCase();
@@ -409,7 +424,6 @@ def build_html_template():
             if (q === '') { cy.elements().style('opacity', 1); }
         });
 
-        // Click node -> highlight neighborhood + show card
         cy.on('tap', 'node', function(evt) {
             var node = evt.target;
             var card = document.getElementById('conceptCard');
@@ -430,7 +444,6 @@ def build_html_template():
             card.style.left = Math.min(evt.originalEvent.clientX + 20, window.innerWidth - 360) + 'px';
             card.style.top = Math.min(evt.originalEvent.clientY - 30, window.innerHeight - 300) + 'px';
 
-            // Fade non-connected, highlight neighborhood
             cy.elements().style('opacity', 0.1);
             node.style('opacity', 1);
             var connectedEdges = node.connectedEdges();
@@ -438,14 +451,12 @@ def build_html_template():
             connectedEdges.style('opacity', 0.8);
             connectedNodes.style('opacity', 1);
 
-            // Gradient fade on edges: closer to clicked node = brighter
             connectedEdges.forEach(function(edge) {
                 var sourceDist = edge.source().id() === node.id() ? 0 : 1;
                 edge.style('opacity', sourceDist === 0 ? 0.9 : 0.5);
             });
         });
 
-        // Click background -> reset
         cy.on('tap', function(evt) {
             if (evt.target === cy) {
                 resetView();
@@ -463,7 +474,6 @@ def build_html_template():
             cy.center();
         }
 
-        // Tooltip
         var tooltip = document.getElementById('nodeTooltip');
         cy.on('mouseover', 'node', function(evt) {
             var n = evt.target;
@@ -480,7 +490,6 @@ def build_html_template():
             tooltip.style.display = 'none';
         });
 
-        // Legend domain filter
         document.querySelectorAll('.legend-item .color-box').forEach(function(box) {
             box.addEventListener('click', function() {
                 var domainText = this.nextElementSibling.textContent.trim();
@@ -491,7 +500,6 @@ def build_html_template():
                         n.style({ 'opacity': 0.08, 'border-width': 1 });
                     }
                 });
-                // Ghost edges that connect to visible nodes
                 cy.edges().forEach(function(e) {
                     var srcVisible = e.source().data('domain') === domainText;
                     var tgtVisible = e.target().data('domain') === domainText;
@@ -504,7 +512,6 @@ def build_html_template():
             });
         });
 
-        // Legend toggle
         document.getElementById('legendToggle').addEventListener('click', function() {
             document.getElementById('legendPanel').classList.toggle('collapsed');
         });
@@ -512,7 +519,6 @@ def build_html_template():
             document.getElementById('legendPanel').classList.add('collapsed');
         });
 
-        // Keyboard shortcuts
         document.addEventListener('keydown', function(e) {
             if (e.key === '/' && document.activeElement !== searchInput) {
                 e.preventDefault();
@@ -525,7 +531,6 @@ def build_html_template():
             }
         });
 
-        // Easter egg
         var keyBuffer = [];
         document.addEventListener('keydown', function(e) {
             if (e.key.length === 1 && /[a-zA-Z]/.test(e.key)) {
@@ -601,7 +606,7 @@ def generate_html(nodes, edges, domain_counts):
 
 def main():
     print("=" * 60)
-    print("CADMIES MYCELIUM MAP GENERATOR v2.4.0")
+    print(f"CADMIES MYCELIUM MAP GENERATOR v{VERSION}")
     print(f"Blockstore: {BLOCKS_DIR}")
     print(f"Output: {OUTPUT_FILE}")
     print(f"Canonical domains: {len(CANONICAL_DOMAINS)}")
