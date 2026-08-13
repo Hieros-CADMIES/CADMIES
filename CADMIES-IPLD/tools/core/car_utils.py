@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools/core
+Document_ID: CA-2026-026-TOOL
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [cid_generator.py, verification_manager.py]
+---
 """
 File: car_utils.py
 Tool: CADMIES CAR Utilities
-Version: 1.0.3
+Version: 1.1.0
 System: CADMIES / tools/core
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -14,6 +26,9 @@ Usage:
     from car_utils import write_car, read_car, read_car_index, calculate_cid
 
 Version History:
+  v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+      Removed emojis from self-test output for scientific rigor compliance.
+      Made version display dynamic via VERSION constant.
   v1.0.3 (2026-05-25): Added read_car_index() to extract human_id -> CID mapping.
   v1.0.2 (2026-05-23): Fixed calculate_cid() to use hashlib.sha256 + multihash.wrap.
   v1.0.1 (2026-05-23): Fixed CID construction, added re-encode verification.
@@ -26,6 +41,8 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional, Union
 import dag_cbor
 from multiformats import CID, multihash
+
+VERSION = "1.1.0"
 
 
 def calculate_cid(data: bytes) -> str:
@@ -215,7 +232,7 @@ def verify_block_integrity(block_data: bytes, expected_cid: str) -> bool:
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("CADMIES CAR UTILS v1.0.3 - Self Test")
+    print(f"CADMIES CAR UTILS v{VERSION} - Self Test")
     print("=" * 60)
     
     print("\n1. Testing write/read roundtrip...")
@@ -254,9 +271,9 @@ if __name__ == "__main__":
                read_blocks.get(cid2_str) == block2_data)
     
     if success:
-        print("   ✅ Roundtrip successful")
+        print("   Roundtrip successful")
     else:
-        print("   ❌ Roundtrip failed")
+        print("   Roundtrip FAILED")
     
     tmp_path.unlink()
     
@@ -267,9 +284,9 @@ if __name__ == "__main__":
     print(f"   CID: {cid}")
     
     if cid.startswith('Qm') or cid.startswith('bafy'):
-        print("   ✅ CID calculation working")
+        print("   CID calculation working")
     else:
-        print("   ❌ CID calculation failed")
+        print("   CID calculation FAILED")
     
     print("\n3. Testing CID equivalence...")
     test_block = b'{"test": "equivalence"}'
@@ -284,9 +301,9 @@ if __name__ == "__main__":
     print(f"   cids_equivalent() returns: {equivalent}")
     
     if equivalent and cid_v0 == cid_v0_again:
-        print("   ✅ CID equivalence working")
+        print("   CID equivalence working")
     else:
-        print("   ❌ CID equivalence failed")
+        print("   CID equivalence FAILED")
     
     print("\n4. Testing CID string/byte conversion...")
     test_cid_str = calculate_cid(b"test conversion")
@@ -298,10 +315,10 @@ if __name__ == "__main__":
     print(f"   Converted back: {test_cid_back}")
     
     if test_cid_back == test_cid_str:
-        print("   ✅ Conversion works")
+        print("   Conversion works")
     else:
-        print("   ❌ Conversion failed")
+        print("   Conversion FAILED")
     
     print("\n" + "=" * 60)
-    print("CAR Utils v1.0.3 ready for use")
+    print(f"CAR Utils v{VERSION} ready for use")
     print("=" * 60)
