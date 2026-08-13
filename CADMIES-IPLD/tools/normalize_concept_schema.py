@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools
+Document_ID: CA-2026-028-TOOL
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, scientific_validator.py]
+---
 """
 File: normalize_concept_schema.py
 Tool: CADMIES Schema Normalizer
-Version: 1.0.0
+Version: 1.1.0
 System: CADMIES / tools
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -15,6 +27,10 @@ Usage:
     python tools/normalize_concept_schema.py
 
 Version History:
+  v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+      Switched to paths.py for SOURCE_CONCEPTS_DIR.
+      Made version display dynamic via VERSION constant.
+      Removed emojis from output for scientific rigor compliance.
   v1.0.0: Initial normalizer — merge all fields, add missing, preserve everything.
 """
 
@@ -22,9 +38,9 @@ import json
 from pathlib import Path
 from collections import OrderedDict
 
-# === PATH SETUP ===
-PROJECT_ROOT = Path(__file__).parent.parent
-SOURCE_CONCEPTS_DIR = PROJECT_ROOT / "source_concepts"
+from paths import SOURCE_CONCEPTS_DIR
+
+VERSION = "1.1.0"
 
 # === TARGET SCHEMA ===
 
@@ -129,7 +145,7 @@ def normalize_concept(concept):
 
 def main():
     print("=" * 60)
-    print("CADMIES SCHEMA NORMALIZER v1.0.0")
+    print(f"CADMIES SCHEMA NORMALIZER v{VERSION}")
     print("=" * 60)
     
     if not SOURCE_CONCEPTS_DIR.exists():
@@ -150,10 +166,10 @@ def main():
             with open(jf, "w") as f:
                 json.dump(normalized, f, indent=2)
             
-            print(f"  ✅ {original_human_id}")
+            print(f"  Normalized: {original_human_id}")
             
         except Exception as e:
-            print(f"  ❌ {jf.name}: {e}")
+            print(f"  ERROR: {jf.name}: {e}")
     
     print(f"\nDone. All concepts normalized to unified schema.")
     print("Review changes with: git diff source_concepts/")
