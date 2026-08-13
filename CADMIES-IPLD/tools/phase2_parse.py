@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools
+Document_ID: CA-2026-039-TOOL
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, cadmies_concept_reader.py, phase1_extract.py]
+---
 """
-File: phase1_extract.py
+File: phase2_parse.py
 Tool: CADMIES Relationship Generator — Phase 2
-Version: 1.0.0
+Version: 1.1.0
 System: CADMIES / tools
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -11,19 +23,27 @@ Purpose: Parse raw Mistral responses from Phase 1, deduplicate edges,
          map display names to human_ids, and output net-new edges.
 
 Usage:
-    python tools/phase1_extract.py
+    python tools/phase2_parse.py
+
+Version History:
+    v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+        Fixed broken import from llm_mycelium_reader to cadmies_concept_reader.
+        Added VERSION constant for dynamic version display.
+    v1.0.0: Initial release. Edge parsing and deduplication.
 """
 
 import json, sys, re
 from pathlib import Path
 from collections import defaultdict
 
+VERSION = "1.1.0"
+
 TOOLS_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = TOOLS_DIR.parent
 sys.path.insert(0, str(PROJECT_ROOT / "agents" / "code"))
 sys.path.insert(0, str(PROJECT_ROOT / "tools" / "core"))
 
-from llm_mycelium_reader import load_concept, load_all_concept_cids
+from cadmies_concept_reader import load_concept, load_all_concept_cids
 from paths import BLOCKS_DIR
 
 RAW_DIR = PROJECT_ROOT / "raw_extractions"
@@ -78,7 +98,6 @@ def load_existing_edges():
 def parse_line(line):
     """Parse: anything [type] target1, target2"""
     line = line.strip()
-    # Find the first [type] bracket
     bracket_match = re.search(r'\[([^\]]+)\]', line)
     if not bracket_match:
         return None, None, []
@@ -87,12 +106,10 @@ def parse_line(line):
     before_bracket = line[:bracket_match.start()].strip()
     after_bracket = line[bracket_match.end():].strip()
     
-    # Remove leading numbering like "1. " or "1."
     source = re.sub(r'^[\d]+\.\s*', '', before_bracket).strip().rstrip('→->').strip()
     if not source:
         return None, None, []
     
-    # Clean targets: split by comma, strip notes and quotes
     targets = []
     for t in after_bracket.split(','):
         t = re.sub(r'\s*\(.*?\)\s*$', '', t.strip()).strip('"\'')
@@ -166,7 +183,7 @@ def main():
         print(f"\nSample:")
         for source in sorted(output)[:10]:
             for edge in output[source][:2]:
-                print(f"  {source} → [{edge['type']}] {edge['target']}")
+                print(f"  {source} -> [{edge['type']}] {edge['target']}")
 
 if __name__ == "__main__":
     main()
