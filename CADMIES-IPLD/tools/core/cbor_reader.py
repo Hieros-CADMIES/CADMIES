@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools/core
+Document_ID: CA-2026-024-TOOL
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, cid_generator.py, provenance_manager.py]
+---
 """
 File: cbor_reader.py
 Tool: CADMIES CBOR Reader
-Version: 1.0.0
+Version: 1.1.0
 System: CADMIES / tools/core
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -16,14 +28,21 @@ Usage:
     python tools/core/cbor_reader.py --list --verbose
 
 Dependencies: dag_cbor
+
+Version History:
+    v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+        Removed emojis from all output for scientific rigor compliance.
+        Fixed version display to use dynamic self.version.
+        Removed unused imports and duplicate provenance import.
+        Standardized timestamps to UTC.
+    v1.0.0: Initial release. Read and display concepts from blockstore.
 """
 
 import argparse
 import json
 import sys
-import os
-from pathlib import Path
-from datetime import datetime
+import textwrap
+from datetime import datetime, timezone
 from paths import BLOCKS_DIR, INDEX_FILE, LOGS_DIR
 from provenance_manager import ProvenanceManager
 
@@ -52,7 +71,7 @@ class CBORReader:
     
     def __init__(self):
         """Initialize with centralized paths."""
-        self.version = "1.0.0"
+        self.version = "1.1.0"
         self.blocks_dir = BLOCKS_DIR
         self.index_file = INDEX_FILE
         self.logs_dir = LOGS_DIR
@@ -121,7 +140,7 @@ class CBORReader:
         """Describe how this concept complies with the universal scientific schema."""
         schema_info = []
         
-        schema_info.append("📋 SCHEMA COMPLIANCE:")
+        schema_info.append("SCHEMA COMPLIANCE:")
         schema_info.append(f"  Schema: {self.SCHEMA_NAME}")
         schema_info.append(f"  Version: {self.SCHEMA_VERSION}")
         schema_info.append("  Purpose: Standardized representation of educational concepts")
@@ -147,9 +166,9 @@ class CBORReader:
             purpose = concept['metadata']['purpose']
             valid_purposes = ["educational", "research", "personal_knowledge"]
             if purpose in valid_purposes:
-                schema_info.append(f"  Purpose: {purpose} ✓ (valid educational use)")
+                schema_info.append(f"  Purpose: {purpose} (valid educational use)")
             else:
-                schema_info.append(f"  Purpose: {purpose} ⚠️ (check alignment with knowledge sharing ethics)")
+                schema_info.append(f"  Purpose: {purpose} (check alignment with knowledge sharing ethics)")
         
         if 'metadata' in concept and 'license' in concept['metadata']:
             license_info = concept['metadata']['license']
@@ -169,21 +188,20 @@ class CBORReader:
         output.append("-" * 80)
         
         try:
-            from provenance_manager import ProvenanceManager
             pm = ProvenanceManager()
             provenance_records = pm.query_provenance(cid)
             if provenance_records:
                 output.append("")
-                output.append("📜 PROVENANCE STICKY NOTES:")
+                output.append("PROVENANCE RECORDS:")
                 for p in provenance_records:
                     record_type = p.get('record_type', 'unknown')
                     author = p.get('author', 'unknown')
                     timestamp = p.get('timestamp', 'unknown')[:19]
-                    output.append(f"   • {record_type} by {author} on {timestamp}")
+                    output.append(f"   - {record_type} by {author} on {timestamp}")
                     if p.get('comment'):
-                        output.append(f"     └─ {p.get('comment')}")
+                        output.append(f"     - {p.get('comment')}")
                     if p.get('confidence'):
-                        output.append(f"     └─ Confidence: {p.get('confidence')}")
+                        output.append(f"     - Confidence: {p.get('confidence')}")
         except Exception:
             pass
         
@@ -191,7 +209,7 @@ class CBORReader:
             from verification_manager import get_verification_status
             level, badge, label, verification_chain = get_verification_status(cid)
             output.append("")
-            output.append(f"🔐 VERIFICATION STATUS: {badge} {label}")
+            output.append(f"VERIFICATION STATUS: {label}")
             output.append(f"   {len(verification_chain)} verification(s) on record")
         except Exception:
             pass
@@ -210,7 +228,6 @@ class CBORReader:
         output.append(f"\n  Definition:")
         definition = concept.get('definition', 'No definition provided')
         
-        import textwrap
         wrapped_def = textwrap.fill(definition, width=76, subsequent_indent='    ')
         output.append(f"    {wrapped_def}")
         
@@ -248,12 +265,12 @@ class CBORReader:
             output.append(f"  Purpose: {metadata['purpose']}")
         
         if 'supersedes' in metadata and metadata['supersedes']:
-            output.append(f"\n📜 VERSION HISTORY:")
+            output.append(f"\nVERSION HISTORY:")
             output.append(f"  Supersedes: {metadata['supersedes']}")
-            output.append(f"  → To view previous version: python3 cbor_reader.py {metadata['supersedes']}")
+            output.append(f"  To view previous version: python3 cbor_reader.py {metadata['supersedes']}")
         if 'superseded_by' in metadata and metadata['superseded_by']:
             output.append(f"  Superseded by: {metadata['superseded_by']}")
-            output.append(f"  → This version has been replaced. View newer: python3 cbor_reader.py {metadata['superseded_by']}")
+            output.append(f"  This version has been replaced. View newer: python3 cbor_reader.py {metadata['superseded_by']}")
         
         relationships = concept.get('relationships', {})
         if any(relationships.values()):
@@ -267,7 +284,7 @@ class CBORReader:
         
         proofs = concept.get('proofs', [])
         if proofs:
-            output.append(f"\nEVIDENCE & PROOFS ({len(proofs)} sources):")
+            output.append(f"\nEVIDENCE AND PROOFS ({len(proofs)} sources):")
             for i, proof in enumerate(proofs[:3], 1):
                 proof_type = proof.get('type', 'unknown').title()
                 confidence = proof.get('confidence', 0)
@@ -289,7 +306,7 @@ class CBORReader:
             output.append(f"\nADDITIONAL EDUCATIONAL CONTENT: {extra_count} fields")
             extra_samples = list(concept['extra_fields'].items())[:3]
             for key, value in extra_samples:
-                output.append(f"  • {key}: {str(value)[:40]}{'...' if len(str(value)) > 40 else ''}")
+                output.append(f"  - {key}: {str(value)[:40]}{'...' if len(str(value)) > 40 else ''}")
         
         output.append("\n" + "-" * 80)
         output.append(f"SCHEMA REFERENCE: This concept follows {self.SCHEMA_NAME}")
@@ -371,11 +388,11 @@ class CBORReader:
             
             output.append(f"  Concepts by Domain:")
             for domain, count in sorted(domains.items()):
-                output.append(f"    • {domain}: {count} concepts")
+                output.append(f"    - {domain}: {count} concepts")
         
         output.append(f"\n  Schema Compliance:")
-        output.append(f"    • Using: {self.SCHEMA_NAME}")
-        output.append(f"    • All blocks compatible with universal scientific concept schema")
+        output.append(f"    Using: {self.SCHEMA_NAME}")
+        output.append(f"    All blocks compatible with universal scientific concept schema")
         
         if verbose and total_files > 0:
             total_size = sum(f.stat().st_size for f in cbor_files)
@@ -397,7 +414,7 @@ class CBORReader:
         log_file = self.logs_dir / "knowledge_retrieval.jsonl"
         
         log_entry = {
-            "timestamp": datetime.now().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
             "operation": "knowledge_retrieval",
             "tool_version": self.version,
             "identifier": identifier,
@@ -418,7 +435,7 @@ class CBORReader:
 def main():
     """Main function with command-line argument parsing for educational retrieval."""
     parser = argparse.ArgumentParser(
-        description="CBOR Reader v1.0.0 - Retrieve knowledge concepts by CID or human ID",
+        description=f"CBOR Reader v1.1.0 - Retrieve knowledge concepts by CID or human ID",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -461,7 +478,7 @@ Install: pip install dag-cbor
     reader = CBORReader()
     
     print("=" * 60)
-    print("CADMIES CBOR READER v1.0.0")
+    print(f"CADMIES CBOR READER v{reader.version}")
     print("Content-Addressed Knowledge Retrieval")
     print("License: AGPLv3 with Commons Clause")
     print("=" * 60)
@@ -517,7 +534,7 @@ Install: pip install dag-cbor
         
         reader.log_retrieval(identifier, cid, True)
         
-        print(f"\n📋 RETRIEVAL SUMMARY:")
+        print(f"\nRETRIEVAL SUMMARY:")
         print(f"   Retrieved via: {id_type} ('{identifier}')")
         print(f"   Content ID: {cid}")
         print(f"   Title: {concept.get('title', 'Unknown')}")
@@ -530,9 +547,9 @@ Install: pip install dag-cbor
             if 'license' in metadata:
                 print(f"   License: {metadata['license']}")
         
-        print(f"\n✅ Knowledge retrieved successfully!")
+        print(f"\nKnowledge retrieved successfully!")
         print(f"   This content will always be accessible via this CID.")
-        print(f"   Shared understanding → diminished ignorance")
+        print(f"   Shared understanding -> diminished ignorance")
         
     except SystemExit:
         reader.log_retrieval(identifier, cid, False)
