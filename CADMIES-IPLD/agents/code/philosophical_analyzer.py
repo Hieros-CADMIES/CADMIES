@@ -1,37 +1,61 @@
+#!/usr/bin/env python3
+---
+System: CADMIES / agents/code
+Document_ID: CA-2026-035-AGENT
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, cadmies_concept_reader.py]
+---
 """
 File: philosophical_analyzer.py
+Agent: Philosophical Analyzer
 Author: CADMIES Research Group
 Created: 2025-12-29
-Version: 1.0.1
-System: CADMIES
-Document_ID: CA-2025-047-IMPLEMENTATION
-Status: PUBLIC RELEASE
-Modified: 2026-05-12
-Related_Docs:
-  - Runtime Interpreter Design Specification v1.0.0
-  - Agent Schema Development Roadmap v1.0.0
-  - CADMIES IPLD Technical Documentation
-"""
+Version: 1.1.0
+System: CADMIES / agents/code
+Status: ACTIVE
+License: AGPLv3 with Commons Clause
 
-"""
-Philosophical Analyzer Agent Implementation v1.0.0
-Purpose: Analyze philosophical concepts for patterns and connections
+Purpose: Analyze philosophical concepts for patterns and connections.
+         Air-gapped. No external dependencies beyond dag_cbor.
+
+Usage:
+    python philosophical_analyzer.py --test
+    python philosophical_analyzer.py --cids CID1 CID2 CID3 --depth detailed
+
 Signature: analyze_philosophical_patterns(concept_cids: list, context: dict) -> dict
-Dependencies: json, re, collections (Python stdlib only)
-Air-Gapped: Yes (no external dependencies)
+
+Version History:
+    v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+        Switched to paths.py for PROJECT_ROOT and BLOCKSTORE_PATH.
+        Made version display dynamic via VERSION constant.
+    v1.0.0: Initial release. Pattern analysis with three depth levels.
 """
 
 import json
 import re
 import time
+import sys
 import base64
 from collections import defaultdict, Counter
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
-__version__ = "1.0.0"
+# Add tools/core to path for paths.py import
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "tools" / "core"))
 
-# Use existing dag_cbor from our system
+from paths import PROJECT_ROOT, BLOCKS_DIR
+
+VERSION = "1.1.0"
+
+BLOCKSTORE_PATH = BLOCKS_DIR
+
+# Try importing dag_cbor for block reading
 try:
     import dag_cbor
     DAG_CBOR_AVAILABLE = True
@@ -39,18 +63,6 @@ except ImportError:
     DAG_CBOR_AVAILABLE = False
     print("WARNING: dag_cbor not available - using JSON fallback")
 
-def get_project_root() -> Path:
-    """
-    Get the CADMIES project root directory.
-    Assumes this file is at: CADMIES-IPLD/agents_workspace/philosophical_analyzer.py
-    """
-    current_file = Path(__file__).resolve()
-    # Go up to CADMIES-IPLD root
-    project_root = current_file.parent.parent.parent
-    return project_root
-
-PROJECT_ROOT = get_project_root()
-BLOCKSTORE_PATH = PROJECT_ROOT / "store" / "blocks"
 
 def load_concept(cid: str, blockstore_path: Path = None) -> Dict[str, Any]:
     """
@@ -70,14 +82,11 @@ def load_concept(cid: str, blockstore_path: Path = None) -> Dict[str, Any]:
     if not cid.startswith('bafy'):
         raise ValueError(f"Invalid CID format: {cid}")
     
-    # Determine blockstore path
     if blockstore_path is None:
         blockstore_path = BLOCKSTORE_PATH
     
-    # Try with .cbor extension first
     cbor_file = blockstore_path / f"{cid}.cbor"
     if not cbor_file.exists():
-        # Try without extension (legacy format)
         cbor_file = blockstore_path / cid
     
     if not cbor_file.exists():
@@ -92,7 +101,6 @@ def load_concept(cid: str, blockstore_path: Path = None) -> Dict[str, Any]:
         except Exception as e:
             print(f"WARNING: DAG-CBOR decode failed for {cid}: {e}")
     
-    # Fallback to JSON
     try:
         return json.loads(raw_data.decode('utf-8'))
     except Exception as e:
@@ -103,54 +111,36 @@ def load_concept(cid: str, blockstore_path: Path = None) -> Dict[str, Any]:
             '_raw': base64.b64encode(raw_data[:100]).decode('utf-8')
         }
 
+
 def extract_key_terms(text: str, min_length: int = 4) -> List[str]:
     """
     Extract meaningful terms from text.
-    
-    Args:
-        text: Input text to analyze
-        min_length: Minimum word length to consider
-        
-    Returns:
-        List of key terms
     """
     if not text:
         return []
     
-    # Convert to lowercase
     text_lower = text.lower()
     
-    # Remove common stop words (minimal set for philosophical text)
     stop_words = {'the', 'and', 'for', 'that', 'this', 'with', 'from', 'have', 'has', 
                   'was', 'were', 'are', 'is', 'be', 'been', 'being', 'does', 'do'}
     
-    # Extract words (allow hyphens in words)
     words = re.findall(r'\b[a-z][a-z-]{2,}\b', text_lower)
     
-    # Filter and return
     filtered_words = []
     for word in words:
-        # Remove hyphens for length check
         clean_word = word.replace('-', '')
         if clean_word not in stop_words and len(clean_word) >= min_length:
             filtered_words.append(word)
     
     return filtered_words
 
+
 def find_semantic_connections(concept1: Dict, concept2: Dict) -> List[Dict]:
     """
     Find semantic connections between two concepts.
-    
-    Args:
-        concept1: First concept data
-        concept2: Second concept data
-        
-    Returns:
-        List of connection objects
     """
     connections = []
     
-    # Check for shared domain
     domain1 = concept1.get('domain')
     domain2 = concept2.get('domain')
     if domain1 and domain1 == domain2:
@@ -161,7 +151,6 @@ def find_semantic_connections(concept1: Dict, concept2: Dict) -> List[Dict]:
             'evidence': [domain1]
         })
     
-    # Check for shared type
     type1 = concept1.get('type')
     type2 = concept2.get('type')
     if type1 and type1 == type2:
@@ -172,7 +161,6 @@ def find_semantic_connections(concept1: Dict, concept2: Dict) -> List[Dict]:
             'evidence': [type1]
         })
     
-    # Check for shared subdomain
     subdomain1 = concept1.get('subdomain')
     subdomain2 = concept2.get('subdomain')
     if subdomain1 and subdomain1 == subdomain2:
@@ -183,7 +171,6 @@ def find_semantic_connections(concept1: Dict, concept2: Dict) -> List[Dict]:
             'evidence': [subdomain1]
         })
     
-    # Text-based similarity (simple version)
     text1 = f"{concept1.get('title', '')} {concept1.get('definition', '')}"
     text2 = f"{concept2.get('title', '')} {concept2.get('definition', '')}"
     
@@ -201,6 +188,7 @@ def find_semantic_connections(concept1: Dict, concept2: Dict) -> List[Dict]:
     
     return connections
 
+
 def analyze_philosophical_patterns(concept_cids: List[str], context: Dict[str, Any] = None) -> Dict[str, Any]:
     """
     Analyze philosophical concepts for patterns and connections.
@@ -210,19 +198,10 @@ def analyze_philosophical_patterns(concept_cids: List[str], context: Dict[str, A
         context: Optional execution context with metadata
         
     Returns:
-        Dict with analysis results following the specification
-        
-    Example context:
-        {
-            "focus_area": "metaphysics",
-            "analysis_depth": "basic|detailed|comprehensive",
-            "previous_results": {...},
-            "user_query": "Find connections between these concepts"
-        }
+        Dict with analysis results
     """
     start_time = time.time()
     
-    # Initialize context
     if context is None:
         context = {}
     
@@ -234,7 +213,6 @@ def analyze_philosophical_patterns(concept_cids: List[str], context: Dict[str, A
     print(f"   Focus: {focus_area}")
     print(f"   Depth: {analysis_depth}")
     
-    # Load all concepts
     concepts = []
     load_errors = []
     
@@ -272,7 +250,6 @@ def analyze_philosophical_patterns(concept_cids: List[str], context: Dict[str, A
     
     print(f"SUCCESS: Loaded {len(concepts)}/{len(concept_cids)} concepts")
     
-    # Perform analysis based on depth
     results = {
         'success': True,
         'concepts_analyzed': len(concepts),
@@ -281,7 +258,7 @@ def analyze_philosophical_patterns(concept_cids: List[str], context: Dict[str, A
         'insights': [],
         'recommendations': [],
         'metadata': {
-            'analyzer_version': __version__,
+            'analyzer_version': VERSION,
             'analysis_timestamp': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
             'execution_time_seconds': 0,
             'focus_area': focus_area,
@@ -292,7 +269,6 @@ def analyze_philosophical_patterns(concept_cids: List[str], context: Dict[str, A
     
     # BASIC ANALYSIS (always performed)
     
-    # 1. Domain distribution
     domains = Counter([c['domain'] for c in concepts if c['domain']])
     if domains:
         results['domain_distribution'] = dict(domains)
@@ -303,22 +279,18 @@ def analyze_philosophical_patterns(concept_cids: List[str], context: Dict[str, A
                 'confidence': 0.9
             })
     
-    # 2. Type distribution
     types = Counter([c['type'] for c in concepts if c['type']])
     if types:
         results['type_distribution'] = dict(types)
     
-    # 3. Term frequency analysis
     all_text = ' '.join([f"{c.get('title', '')} {c.get('definition', '')}" for c in concepts])
     key_terms = extract_key_terms(all_text)
     term_freq = Counter(key_terms)
     
     if term_freq:
-        # Get top terms
         top_terms = dict(term_freq.most_common(10))
         results['common_terminology'] = top_terms
         
-        # Look for interesting term patterns
         philosophical_terms = {'reality', 'consciousness', 'existence', 'knowledge', 
                               'truth', 'being', 'mind', 'nature', 'universe', 'theory'}
         found_terms = philosophical_terms.intersection(set(top_terms.keys()))
@@ -331,7 +303,6 @@ def analyze_philosophical_patterns(concept_cids: List[str], context: Dict[str, A
     
     # DETAILED ANALYSIS (if requested)
     if analysis_depth in ['detailed', 'comprehensive']:
-        # Find connections between all concept pairs
         all_connections = []
         
         for i in range(len(concepts)):
@@ -352,7 +323,6 @@ def analyze_philosophical_patterns(concept_cids: List[str], context: Dict[str, A
         
         results['connections'] = all_connections
         
-        # Group connections by type
         if all_connections:
             connection_types = Counter([c['connection_type'] for c in all_connections])
             results['connection_analysis'] = {
@@ -365,7 +335,6 @@ def analyze_philosophical_patterns(concept_cids: List[str], context: Dict[str, A
     
     # COMPREHENSIVE ANALYSIS (additional insights)
     if analysis_depth == 'comprehensive' and len(concepts) >= 3:
-        # Look for conceptual clusters
         domain_groups = defaultdict(list)
         for concept in concepts:
             if concept['domain']:
@@ -396,7 +365,6 @@ def analyze_philosophical_patterns(concept_cids: List[str], context: Dict[str, A
             'priority': 'medium'
         })
     
-    # Calculate execution time
     execution_time = time.time() - start_time
     results['metadata']['execution_time_seconds'] = execution_time
     
@@ -408,30 +376,34 @@ def analyze_philosophical_patterns(concept_cids: List[str], context: Dict[str, A
     
     return results
 
+
 def test_agent() -> Dict[str, Any]:
     """
-    Test function to verify the agent works with stored concepts.
-    
-    Returns:
-        Test results
+    Self-test for the philosophical analyzer.
+    Uses any available concepts from the index rather than hardcoded CIDs.
     """
     print("TESTING PHILOSOPHICAL ANALYZER AGENT")
     print("=" * 50)
     
-    # Use the 5 philosophical concepts from the system
-    test_cids = [
-        "bafyreignxp73ooqeiwdgecmvqv7dbmnimm4orgyca7srzdiykm7kleqbja",  # fractal_reality_principle
-        "bafyreiftvhx64umvh3jq3tjjzxw6vkcgom7nzqnfojdmqtn4v77bafwu7m",  # bond_breaking_as_liberation_mechanism
-        "bafyreigcii5de4qhwnn25i62gxa245s5fwn5nbrzz3in346ut5kem4j474",  # cyclic_liberation_force_hypothesis
-        "bafyreihlh4vwiexvuq667arus727jqs7sifuf3vjuyczwmqqcfpcopghsq",  # cosmic_mind_pattern_isomorphism
-        "bafyreiht7rhfuixpxqtfelgckhwboi7ytzar4sullw2f73mksbbsn74f4q"   # informational_pattern_as_cosmic_dna
-    ]
+    # Load available CIDs from index dynamically
+    from paths import INDEX_FILE
+    test_cids = []
+    if INDEX_FILE.exists():
+        with open(INDEX_FILE, 'r') as f:
+            index = json.load(f)
+        test_cids = list(index.values())[:5]
+    
+    if not test_cids:
+        print("No concepts available for testing. Import concepts first.")
+        return {'success': False, 'error': 'No concepts in index'}
+    
+    print(f"Using {len(test_cids)} concepts from index for test")
     
     test_context = {
         "focus_area": "metaphysics",
         "analysis_depth": "detailed",
         "test_mode": True,
-        "description": "Testing philosophical analyzer with 5 core concepts"
+        "description": "Testing philosophical analyzer with available concepts"
     }
     
     try:
@@ -454,25 +426,25 @@ def test_agent() -> Dict[str, Any]:
         error_result = {
             'success': False,
             'error': str(e),
-            'traceback': 'See console output',
             'metadata': {
-                'timestamp': time.strftime('%Y-%m-%dT%H:%M:%SZ'),
+                'timestamp': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
                 'test_cids': len(test_cids)
             }
         }
         print(f"TEST FAILED WITH EXCEPTION: {e}")
         return error_result
 
-# Command-line interface for direct execution
+
+# Command-line interface
 if __name__ == "__main__":
     import argparse
     
     parser = argparse.ArgumentParser(
-        description='Philosophical Analyzer Agent - Analyze philosophical concepts for patterns',
+        description=f'Philosophical Analyzer Agent v{VERSION} - Analyze concepts for patterns',
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     
-    parser.add_argument('--test', action='store_true', help='Run self-test with stored concepts')
+    parser.add_argument('--test', action='store_true', help='Run self-test with available concepts')
     parser.add_argument('--cids', nargs='+', help='List of CIDs to analyze')
     parser.add_argument('--context', type=str, help='JSON context string')
     parser.add_argument('--depth', choices=['basic', 'detailed', 'comprehensive'], 
@@ -481,13 +453,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     if args.test:
-        # Run self-test
         results = test_agent()
         print("\n" + "=" * 50)
         print("TEST COMPLETE")
         
     elif args.cids:
-        # Analyze specific CIDs
         context = {}
         if args.context:
             try:
@@ -501,7 +471,6 @@ if __name__ == "__main__":
         print(f"EXECUTING AGENT WITH {len(args.cids)} CIDs")
         results = analyze_philosophical_patterns(args.cids, context)
         
-        # Print summary
         print("\n" + "=" * 50)
         print("ANALYSIS SUMMARY")
         print(f"Success: {results.get('success')}")
@@ -511,7 +480,6 @@ if __name__ == "__main__":
         if results.get('insights'):
             print(f"Insights: {len(results['insights'])}")
         
-        # Save results to analysis directory
         results_dir = PROJECT_ROOT / "analysis_results"
         results_dir.mkdir(exist_ok=True)
         timestamp = time.strftime('%Y%m%d_%H%M%S')
@@ -521,9 +489,7 @@ if __name__ == "__main__":
         print(f"Results saved to: {output_file}")
         
     else:
-        # No arguments - show help
         parser.print_help()
         print("\nExamples:")
         print("  python philosophical_analyzer.py --test")
-        print("  python philosophical_analyzer.py --cids bafyreifh5f5i6elunhcqfuw7n2t3c2rl4z6jtv76rz4wm2kz2q7bj7gnji")
         print("  python philosophical_analyzer.py --cids CID1 CID2 CID3 --depth detailed")
