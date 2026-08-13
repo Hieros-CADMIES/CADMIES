@@ -1,9 +1,21 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools/core
+Document_ID: CA-2026-022-TOOL
+Version: 1.2.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [DeepSeek, Codestral]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, provenance_manager.py]
+---
 """
 File: cid_generator.py
 Tool: CADMIES CID Generator
-Version: 1.1.0
-System: CADMIES
+Version: 1.2.0
+System: CADMIES / tools/core
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
 
@@ -16,21 +28,27 @@ Usage:
     python tools/core/cid_generator.py --concept-file concept.json
 
 Version History:
+  v1.2.0 (2026-08-12): Added scientific documentation YAML metadata block.
+      Fixed INDEX_FILE usage, added ensure_dirs() call, moved shutil import,
+      removed emojis from output for scientific rigor compliance.
   v1.1.0 (2026-06-24): Project renamed from Hieros to Hierion. Updated author,
       copyright, and contact information.
   v1.0.0: Initial release — CIDv1, dag-cbor, SHA2-256.
 """
 
 import json
-import dag_cbor
-from multiformats import multihash, CID
-from typing import Dict, Any
-import hashlib
-from provenance_manager import ProvenanceManager
-from datetime import datetime
+import shutil
 import argparse
 import sys
 import os
+import hashlib
+from typing import Dict, Any
+from datetime import datetime
+
+import dag_cbor
+from multiformats import multihash, CID
+
+from provenance_manager import ProvenanceManager
 from paths import BLOCKS_DIR, INDEX_DIR, INDEX_FILE, LOGS_DIR, ensure_dirs
 
 class CIDGenerator:
@@ -44,7 +62,7 @@ class CIDGenerator:
     """
     
     def __init__(self):
-        self.version = "1.1.0"
+        self.version = "1.2.0"
         self.codec = "dag-cbor"
         self.hash_algo = "sha2-256"
         self.encoding = "base32"
@@ -142,39 +160,36 @@ class CIDGenerator:
         Creates local blockstore with index and audit trail
         """
         try:
+            # Ensure required directories exist
+            ensure_dirs()
+            
             cid = cid_result["cid"]
             serialized = cid_result["serialized"]
             human_id = concept.get("human_id", "unknown")
             
             block_path = BLOCKS_DIR / f"{cid}.cbor"
-            block_path.parent.mkdir(parents=True, exist_ok=True)
             
             with open(block_path, "wb") as f:
                 f.write(serialized)
             
-            index_path = INDEX_DIR / "human_id_to_cid.json"
-            index_path.parent.mkdir(parents=True, exist_ok=True)
-            
             index = {}
-            if os.path.exists(index_path):
-                with open(index_path, "r") as f:
+            if os.path.exists(INDEX_FILE):
+                with open(INDEX_FILE, "r") as f:
                     index = json.load(f)
             
             index[human_id] = cid
             
-            if os.path.exists(index_path):
-                backup_dir = os.path.join(os.path.dirname(index_path), "backups")
-                os.makedirs(backup_dir, exist_ok=True)
-                backup_filename = os.path.basename(index_path) + ".backup." + datetime.now().strftime('%Y%m%d_%H%M%S')
-                backup_path = os.path.join(backup_dir, backup_filename)
-                import shutil
-                shutil.copy2(index_path, backup_path)
+            if os.path.exists(INDEX_FILE):
+                backup_dir = INDEX_DIR / "backups"
+                backup_dir.mkdir(parents=True, exist_ok=True)
+                backup_filename = INDEX_FILE.name + ".backup." + datetime.now().strftime('%Y%m%d_%H%M%S')
+                backup_path = backup_dir / backup_filename
+                shutil.copy2(INDEX_FILE, backup_path)
             
-            with open(index_path, "w") as f:
+            with open(INDEX_FILE, "w") as f:
                 json.dump(index, f, indent=2)
             
             log_path = LOGS_DIR / "operations.jsonl"
-            log_path.parent.mkdir(parents=True, exist_ok=True)
             
             log_entry = {
                 "timestamp": datetime.now().isoformat() + "Z",
@@ -199,9 +214,9 @@ class CIDGenerator:
                     comment="Auto-generated from CID generator"
                 )
                 if provenance_result.get('stored'):
-                    print(f"   📝 Provenance record: {provenance_result['provenance_cid'][:20]}...")
+                    print(f"   Provenance record: {provenance_result['provenance_cid'][:20]}...")
             except Exception as e:
-                print(f"   ⚠️  Provenance creation failed: {e}")
+                print(f"   Warning: Provenance creation failed: {e}")
 
             return {
                 "success": True,
@@ -227,28 +242,28 @@ class CIDGenerator:
         
         Critical for trustworthy knowledge systems
         """
-        print(f"\n🔬 Testing CID determinism (trust through consistency)...")
+        print(f"\nTesting CID determinism (trust through consistency)...")
         
         result1 = self.generate_cid(concept)
         if not result1["success"]:
-            print(f"   ❌ First generation failed: {result1['errors']}")
+            print(f"   First generation failed: {result1['errors']}")
             return False
         
         cid1 = result1["cid"]
         
         result2 = self.generate_cid(concept)
         if not result2["success"]:
-            print(f"   ❌ Second generation failed: {result2['errors']}")
+            print(f"   Second generation failed: {result2['errors']}")
             return False
         
         cid2 = result2["cid"]
         
         if cid1 == cid2:
-            print(f"   ✅ Determinism confirmed: same knowledge → same address")
-            print(f"   📍 CID: {cid1}")
+            print(f"   Determinism confirmed: same knowledge -> same address")
+            print(f"   CID: {cid1}")
             return True
         else:
-            print(f"   ❌ Determinism FAILED: inconsistency detected")
+            print(f"   Determinism FAILED: inconsistency detected")
             print(f"      First:  {cid1}")
             print(f"      Second: {cid2}")
             return False
@@ -350,7 +365,7 @@ def read_concept_file(file_path: str) -> Dict[str, Any]:
     if "metadata" in concept and "purpose" in concept["metadata"]:
         purpose = concept["metadata"]["purpose"]
         if purpose not in ["educational", "research", "personal_knowledge"]:
-            print(f"⚠️  Note: Concept purpose is '{purpose}' - ensure it aligns with knowledge sharing ethics")
+            print(f"Note: Concept purpose is '{purpose}' - ensure it aligns with knowledge sharing ethics")
     
     return concept
 
@@ -380,7 +395,7 @@ Install: pip install dag-cbor multiformats
     parser.add_argument(
         "--version",
         action="version",
-        version=f"CID Generator v1.1.0"
+        version=f"CID Generator v1.2.0"
     )
     
     parser.add_argument(
@@ -394,7 +409,7 @@ Install: pip install dag-cbor multiformats
     generator = CIDGenerator()
     
     print("=" * 60)
-    print("CADMIES CID GENERATOR v1.1.0")
+    print("CADMIES CID GENERATOR v1.2.0")
     print(f"License: AGPLv3 with Commons Clause")
     print("=" * 60)
     
@@ -407,7 +422,7 @@ Install: pip install dag-cbor multiformats
             source = f"external_file: {args.concept_file}"
             generator.external_file_path = args.concept_file
             
-            print(f"\n📚 Processing knowledge file:")
+            print(f"\nProcessing knowledge file:")
             print(f"   Path: {args.concept_file}")
             
             if "title" in concept:
@@ -419,61 +434,61 @@ Install: pip install dag-cbor multiformats
                 metadata = concept.get("metadata", {})
                 purpose = metadata.get("purpose", "")
                 if purpose not in ["educational", "research", "personal_knowledge"]:
-                    print(f"\n⚠️  ETHICAL NOTE: Concept purpose is '{purpose}'")
+                    print(f"\nETHICAL NOTE: Concept purpose is '{purpose}'")
                     print("   Consider adding 'purpose': 'educational' to metadata")
                 
         except FileNotFoundError as e:
-            print(f"\n❌ Error: {str(e)}")
+            print(f"\nError: {str(e)}")
             sys.exit(1)
         except json.JSONDecodeError as e:
-            print(f"\n❌ Invalid JSON: {str(e)}")
+            print(f"\nInvalid JSON: {str(e)}")
             sys.exit(2)
         except ValueError as e:
-            print(f"\n❌ Validation error: {str(e)}")
+            print(f"\nValidation error: {str(e)}")
             sys.exit(3)
         except Exception as e:
-            print(f"\n❌ Unexpected error reading file: {str(e)}")
+            print(f"\nUnexpected error reading file: {str(e)}")
             sys.exit(4)
     else:
         concept = create_sample_concept()
         source = "sample_concept (educational)"
         
-        print(f"\n📚 Sample Educational Concept:")
+        print(f"\nSample Educational Concept:")
         print(f"   Title: {concept['title']}")
         print(f"   Purpose: {concept['metadata'].get('purpose', 'educational')}")
         print(f"   License: {concept['metadata'].get('license', 'CC BY-SA 4.0')}")
     
     result = generator.generate_cid(concept)
     
-    print(f"\n🧪 Processing: '{concept.get('title', 'Knowledge Concept')}'")
+    print(f"\nProcessing: '{concept.get('title', 'Knowledge Concept')}'")
     
     if result["success"]:
-        print(f"   📦 Serialized to {result['bytes_size']} bytes of DAG-CBOR")
-        print(f"   🔐 Computed SHA2-256 hash: {result['hash_preview']}")
-        print(f"   🎯 Generated CID: {result['cid']}")
-        print(f"   📊 CID breakdown:")
+        print(f"   Serialized to {result['bytes_size']} bytes of DAG-CBOR")
+        print(f"   Computed SHA2-256 hash: {result['hash_preview']}")
+        print(f"   Generated CID: {result['cid']}")
+        print(f"   CID breakdown:")
         for key, value in result["cid_parts"].items():
             print(f"      - {key}: {value}")
     else:
-        print(f"\n❌ CID generation failed:")
+        print(f"\nCID generation failed:")
         for error in result["errors"]:
-            print(f"   • {error}")
+            print(f"   - {error}")
         sys.exit(5)
     
     if result["success"]:
         save_result = generator.save_to_blockstore(result, concept)
         
         if save_result["success"]:
-            print(f"\n💾 Saved to knowledge store:")
+            print(f"\nSaved to knowledge store:")
             print(f"   Block: {save_result['block_path']}")
-            print(f"   Index: Updated with '{save_result['human_id']}' → '{save_result['cid']}'")
+            print(f"   Index: Updated with '{save_result['human_id']}' -> '{save_result['cid']}'")
             print(f"   Log: Operation recorded")
         else:
-            print(f"\n⚠️  Knowledge store save failed (CID still generated):")
+            print(f"\nKnowledge store save failed (CID still generated):")
             for error in save_result.get("errors", ["Unknown error"]):
-                print(f"   • {error}")
+                print(f"   - {error}")
     
-    print(f"\n📋 RESULT:")
+    print(f"\nRESULT:")
     print(f"   Success: {result['success']}")
     if result["success"]:
         print(f"   CID: {result['cid']}")
@@ -483,11 +498,11 @@ Install: pip install dag-cbor multiformats
     if result["success"]:
         deterministic = generator.test_determinism(concept)
         if not deterministic:
-            print(f"\n⚠️  WARNING: Non-deterministic CIDs undermine trust in knowledge systems")
+            print(f"\nWARNING: Non-deterministic CIDs undermine trust in knowledge systems")
     
-    print(f"\n✅ Knowledge address generated successfully!")
+    print(f"\nKnowledge address generated successfully!")
     print("   This CID will always point to this exact understanding.")
-    print("   Shared knowledge → shared understanding → diminished ignorance")
+    print("   Shared knowledge -> shared understanding -> diminished ignorance")
 
 if __name__ == "__main__":
     main()
