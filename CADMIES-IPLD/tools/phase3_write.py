@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools
+Document_ID: CA-2026-040-TOOL
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, cadmies_concept_reader.py, phase2_parse.py]
+---
 """
 File: phase3_write.py
 Tool: CADMIES Relationship Generator — Phase 3
-Version: 1.0.0
+Version: 1.1.0
 System: CADMIES / tools
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -12,10 +24,17 @@ Purpose: Write new edges to blockstore CBOR files.
 
 Usage:
     python tools/phase3_write.py
+
+Version History:
+    v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+        Added VERSION constant for dynamic version display.
+    v1.0.0: Initial release. Edge writing to blockstore.
 """
 
 import json, sys
 from pathlib import Path
+
+VERSION = "1.1.0"
 
 TOOLS_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = TOOLS_DIR.parent
@@ -71,7 +90,7 @@ for source_id, edges in new_edges.items():
     
     updated += 1
     edge_types = {e['type'] for e in edges}
-    print(f"  ✅ {source_id}: +{len(edges)} edges ({', '.join(sorted(edge_types))})")
+    print(f"  OK: {source_id}: +{len(edges)} edges ({', '.join(sorted(edge_types))})")
 
 print(f"\n{'='*50}")
 print(f"Updated {updated} concepts with {total_edges} new edges.")
