@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools/harvest
+Document_ID: CA-2026-041-TOOL
+Version: 4.2.1
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, cid_generator.py, scientific_validator.py, cadmies_concept_reader.py]
+---
 """
 File: harvest_full_pipeline.py
 Tool: CADMIES Harvest Pipeline
-Version: 4.2.0
+Version: 4.2.1
 System: CADMIES / tools/harvest
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -20,10 +32,14 @@ Usage:
     python tools/harvest/harvest_full_pipeline.py --batch
 
 Version History:
-  v4.2.0: Fixed mycelium search import (llm_mycelium_reader → cadmies_concept_reader).
+  v4.2.1 (2026-08-12): Added scientific documentation YAML metadata block.
+      Switched to paths.py for SOURCE_CONCEPTS_DIR and INDEX_FILE.
+      Added VERSION constant for dynamic version display.
+      Terminal emojis retained for user experience.
+  v4.2.0: Fixed mycelium search import (llm_mycelium_reader -> cadmies_concept_reader).
   v4.1.0: Three-tier difficulty levels: beginner/intermediate/expert.
   v4.0.1: Hardened: apostrophe escaping, human_id lowercase, builds_upon validation.
-  v4.0.0: Full pipeline: extract → review → validate → mint, LLM-optional mode.
+  v4.0.0: Full pipeline: extract -> review -> validate -> mint, LLM-optional mode.
   v3.0.0: Poetic version and mantra extraction.
   v2.0.0: Mycelium-aware extraction via mycelium search.
   v1.0.0: Initial extraction pipeline.
@@ -35,6 +51,8 @@ import time
 import re
 from pathlib import Path
 from datetime import datetime, timezone
+
+VERSION = "4.2.1"
 
 def deduplicate_concepts(concept_list):
     """Remove duplicate concepts based on title similarity."""
@@ -49,17 +67,20 @@ def deduplicate_concepts(concept_list):
             seen[title] = True
             unique.append(c)
     
-    print(f"   Deduplication: {len(concept_list)} → {len(unique)} concepts")
+    print(f"   Deduplication: {len(concept_list)} -> {len(unique)} concepts")
     return unique
 
 # === PATH SETUP ===
 HARVEST_DIR = Path(__file__).parent
 PROJECT_ROOT = HARVEST_DIR.parent.parent
 
+# Import from paths.py
+sys.path.insert(0, str(PROJECT_ROOT / "tools" / "core"))
+from paths import SOURCE_CONCEPTS_DIR, INDEX_FILE
+
 # === CONFIG ===
 CONVERSATION_FILE = HARVEST_DIR / "conversation.json"
 OUTPUT_FILE = HARVEST_DIR / "harvested_concepts.json"
-SOURCE_CONCEPTS_DIR = PROJECT_ROOT / "source_concepts"
 MODEL = "mistral:7b"
 CHUNK_SIZE = 750
 DELAY = 10
@@ -92,7 +113,7 @@ try:
     MYCELIUM_AVAILABLE = True
 except ImportError:
     MYCELIUM_AVAILABLE = False
-    print("WARNING: Mycelium search unavailable — proceeding without context.")
+    print("WARNING: Mycelium search unavailable - proceeding without context.")
 
 # === CID GENERATOR ===
 sys.path.insert(0, str(PROJECT_ROOT / "tools" / "core"))
@@ -280,7 +301,7 @@ def import_from_source_concepts(source_dir, minted_ids=None):
                 skipped += 1
                 continue
             domain = concept.get("domain", "unknown")
-            print(f"    • {jf.name}  [{domain}]")
+            print(f"    - {jf.name}  [{domain}]")
             concepts_full.append(concept)
             concept_files.append(jf)
         except Exception as e:
@@ -382,7 +403,7 @@ def transform_to_concept(extracted, chunk_index, minted_ids=None):
             "insight": insight,
             "source_chunk": chunk_index + 1,
             "origin_file": CONVERSATION_FILE.name,
-            "harvester_version": "4.2.0"
+            "harvester_version": VERSION
         }
     }
 
@@ -550,11 +571,11 @@ def mint_approved(indices, concepts, concept_files, poetics, mantras):
         results.append(result)
 
         if result["success"]:
-            print(f"  ✅ {result['human_id']}")
+            print(f"  OK: {result['human_id']}")
             print(f"     CID: {result['cid']}")
             print(f"     Size: {result['bytes_size']} bytes")
         else:
-            print(f"  ❌ {result['human_id']} — {result['error']}")
+            print(f"  FAILED: {result['human_id']} — {result['error']}")
 
     successes = [r for r in results if r["success"]]
     failures = [r for r in results if not r["success"]]
@@ -594,7 +615,7 @@ def main():
     global MODEL
     MODEL = args["model"]
     print("=" * 60)
-    print("CADMIES HARVEST PIPELINE v4.2.0")
+    print(f"CADMIES HARVEST PIPELINE v{VERSION}")
     print(f"Model: {MODEL}  |  Chunk Size: {CHUNK_SIZE} words  |  Auto: {args['auto']}  |  Batch: {args['batch']}  |  With-Relationships: {args['with_relationships']}")
     print(f"LLM: {'AVAILABLE' if LLM_AVAILABLE else 'UNAVAILABLE — manual mode'}")
     print(f"Mycelium: {'ENABLED' if MYCELIUM_AVAILABLE else 'DISABLED'}")
@@ -602,10 +623,9 @@ def main():
     print("\a")
 
     minted_ids = set()
-    index_path = PROJECT_ROOT / "store" / "index" / "human_id_to_cid.json"
-    if index_path.exists():
+    if INDEX_FILE.exists():
         try:
-            with open(index_path, "r") as f:
+            with open(INDEX_FILE, "r") as f:
                 minted_ids = set(json.load(f).keys())
         except Exception:
             pass
@@ -668,7 +688,7 @@ def main():
         output = {
             "source_file": CONVERSATION_FILE.name,
             "model": MODEL,
-            "harvester_version": "4.2.0",
+            "harvester_version": VERSION,
             "mycelium_aware": MYCELIUM_AVAILABLE,
             "llm_available": LLM_AVAILABLE,
             "chunk_size": CHUNK_SIZE,
@@ -705,7 +725,7 @@ def main():
         print("No concepts to review. Exiting.")
         sys.exit(0)
         
-    print("\n🧹 Running deduplication on extracted concepts...")
+    print("\nRunning deduplication on extracted concepts...")
     original_count = len(concepts_full)
     concepts_full = deduplicate_concepts(concepts_full)
 
@@ -725,13 +745,7 @@ def main():
 
     mint_approved(approved, concepts_full, concept_files, poetics, mantras)
 
-    print("\nDone. The mycelium grows. 🌱")
-    
-    # map_gen = PROJECT_ROOT / "tools" / "generate_mycelium_map.py"
-    # if map_gen.exists():
-    #    print("\nRegenerating mycelium map...")
-    #    import subprocess
-    #    subprocess.run([sys.executable, str(map_gen)], cwd=str(PROJECT_ROOT))
+    print("\nDone. The mycelium grows.")
     
     if args["with_relationships"]:
         rel_gen = PROJECT_ROOT / "tools" / "generate_relationships.py"
