@@ -1,10 +1,23 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools
+Document_ID: CA-2026-029-TOOL
+Version: 3.2.1
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, generate_mycelium_map.py]
+---
 """
 File: generate_public_gateway.py
 Tool: CADMIES Public Mycelium Gateway Generator
-Version: 3.2.0
-System: CADMIES - tools
+Version: 3.2.1
+System: CADMIES / tools
 Status: ACTIVE
+License: AGPLv3 with Commons Clause
 
 Purpose: Generates a single-page public-facing website from the blockstore.
          All concepts rendered as filterable, searchable cards on one page.
@@ -27,6 +40,11 @@ Output:
     ../docs/ — static site served by web server
 
 Version History:
+  v3.2.1 (2026-08-12): Added scientific documentation YAML metadata block.
+      Made version display dynamic via VERSION constant.
+      Switched to paths.py DOCS_DIR for output directory.
+      Removed terminal emoji for scientific rigor compliance.
+      Gateway UI emojis retained (🌐 🌱).
   v3.2.0 (2026-08-09): Added translate.js integration — client-side multilingual support.
       Toggle left of CADMIES title. localStorage language persistence.
       Privacy note in footer. Default disabled.
@@ -56,9 +74,10 @@ sys.path.insert(0, str(PROJECT_ROOT / "agents" / "code"))
 sys.path.insert(0, str(PROJECT_ROOT / "tools" / "core"))
 
 from cadmies_concept_reader import load_concept, load_all_concept_cids
-from paths import BLOCKS_DIR
+from paths import BLOCKS_DIR, DOCS_DIR
 
-OUTPUT_DIR = PROJECT_ROOT.parent / "docs"
+VERSION = "3.2.1"
+OUTPUT_DIR = DOCS_DIR
 SITE_URL = "https://project-hierion.org"
 
 # === CANONICAL 15-DOMAIN TAXONOMY ===
@@ -238,7 +257,7 @@ def gather_public_concepts():
     all_cids = load_all_concept_cids()
     concepts = []
     domain_counts = Counter()
-    subdomain_index = {}  # canonical_domain -> set of raw domains
+    subdomain_index = {}
 
     for cid in all_cids:
         concept = load_concept(cid)
@@ -255,7 +274,6 @@ def gather_public_concepts():
 
         domain_counts[canonical] += 1
 
-        # Build subdomain index
         if canonical not in subdomain_index:
             subdomain_index[canonical] = set()
         subdomain_index[canonical].add(raw_domain)
@@ -279,7 +297,6 @@ def gather_public_concepts():
             },
         })
 
-    # Build ID-to-title lookup
     id_to_title = {c["human_id"]: c["title"] for c in concepts}
 
     for c in concepts:
@@ -292,7 +309,6 @@ def gather_public_concepts():
             ]
         c["relationships"] = filtered_rels
 
-    # Convert subdomain sets to sorted lists
     subdomain_index = {k: sorted(v) for k, v in subdomain_index.items()}
 
     return sorted(concepts, key=lambda c: c["title"]), domain_counts, subdomain_index
@@ -313,7 +329,6 @@ def build_card(concept):
     definition = escape_html(concept["definition"])
     domain_class = canonical_domain.lower().replace(" ", "-").replace("_", "-")
 
-    # Relationships
     rel_html_parts = []
     for rel_type in ["builds_upon", "related_to", "specializes", "contradicts"]:
         targets = concept["relationships"].get(rel_type, [])
@@ -323,7 +338,6 @@ def build_card(concept):
             rel_html_parts.append(f'<div class="rel-group"><strong>{label}:</strong> {tags}</div>')
     rel_html = "".join(rel_html_parts) if rel_html_parts else '<p class="no-rels"><em>No relationships recorded yet.</em></p>'
 
-    # Extras
     extras = []
     if concept.get("insight"):
         extras.append(f'<div class="extra-section"><strong>Core Insight:</strong> {escape_html(concept["insight"])}</div>')
@@ -363,7 +377,6 @@ def build_index_page(concepts, domain_counts, subdomain_index):
     """Build the single-page public gateway."""
     cards = [build_card(c) for c in concepts]
 
-    # Domain filter buttons — 15 canonical domains with counts
     domain_filters = []
     for d in CANONICAL_DOMAINS:
         count = domain_counts.get(d, 0)
@@ -390,60 +403,19 @@ def build_index_page(concepts, domain_counts, subdomain_index):
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0d1117; color: #c9d1d9; line-height: 1.6; }}
         .container {{ max-width: 1100px; margin: 0 auto; padding: 20px; }}
-
-        /* Header */
         header {{ background: linear-gradient(135deg, #161b22 0%, #0d1117 100%); border-bottom: 1px solid #30363d; padding: 50px 20px 40px; text-align: center; }}
         .header-content {{ display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }}
         header h1 {{ font-size: 2.4em; color: #e6edf3; margin: 0; }}
         .header-sprout {{ font-size: 2.4em; line-height: 1; }}
         .header-subtitle {{ color: #8b949e; font-size: 1.05em; max-width: 600px; margin: 8px auto 20px; }}
-
-        /* Translate Toggle */
-        .translate-toggle {{
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: transparent;
-            border: 1px solid #30363d;
-            border-radius: 6px;
-            padding: 4px 12px;
-            font-size: 0.9em;
-            color: #8b949e;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            line-height: 1.5;
-            margin-right: 4px;
-        }}
-        .translate-toggle:hover {{
-            color: #c9d1d9;
-            border-color: #58a6ff;
-        }}
-        .translate-toggle.active {{
-            border-color: #58a6ff;
-            color: #58a6ff;
-        }}
+        .translate-toggle {{ display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid #30363d; border-radius: 6px; padding: 4px 12px; font-size: 0.9em; color: #8b949e; cursor: pointer; transition: all 0.2s ease; font-family: inherit; line-height: 1.5; margin-right: 4px; }}
+        .translate-toggle:hover {{ color: #c9d1d9; border-color: #58a6ff; }}
+        .translate-toggle.active {{ border-color: #58a6ff; color: #58a6ff; }}
         .translate-toggle .icon {{ font-size: 1em; }}
-
-        /* translate.js overrides — match dark theme */
-        #translate-select {{
-            background: #161b22 !important;
-            color: #c9d1d9 !important;
-            border: 1px solid #30363d !important;
-            border-radius: 6px !important;
-            padding: 4px 8px !important;
-            font-size: 0.85em !important;
-            font-family: inherit !important;
-        }}
-        #translate-select option {{
-            background: #161b22;
-            color: #c9d1d9;
-        }}
-
+        #translate-select {{ background: #161b22 !important; color: #c9d1d9 !important; border: 1px solid #30363d !important; border-radius: 6px !important; padding: 4px 8px !important; font-size: 0.85em !important; font-family: inherit !important; }}
+        #translate-select option {{ background: #161b22; color: #c9d1d9; }}
         .map-link {{ display: inline-block; margin-top: 12px; padding: 10px 24px; background: #238636; color: #ffffff; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.95em; transition: background 0.2s; }}
         .map-link:hover {{ background: #2ea043; }}
-
-        /* Stats */
         .stats {{ display: flex; gap: 20px; justify-content: center; margin: 24px 0 0; flex-wrap: wrap; }}
         .stat {{ background: #161b22; border: 1px solid #30363d; padding: 14px 24px; border-radius: 8px; }}
         .stat-number {{ font-size: 1.6em; font-weight: bold; color: #e6edf3; }}
@@ -451,28 +423,20 @@ def build_index_page(concepts, domain_counts, subdomain_index):
         .stat-orcid .stat-number {{ font-size: 1.0em; font-weight: 600; color: #58a6ff; }}
         .stat-orcid .stat-label {{ display: flex; align-items: center; gap: 6px; justify-content: center; }}
         .stat-orcid .stat-label svg {{ width: 18px; height: 18px; fill: #58a6ff; }}
-
-        /* Search */
         .search-bar {{ margin: 24px 0; }}
         .search-bar input {{ width: 100%; padding: 12px 18px; background: #161b22; border: 1px solid #30363d; border-radius: 8px; color: #e6edf3; font-size: 1em; outline: none; }}
         .search-bar input:focus {{ border-color: #58a6ff; }}
         .search-bar input::placeholder {{ color: #484f58; }}
-
-        /* Filters */
         .filters {{ display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 8px; }}
         .filter-btn {{ background: #21262d; border: 1px solid #30363d; color: #c9d1d9; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85em; transition: all 0.2s; }}
         .filter-btn:hover {{ background: #30363d; }}
         .filter-btn.active {{ background: #58a6ff; color: #ffffff; border-color: #58a6ff; }}
-
-        /* Subdomain row (placeholder for future) */
         .subdomain-row {{ display: none; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; padding-left: 4px; }}
         .subdomain-row.visible {{ display: flex; }}
         .subdomain-btn {{ background: #1c2333; border: 1px solid #30363d; color: #8b949e; padding: 4px 12px; border-radius: 16px; cursor: pointer; font-size: 0.75em; transition: all 0.2s; }}
         .subdomain-btn:hover {{ background: #30363d; color: #c9d1d9; }}
         .subdomain-btn.active {{ background: #58a6ff; color: #ffffff; border-color: #58a6ff; }}
         .subdomain-label {{ color: #484f58; font-size: 0.75em; margin-right: 4px; align-self: center; }}
-
-        /* Cards */
         .concept-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }}
         .concept-card {{ background: #161b22; border: 1px solid #30363d; border-radius: 10px; overflow: hidden; transition: border-color 0.2s; }}
         .concept-card:hover {{ border-color: #58a6ff; }}
@@ -481,15 +445,11 @@ def build_index_page(concepts, domain_counts, subdomain_index):
         .card-header h2 {{ font-size: 1.15em; color: #e6edf3; margin-bottom: 6px; }}
         .definition-preview {{ color: #8b949e; font-size: 0.9em; }}
         .expand-hint {{ display: block; font-size: 0.75em; color: #484f58; margin-top: 10px; }}
-
-        /* Expanded detail */
         .card-detail {{ display: none; padding: 0 20px 20px; border-top: 1px solid #30363d; }}
         .concept-card.expanded .card-detail {{ display: block; }}
         .concept-card.expanded .expand-hint {{ display: none; }}
         .definition-full {{ margin: 16px 0; padding: 16px; background: #0d1117; border-radius: 8px; border: 1px solid #21262d; }}
         .definition-full p {{ color: #c9d1d9; font-size: 0.95em; }}
-
-        /* Relationships */
         .relationships {{ margin: 16px 0; }}
         .relationships h3 {{ font-size: 0.9em; color: #8b949e; margin-bottom: 10px; }}
         .rel-group {{ margin: 8px 0; font-size: 0.85em; color: #8b949e; }}
@@ -500,18 +460,12 @@ def build_index_page(concepts, domain_counts, subdomain_index):
         .rel-specializes {{ background: #2d1b3a; color: #d2a8ff; }}
         .rel-contradicts {{ background: #3a1b1b; color: #ff7b72; }}
         .no-rels {{ color: #484f58; font-style: italic; font-size: 0.85em; }}
-
-        /* Extras */
         .extra-section {{ margin: 12px 0; font-size: 0.9em; color: #c9d1d9; }}
         .extra-section strong {{ color: #e6edf3; }}
         .poetic blockquote {{ border-left: 3px solid #58a6ff; padding-left: 14px; color: #8b949e; font-style: italic; margin: 8px 0; }}
         .mantra em {{ color: #d2a8ff; }}
-
-        /* CID box */
         .cid-box {{ margin: 16px 0; padding: 12px; background: #0d1117; border-radius: 6px; font-size: 0.8em; color: #8b949e; }}
         .cid-box code {{ word-break: break-all; color: #484f58; }}
-
-        /* Domain badges */
         .domain-badge {{ display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.72em; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }}
         .domain-physics {{ background: #1b2d4a; color: #79c0ff; }}
         .domain-philosophy {{ background: #2d1b3a; color: #d2a8ff; }}
@@ -528,24 +482,12 @@ def build_index_page(concepts, domain_counts, subdomain_index):
         .domain-economics {{ background: #3a361b; color: #e3b341; }}
         .domain-ecology {{ background: #1b3a1b; color: #7ee787; }}
         .domain-medicine {{ background: #1b3a1b; color: #7ee787; }}
-
-        /* Footer */
         footer {{ text-align: center; padding: 40px 20px; color: #484f58; font-size: 0.85em; border-top: 1px solid #30363d; margin-top: 40px; }}
         footer a {{ color: #58a6ff; text-decoration: none; }}
         footer a:hover {{ text-decoration: underline; }}
         .footer-privacy {{ font-size: 0.85em; color: #484f58; margin-top: 8px; }}
-
-        /* Results count */
         .results-count {{ color: #8b949e; font-size: 0.85em; margin: 4px 0 16px; }}
-
-        @media (max-width: 640px) {{
-            .concept-grid {{ grid-template-columns: 1fr; }}
-            header h1 {{ font-size: 1.6em; }}
-            .stats {{ gap: 10px; }}
-            .stat {{ padding: 10px 16px; }}
-            .header-content {{ gap: 8px; }}
-            .translate-toggle {{ font-size: 0.8em; padding: 3px 10px; }}
-        }}
+        @media (max-width: 640px) {{ .concept-grid {{ grid-template-columns: 1fr; }} header h1 {{ font-size: 1.6em; }} .stats {{ gap: 10px; }} .stat {{ padding: 10px 16px; }} .header-content {{ gap: 8px; }} .translate-toggle {{ font-size: 0.8em; padding: 3px 10px; }} }}
     </style>
 </head>
 <body>
@@ -588,7 +530,6 @@ def build_index_page(concepts, domain_counts, subdomain_index):
             <button class="filter-btn active" data-filter="all">All ({len(concepts)})</button>
             {''.join(domain_filters)}
         </div>
-        <!-- Subdomain row (placeholder for future expansion) -->
         <div class="subdomain-row" id="subdomainRow">
             <span class="subdomain-label">Subdomains:</span>
         </div>
@@ -608,13 +549,10 @@ def build_index_page(concepts, domain_counts, subdomain_index):
     <script>
         let currentFilter = 'all';
         const totalConcepts = {len(concepts)};
-
-        // === TRANSLATE.JS INTEGRATION ===
         let translationActive = false;
 
         function toggleTranslation() {{
             if (!translationActive) {{
-                // Load translate.js if not already loaded
                 if (typeof translate === 'undefined') {{
                     const script = document.createElement('script');
                     script.src = 'https://cdn.staticfile.net/translate.js/3.15.6/translate.min.js';
@@ -622,7 +560,6 @@ def build_index_page(concepts, domain_counts, subdomain_index):
                         translate.execute();
                         translationActive = true;
                         updateToggleUI(true);
-                        // Store preference
                         try {{ localStorage.setItem('translateActive', 'true'); }} catch(e) {{}}
                     }};
                     document.head.appendChild(script);
@@ -633,7 +570,6 @@ def build_index_page(concepts, domain_counts, subdomain_index):
                     try {{ localStorage.setItem('translateActive', 'true'); }} catch(e) {{}}
                 }}
             }} else {{
-                // Reset to English
                 if (typeof translate !== 'undefined' && translate.reset) {{
                     translate.reset();
                 }} else {{
@@ -657,19 +593,16 @@ def build_index_page(concepts, domain_counts, subdomain_index):
             }}
         }}
 
-        // Restore preference on load
         (function() {{
             try {{
                 const saved = localStorage.getItem('translateActive');
                 if (saved === 'true') {{
-                    // Wait for page to settle then activate
                     setTimeout(function() {{
                         if (typeof translate !== 'undefined') {{
                             translate.execute();
                             translationActive = true;
                             updateToggleUI(true);
                         }} else {{
-                            // Load and activate
                             const script = document.createElement('script');
                             script.src = 'https://cdn.staticfile.net/translate.js/3.15.6/translate.min.js';
                             script.onload = function() {{
@@ -681,10 +614,9 @@ def build_index_page(concepts, domain_counts, subdomain_index):
                         }}
                     }}, 500);
                 }}
-            }} catch(e) {{ /* localStorage not available */ }}
+            }} catch(e) {{ }}
         }})();
 
-        // Listen for translate.js language change events if available
         document.addEventListener('translateLanguageChange', function(e) {{
             if (e.detail && e.detail.language) {{
                 const label = document.getElementById('toggleLabel');
@@ -693,17 +625,11 @@ def build_index_page(concepts, domain_counts, subdomain_index):
             }}
         }});
 
-        // === FILTER LOGIC ===
         function setFilter(filter, btn) {{
             currentFilter = filter;
-
-            // Update active state on buttons
             document.querySelectorAll('#filters .filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
-            // Hide subdomain row for now (placeholder)
             document.getElementById('subdomainRow').classList.remove('visible');
-
             filterConcepts();
         }}
 
@@ -715,10 +641,8 @@ def build_index_page(concepts, domain_counts, subdomain_index):
             cards.forEach(card => {{
                 const domain = card.dataset.domain;
                 const searchData = card.dataset.search;
-
                 const matchesFilter = currentFilter === 'all' || domain === currentFilter;
                 const matchesSearch = searchData.includes(searchTerm);
-
                 if (matchesFilter && matchesSearch) {{
                     card.classList.remove('hidden');
                     visible++;
@@ -730,7 +654,6 @@ def build_index_page(concepts, domain_counts, subdomain_index):
             document.getElementById('resultsCount').textContent = 'Showing ' + visible + ' of ' + totalConcepts + ' concepts';
         }}
 
-        // Bind click events to filter buttons
         document.querySelectorAll('#filters .filter-btn').forEach(function(btn) {{
             btn.addEventListener('click', function() {{
                 var filter = this.dataset.filter;
@@ -738,7 +661,6 @@ def build_index_page(concepts, domain_counts, subdomain_index):
             }});
         }});
 
-        // Search triggers filter
         document.getElementById('search').addEventListener('input', filterConcepts);
     </script>
 </body>
@@ -759,7 +681,6 @@ def build_json_feed(concepts):
                 "name": "CADMIES Mycelium",
             },
             "url": f"{SITE_URL}/index.html#{c['human_id']}",
-            # Extended fields for client-side filtering
             "domain": c["domain"],
             "canonical_domain": c["canonical_domain"],
         })
@@ -779,7 +700,7 @@ def build_sitemap(concepts):
 
 def main():
     print("=" * 60)
-    print("CADMIES PUBLIC MYCELIUM GATEWAY GENERATOR v3.2.0")
+    print(f"CADMIES PUBLIC MYCELIUM GATEWAY GENERATOR v{VERSION}")
     print(f"Output: {OUTPUT_DIR}")
     print("translate.js integration: ENABLED (client-side, privacy-respecting)")
     print("=" * 60)
@@ -794,25 +715,21 @@ def main():
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Build single-page index
     print("Generating index.html (single-page gateway with translate.js)...")
     index_html = build_index_page(concepts, domain_counts, subdomain_index)
     with open(OUTPUT_DIR / "index.html", "w") as f:
         f.write(index_html)
 
-    # Build JSON-LD feed
     print("Generating concepts.json (structured data with domain fields)...")
     json_feed = build_json_feed(concepts)
     with open(OUTPUT_DIR / "concepts.json", "w") as f:
         f.write(json_feed)
 
-    # Build sitemap
     print("Generating sitemap.xml...")
     sitemap = build_sitemap(concepts)
     with open(OUTPUT_DIR / "sitemap.xml", "w") as f:
         f.write(sitemap)
 
-    # Ensure .nojekyll
     nojekyll = OUTPUT_DIR / ".nojekyll"
     if not nojekyll.exists():
         nojekyll.touch()
@@ -824,7 +741,7 @@ def main():
     print(f"   .nojekyll — bypass Jekyll processing")
     print(f"\nDomain filter pills now functional. Click a domain to filter cards.")
     print(f"   Subdomain tier is designed but not yet implemented.")
-    print(f"\n🌐 translate.js integration:")
+    print(f"\ntranslate.js integration:")
     print(f"   Toggle left of CADMIES title — click to activate client-side translation")
     print(f"   Language preference stored in localStorage")
     print(f"   All processing occurs client-side — no data sent to CADMIES servers")
