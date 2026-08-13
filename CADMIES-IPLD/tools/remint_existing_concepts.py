@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools
+Document_ID: CA-2026-037-TOOL
+Version: 2.0.1
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, cid_generator.py, provenance_manager.py]
+---
 """
 File: remint_existing_concepts.py
 Tool: CADMIES Concept Reminter
-Version: 2.0.0
+Version: 2.0.1
 System: CADMIES / tools
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -17,9 +29,16 @@ Usage:
     python tools/remint_existing_concepts.py --apply             # Re-mint all
     python tools/remint_existing_concepts.py --concept entropy   # Check single
     python tools/remint_existing_concepts.py --concept entropy --apply  # Re-mint single
+
+Version History:
+    v2.0.1 (2026-08-12): Added scientific documentation YAML metadata block.
+        Added VERSION constant for dynamic version display.
+        Removed dead code (unused now variable and os import).
+        Standardized backup timestamps to UTC.
+    v2.0.0: Initial release. Content-based reminting with provenance.
 """
 
-import json, sys, os, hashlib
+import json, sys, hashlib
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -34,9 +53,10 @@ from cid_generator import CIDGenerator
 from provenance_manager import ProvenanceManager
 import dag_cbor
 
+VERSION = "2.0.1"
+
 cid_gen = CIDGenerator()
 pm = ProvenanceManager()
-now = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
 
 
 def compute_current_cid(concept: dict) -> str:
@@ -59,7 +79,7 @@ def main():
 
     mode = "APPLY" if apply else "DRY RUN"
     scope = f"concept '{target}'" if target else "ALL concepts"
-    print(f"=== CADMIES Concept Reminter v2.0.0 — {mode} ===")
+    print(f"=== CADMIES Concept Reminter v{VERSION} — {mode} ===")
     print(f"Scope: {scope}")
     print(f"Blockstore: {BLOCKS_DIR}\n")
 
@@ -68,7 +88,7 @@ def main():
 
     if target:
         if target not in index:
-            print(f"❌ Concept '{target}' not found in index.")
+            print(f"ERROR: Concept '{target}' not found in index.")
             sys.exit(1)
         work_list = {target: index[target]}
     else:
@@ -82,7 +102,7 @@ def main():
     for human_id, old_cid in sorted(work_list.items()):
         concept = load_concept(old_cid)
         if 'error' in concept:
-            print(f"  ⚠️  {human_id}: cannot load (CID: {old_cid[:20]}...) — {concept['error']}")
+            print(f"  WARNING: {human_id}: cannot load (CID: {old_cid[:20]}...) — {concept['error']}")
             missing_count += 1
             continue
 
@@ -93,7 +113,7 @@ def main():
             continue
 
         stale_count += 1
-        print(f"  🔄 {human_id}")
+        print(f"  REMINT NEEDED: {human_id}")
         print(f"     Old CID: {old_cid}")
         print(f"     New CID: {new_cid}")
 
@@ -111,12 +131,12 @@ def main():
         try:
             pm.create_provenance_record(
                 concept_cid=new_cid,
-                author="CADMIES Remint Script v2.0.0",
+                author=f"CADMIES Remint Script v{VERSION}",
                 record_type="supersedes",
                 comment=f"Re-minted due to content change. Old CID: {old_cid}"
             )
         except Exception as e:
-            print(f"     ⚠️  Provenance failed: {e}")
+            print(f"     WARNING: Provenance failed: {e}")
 
         old_path = BLOCKS_DIR / f"{old_cid}.cbor"
         if not old_path.exists():
@@ -127,18 +147,18 @@ def main():
         index[human_id] = new_cid
 
         reminted += 1
-        print(f"     ✅ Re-minted. Old file removed. Index updated.")
+        print(f"     Re-minted. Old file removed. Index updated.")
 
     if apply and reminted > 0:
         backup_dir = INDEX_FILE.parent / "backups"
         backup_dir.mkdir(parents=True, exist_ok=True)
-        backup_name = f"human_id_to_cid.json.backup.{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        backup_name = f"human_id_to_cid.json.backup.{datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%SZ')}"
         import shutil
         shutil.copy2(INDEX_FILE, backup_dir / backup_name)
 
         with open(INDEX_FILE, 'w') as f:
             json.dump(index, f, indent=2)
-        print(f"\n💾 Index saved with {reminted} updated entries.")
+        print(f"\nIndex saved with {reminted} updated entries.")
         print(f"   Backup: {backup_name}")
 
     print(f"\n{'='*60}")
