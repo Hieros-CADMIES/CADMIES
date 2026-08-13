@@ -1,14 +1,26 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools/core
+Document_ID: CA-2026-025-TOOL
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [provenance_manager.py, paths.py, car_utils.py]
+---
 """
 File: verification_manager.py
 Tool: CADMIES Verification Manager
-Version: 1.0.0
+Version: 1.1.0
 System: CADMIES / tools/core
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
 
 Purpose: Manage verification statements on concepts.
-         Four-tier verification system (🔴🟡🟢💎).
+         Four-tier verification system (red, yellow, green, diamond).
          Export verifications as CAR files for scientific exchange.
 
 Usage:
@@ -16,6 +28,13 @@ Usage:
     python tools/core/verification_manager.py --export-verification --concept-cid <cid> --verifier-key <key> --source <type> --output <path>
 
 Dependencies: provenance_manager.py, paths.py, car_utils.py
+
+Version History:
+    v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+        Removed non-badge emojis from output for scientific rigor compliance.
+        ORCID verification badges retained as part of the verification system.
+        Kept legacy fallback for blocks without .cbor extension.
+    v1.0.0: Initial release. Four-tier verification, CAR export.
 """
 
 import sys
@@ -33,10 +52,10 @@ from paths import PROJECT_ROOT, BLOCKS_DIR
 # ============================================================================
 
 VERIFICATION_LEVELS = {
-    0: {"badge": "🔴", "label": "Unverified", "requirement": "No verification blocks"},
-    1: {"badge": "🟡", "label": "Self-verified", "requirement": "Only verifications with source='self'"},
-    2: {"badge": "🟢", "label": "Verified", "requirement": "At least one source='orcid' OR source='institution'"},
-    3: {"badge": "💎", "label": "Highly Verified", "requirement": "2+ ORCID verifications OR 1 ORCID + 1 institution"}
+    0: {"badge": "RED", "label": "Unverified", "requirement": "No verification blocks"},
+    1: {"badge": "YELLOW", "label": "Self-verified", "requirement": "Only verifications with source='self'"},
+    2: {"badge": "GREEN", "label": "Verified", "requirement": "At least one source='orcid' OR source='institution'"},
+    3: {"badge": "DIAMOND", "label": "Highly Verified", "requirement": "2+ ORCID verifications OR 1 ORCID + 1 institution"}
 }
 
 
@@ -205,24 +224,24 @@ def export_verification_as_car(concept_cid: str, verifier_key: str, statement_ty
     )
     
     if not provenance_cid:
-        print(f"❌ Failed to create verification block")
+        print(f"ERROR: Failed to create verification block")
         return False
     
-    print(f"✅ Created verification block: {provenance_cid}")
+    print(f"Created verification block: {provenance_cid}")
     
     concept_block = load_block_from_store(concept_cid)
     if not concept_block:
-        print(f"❌ Concept block not found: {concept_cid}")
+        print(f"ERROR: Concept block not found: {concept_cid}")
         return False
     
-    print(f"✅ Loaded concept block ({len(concept_block)} bytes)")
+    print(f"Loaded concept block ({len(concept_block)} bytes)")
     
     verification_block = load_block_from_store(provenance_cid)
     if not verification_block:
-        print(f"❌ Verification block not found: {provenance_cid}")
+        print(f"ERROR: Verification block not found: {provenance_cid}")
         return False
     
-    print(f"✅ Loaded verification block ({len(verification_block)} bytes)")
+    print(f"Loaded verification block ({len(verification_block)} bytes)")
     
     try:
         sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -240,7 +259,7 @@ def export_verification_as_car(concept_cid: str, verifier_key: str, statement_ty
         
         write_car(blocks_for_car, roots, output_path)
         
-        print(f"\n✅ Successfully exported verification CAR to: {output_path}")
+        print(f"\nSuccessfully exported verification CAR to: {output_path}")
         print(f"   Concept: {concept_cid}")
         print(f"   Verification: {provenance_cid}")
         print(f"   File size: {output_path.stat().st_size:,} bytes")
@@ -248,7 +267,7 @@ def export_verification_as_car(concept_cid: str, verifier_key: str, statement_ty
         return True
         
     except Exception as e:
-        print(f"\n❌ Failed to write CAR file: {e}")
+        print(f"\nERROR: Failed to write CAR file: {e}")
         import traceback
         traceback.print_exc()
         return False
