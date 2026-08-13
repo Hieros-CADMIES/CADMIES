@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools
+Document_ID: CA-2026-038-TOOL
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, cadmies_concept_reader.py, phase2_parse.py]
+---
 """
 File: phase1_extract.py
 Tool: CADMIES Relationship Generator — Phase 1
-Version: 1.0.0
+Version: 1.1.0
 System: CADMIES / tools
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -12,11 +24,18 @@ Purpose: Send concept batches to Mistral, save raw responses.
 
 Usage:
     python tools/phase1_extract.py
+
+Version History:
+    v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+        Added VERSION constant for dynamic version display.
+    v1.0.0: Initial release. Raw extraction from Mistral.
 """
 
 import json, sys, time
 from pathlib import Path
 from collections import defaultdict
+
+VERSION = "1.1.0"
 
 TOOLS_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = TOOLS_DIR.parent
@@ -59,11 +78,11 @@ thermodynamics → [specializes] statistical_mechanics"""
 
 def call_mistral(prompt, step_name):
     import ollama
-    print(f"  Mistral ← {len(prompt.split())} tokens...", end=" ", flush=True)
+    print(f"  Mistral <- {len(prompt.split())} tokens...", end=" ", flush=True)
     try:
         response = ollama.generate(model=MODEL, prompt=prompt, options={"num_predict": 1024, "temperature": 0.1})
         raw = response["response"].strip()
-        print(f"→ {len(raw)} chars")
+        print(f"-> {len(raw)} chars")
         return raw
     except Exception as e:
         print(f"ERROR: {e}")
