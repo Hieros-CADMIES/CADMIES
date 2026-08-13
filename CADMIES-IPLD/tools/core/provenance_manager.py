@@ -1,8 +1,20 @@
 #!/usr/bin/env python3
+---
+System: CADMIES / tools/core
+Document_ID: CA-2026-023-TOOL
+Version: 1.1.0
+Classification: INTERNAL
+Author: The Gardener
+Reviewers: [The Gardener, DeepSeek]
+Status: ACTIVE
+Created: 2026-08-12
+Modified: 2026-08-12
+Related_Docs: [paths.py, cid_generator.py]
+---
 """
 File: provenance_manager.py
 Tool: CADMIES Provenance Manager
-Version: 1.0.0
+Version: 1.1.0
 System: CADMIES / tools/core
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
@@ -14,26 +26,29 @@ Usage:
     from provenance_manager import ProvenanceManager
 
 Dependencies: dag_cbor, multiformats
+
+Version History:
+    v1.1.0 (2026-08-12): Added scientific documentation YAML metadata block.
+        Removed store_path parameter for path consistency with paths.py.
+        Standardized block file naming to .cbor extension.
+        Removed unused imports.
+    v1.0.0: Initial release. Creation and query of provenance records.
 """
 
 import json
-import dag_cbor
 import hashlib
 from datetime import datetime, timezone
-from pathlib import Path
-from multiformats import multihash, CID
 from typing import Dict, Any, List, Optional
-from paths import BLOCKS_DIR, INDEX_FILE, LOGS_DIR, ensure_dirs
+
+import dag_cbor
+from multiformats import multihash, CID
+
+from paths import BLOCKS_DIR, ensure_dirs
 
 class ProvenanceManager:
-    def __init__(self, store_path: Path = None):
-        if store_path is None:
-            self.store_path = Path(__file__).parent.parent.parent / "store"
-        else:
-            self.store_path = Path(store_path)
-        
-        self.blocks_path = self.store_path / "blocks"
-        self.index_path = self.store_path / "index" / "human_id_to_cid.json"
+    def __init__(self):
+        ensure_dirs()
+        self.blocks_path = BLOCKS_DIR
         
     def create_provenance_record(self, concept_cid: str, author: str, record_type: str, **kwargs) -> Dict[str, Any]:
         """Create a provenance record and store it as an IPLD block"""
@@ -51,7 +66,7 @@ class ProvenanceManager:
         mh = multihash.wrap(digest, 'sha2-256')
         cid = CID('base32', 1, 'dag-cbor', mh)
         
-        block_path = self.blocks_path / str(cid)
+        block_path = self.blocks_path / f"{cid}.cbor"
         with open(block_path, 'wb') as f:
             f.write(cbor_bytes)
         
@@ -65,7 +80,7 @@ class ProvenanceManager:
         """Find all provenance records referencing a concept CID"""
         results = []
         
-        for block_file in self.blocks_path.glob("bafy*"):
+        for block_file in self.blocks_path.glob("bafy*.cbor"):
             with open(block_file, 'rb') as f:
                 cbor_bytes = f.read()
             
@@ -90,5 +105,5 @@ class ProvenanceManager:
 if __name__ == "__main__":
     pm = ProvenanceManager()
     print("Provenance Manager initialized")
-    print(f"Store path: {pm.store_path}")
-    print(f"Blocks: {len(list(pm.blocks_path.glob('bafy*')))}")
+    print(f"Store path: {pm.blocks_path}")
+    print(f"Blocks: {len(list(pm.blocks_path.glob('bafy*.cbor')))}")
