@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / tools
-Document_ID: CA-2026-031-TOOL
-Version: 1.3.0
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [paths.py, car_utils.py, export_to_car.py]
----
 """
 File: import_from_car.py
 Tool: CADMIES CAR Import
