@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / tools/core
-Document_ID: CA-2026-021-TOOL
-Version: 1.1.0
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [paths_README.md, cid_generator.py, generate_public_gateway.py]
----
 """
 File: paths.py
 Tool: CADMIES Path Manager
