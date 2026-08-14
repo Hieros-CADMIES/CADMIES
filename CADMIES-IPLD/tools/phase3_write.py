@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / tools
-Document_ID: CA-2026-040-TOOL
-Version: 1.1.0
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [paths.py, cadmies_concept_reader.py, phase2_parse.py]
----
 """
 File: phase3_write.py
 Tool: CADMIES Relationship Generator — Phase 3
