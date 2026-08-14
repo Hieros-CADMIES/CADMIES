@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / tools
-Document_ID: CA-2026-037-TOOL
-Version: 2.0.1
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [paths.py, cid_generator.py, provenance_manager.py]
----
 """
 File: remint_existing_concepts.py
 Tool: CADMIES Concept Reminter
