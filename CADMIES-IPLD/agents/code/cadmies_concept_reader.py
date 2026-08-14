@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / agents/code
-Document_ID: CA-2026-034-AGENT
-Version: 1.3.0
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [paths.py, cid_generator.py]
----
 """
 File: cadmies_concept_reader.py
 Agent: Willie the Research Assistant
