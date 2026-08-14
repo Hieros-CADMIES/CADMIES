@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / tools/core
-Document_ID: CA-2026-022-TOOL
-Version: 1.2.0
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [paths.py, provenance_manager.py]
----
 """
 File: cid_generator.py
 Tool: CADMIES CID Generator
