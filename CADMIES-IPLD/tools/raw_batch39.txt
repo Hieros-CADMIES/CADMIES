@@ -1,0 +1,31 @@
+{
+    "relationships": {
+        "neurotic_perfectionism": [
+            {"target": "newtons_first_law", "type": "related_to"},
+            {"target": "nirvana_as_deactivation", "type": "contradicts"}
+        ],
+        "neurotransmitter_communication": [
+            {"target": "neurotransmitter_system", "type": "specializes"},
+            {"target": "nirvana_as_deactivation", "type": "related_to"}
+        ],
+        "neurotransmitter_system": [
+            {"target": "neurotransmitter_communication", "type": "builds_upon"},
+            {"target": "nirvana_as_deactivation", "type": "related_to"}
+        ],
+        "newtons_first_law": [],
+        "newtons_laws_of_motion": [
+            {"target": "newtons_first_law", "type": "builds_upon"},
+            {"target": "neurotic_perfectionism", "type": "related_to"}
+        ],
+        "nibbana": [
+            {"target": "nirvana_as_liberation", "type": "specializes"}
+        ],
+        "nirvana_as_de-achievement": [],
+        "nirvana_as_deactivation": [
+            {"target": "neurotransmitter_communication", "type": "related_to"},
+            {"target": "neurotransmitter_system", "type": "related_to"},
+            {"target": "neurotic_perfectionism", "type": "contradicts"}
+        ],
+        "nirvana_as_dead_ending": [
+            {"target": "nirvana_as_deactivation", "type": "specializes"},
+            {"target": "neurotic_perfectionism", "type": "contradicts"}

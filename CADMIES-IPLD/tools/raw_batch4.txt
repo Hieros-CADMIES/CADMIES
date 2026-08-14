@@ -1,0 +1,35 @@
+{
+    "relationships": {
+        "awakening_experience": [
+            {"target": "awareness_as_unity", "type": "builds_upon"},
+            {"target": "biological_mind_as_enemy", "type": "contradicts"}
+        ],
+        "awakening_shift": [
+            {"target": "bayes_theorem", "type": "related_to"},
+            {"target": "awareness_as_unity", "type": "builds_upon"}
+        ],
+        "awareness_as_unity": [],
+        "bayes_theorem": [
+            {"target": "awakening_shift", "type": "related_to"},
+            {"target": "biological_obstruction", "type": "specializes"}
+        ],
+        "biodiversity": [
+            {"target": "bioenergetics", "type": "related_to"},
+            {"target": "biological_imperative", "type": "builds_upon"}
+        ],
+        "bioenergetics": [
+            {"target": "biodiversity", "type": "related_to"},
+            {"target": "biology_as_enemy", "type": "contradicts"}
+        ],
+        "biological_imperative": [
+            {"target": "biodiversity", "type": "builds_upon"},
+            {"target": "biological_obstruction", "type": "related_to"}
+        ],
+        "biological_mind_as_enemy": [
+            {"target": "awakening_experience", "type": "contradicts"},
+            {"target": "biological_obstruction", "type": "specializes"}
+        ],
+        "biological_obstruction": [
+            {"target": "bayes_theorem", "type": "specializes"},
+            {"target": "biological_imperative", "type": "related_to"},
+            {"target": "biological_mind_as_enemy", "type": "specializes"}

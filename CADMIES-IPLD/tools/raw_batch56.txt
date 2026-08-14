@@ -1,0 +1,39 @@
+{
+    "relationships": {
+        "stomatal_regulation": [
+            {"target": "supply_and_demand", "type": "related_to"},
+            {"target": "subconscious_cellular_awareness", "type": "builds_upon"}
+        ],
+        "strategic_acceptance": [
+            {"target": "sunyata_emptiness", "type": "specializes"},
+            {"target": "subversive_delivery", "type": "related_to"}
+        ],
+        "stress_dysregulation_cycle": [
+            {"target": "supply_and_demand", "type": "contradicts"},
+            {"target": "synergistic_thinking", "type": "builds_upon"}
+        ],
+        "subconscious_cellular_awareness": [],
+        "subversive_delivery": [
+            {"target": "superposition_consciousness", "type": "related_to"},
+            {"target": "strategic_acceptance", "type": "related_to"}
+        ],
+        "suchness": [
+            {"target": "sunyata_emptiness", "type": "specializes"},
+            {"target": "superposition_consciousness", "type": "contradicts"}
+        ],
+        "sunyata_emptiness": [
+            {"target": "strategic_acceptance", "type": "builds_upon"},
+            {"target": "suchness", "type": "specializes"}
+        ],
+        "superposition_consciousness": [
+            {"target": "subversive_delivery", "type": "related_to"},
+            {"target": "suchness", "type": "contradicts"}
+        ],
+        "supply_and_demand": [
+            {"target": "stomatal_regulation", "type": "related_to"},
+            {"target": "stress_dysregulation_cycle", "type": "contradicts"}
+        ],
+        "synergistic_thinking": [
+            {"target": "stress_dysregulation_cycle", "type": "builds_upon"}
+        ]
+    }

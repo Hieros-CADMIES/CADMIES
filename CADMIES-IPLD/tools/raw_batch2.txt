@@ -1,0 +1,20 @@
+{
+  "ai:llm_mycelium_reader/willie_the_librarian_v1": {
+    "relationships": {
+      "ai:llm_mycelium_reader/willie_the_librarian_v1": [],
+      "alan_watts_transformative_process": [],
+      "alien_perception": [],
+      "anatta": ["anatta_and_compassion", "anatta_non_self", "anatta_not_self", "anatta_perspective"],
+      "anatta_and_compassion": [],
+      "anatta_non_self": [],
+      "anatta_not_self": [],
+      "anatta_perspective": [],
+      "anchor_fang_ratchet_mechanism": [],
+      "anchorfang_ratcheting_mechanism": [],
+      "antibiotic_resistance": [],
+      "archetypal_pattern": [],
+      "art_as_a_window_and_proposal": [],
+      "art_as_a_window_into_different_mindsets": [],
+      "art_as_window_into_the_mind": []
+    }
+  }

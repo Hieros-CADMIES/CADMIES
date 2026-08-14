@@ -1,0 +1,33 @@
+{
+    "relationships": {
+        "hamiltons_rule": [
+            {"target": "hematophagous_symbiosis_theory", "type": "builds_upon"},
+            {"target": "hard_problem_of_consciousness", "type": "related_to"}
+        ],
+        "hammer_perspective": [
+            {"target": "hammer_philosophy", "type": "specializes"},
+            {"target": "hermitage_of_the_heart", "type": "related_to"}
+        ],
+        "hammer_philosophy": [
+            {"target": "hammer_perspective", "type": "specializes"},
+            {"target": "hierarchical_emergence", "type": "related_to"}
+        ],
+        "hard_problem_of_consciousness": [
+            {"target": "hamiltons_rule", "type": "related_to"},
+            {"target": "heisenberg_uncertainty_principle", "type": "contradicts"}
+        ],
+        "heisenberg_uncertainty_principle": [
+            {"target": "hard_problem_of_consciousness", "type": "contradicts"},
+            {"target": "hierarchical_emergence", "type": "related_to"}
+        ],
+        "hematophagous_symbiosis_theory": [
+            {"target": "hamiltons_rule", "type": "builds_upon"},
+            {"target": "hierarchical_emergence", "type": "related_to"}
+        ],
+        "hermitage_of_the_heart": [
+            {"target": "hammer_perspective", "type": "related_to"},
+            {"target": "hard_problem_of_consciousness", "type": "related_to"}
+        ],
+        "hierarchical_emergence": [
+            {"target": "hammer_philosophy", "type": "related_to"},
+            {"target": "hematophagous_symbiosis_theory", "type": "related_to"}

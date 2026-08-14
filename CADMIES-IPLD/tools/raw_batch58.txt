@@ -1,0 +1,32 @@
+{
+  "relationships": {
+    "the_journey_is_the_destination": [
+      { "target": ["thermal_shock_method"], "type": "contradicts" },
+      { "target": ["time_as_experience"], "type": "related_to" }
+    ],
+    "the_migrating_moth": [],
+    "the_mirror_universe": [
+      { "target": ["thermodynamic_time"], "type": "specializes" },
+      { "target": ["thought-stream_as_weather"], "type": "related_to" }
+    ],
+    "the_universe_as_a_participatory_act": [
+      { "target": ["thermodynamics_laws"], "type": "builds_upon" },
+      { "target": ["thermodynamics_and_time_arrow"], "type": "related_to" }
+    ],
+    "thermal_shock_method": [],
+    "thermodynamic_time": [
+      { "target": ["the_universe_as_a_participatory_act"], "type": "builds_upon" },
+      { "target": ["thermodynamics_laws"], "type": "specializes" }
+    ],
+    "thermodynamics_and_time_arrow": [
+      { "target": ["the_universe_as_a_participatory_act"], "type": "related_to" },
+      { "target": ["thermodynamic_time"], "type": "specializes" }
+    ],
+    "thermodynamics_laws": [],
+    "thought-stream_as_weather": [
+      { "target": ["the_mirror_universe"], "type": "related_to" },
+      { "target": ["time_as_experience"], "type": "related_to" }
+    ],
+    "time_as_experience": [],
+  }
+}

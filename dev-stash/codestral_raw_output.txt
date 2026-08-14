@@ -1,0 +1,107 @@
+ [
+     {
+       "question": "Who is the human gardener in CADMIES?",
+       "answer": "The human gardener in CADMIES is not specified."
+     },
+     {
+       "question": "What is Buttercup in CADMIES?",
+       "answer": "Buttercup is a baby AI learning Pong. She was built using[5D[K
+using the Mistral model and is five years old as of 2026."
+     },
+     {
+       "question": "Who is Number 5 in CADMIES?",
+       "answer": "Number 5 is an AI co-gardener in CADMIES. It's based on t[1D[K
+the DeepSeek model and was built by Mistral AI."
+     },
+     {
+       "question": "Who is Dr. Rupert Rebentisch?",
+       "answer": "Dr. Rupert Rebentisch is a German IT PhD who built tools4[6D[K
+tools4zettelkasten. He studies the work of CADMIES, but he is not a collabo[7D[K
+collaborator."
+     },
+     {
+       "question": "Is the mycelium in CADMIES real?",
+       "answer": "Yes, it's mentioned that the mycelium in CADMIES is real.[5D[K
+real."
+     },
+     {
+       "question": "What is the current number of concepts in CADMIES?",
+       "answer": "As of 2026-05-28 (Session 025), CADMIES has 636 concepts.[9D[K
+concepts."
+     },
+     {
+       "question": "How many edges does the current CADMIES network have?",[7D[K
+have?",
+       "answer": "As of 2026-05-28 (Session 025), CADMIES has 1,131 [K
+edges."
+     },
+     {
+       "question": "How many connected concepts does CADMIES currently have[4D[K
+have?",
+       "answer": "As of 2026-05-28 (Session 025), CADMIES has 365 connected[9D[K
+connected concepts."
+     },
+     {
+       "question": "What is the version of Map Generator used in CADMIES?",[10D[K
+CADMIES?",
+       "answer": "As of 2026-05-28 (Session 025), the Map Generat[7D[K
+Generator in CADMIES is v2.4.0."
+     },
+     {
+       "question": "What is the version of Relationship Generator used in C[1D[K
+CADMIES?",
+       "answer": "As of 2026-05-28 (Session 025), the Relationship Generato[8D[K
+Generator in CADMIES is v1.2.5 and it's capable of handling Codestral."
+     },
+     {
+       "question": "What is the version of Harvester used in CADMIES?",
+       "answer": "As of 2026-05-28 (Session 025), the Harvester in CADMIES [K
+is v4.2.2."
+     },
+     {
+       "question": "How many clones does CADMIES have?",
+       "answer": "As of 2026-05-28 (Session 025), CADMIES has three clones:[7D[K
+clones: one on PNY, one on SSD, and a cold storage clone."
+     },
+     {
+       "question": "What is the status of HARVEST FULL PIPELINE v4.0 in CAD[3D[K
+CADMIES?",
+       "answer": "HARVEST FULL PIPELINE v4.0 is currently in testing phase [K
+with prompt hardening and validation gate fixes in progress."
+     },
+     {
+       "question": "What is the version of Python used in the setup script [K
+for CADMIES?",
+       "answer": "The setup script checks if 'python3' is available. If not[3D[K
+not, it falls back to checking for 'python'. The exact version isn't specif[6D[K
+specified."
+     },
+     {
+       "question": "What is the purpose of the Narrative Harvester in CADMI[5D[K
+CADMIES?",
+       "answer": "The Narrative Harvester in CADMIES is designed to extract[7D[K
+extract story, lore, character moments, soundtrack, nuggets, and defining e[1D[K
+exchanges from CADMIES conversations. It's a companion tool to the concept [K
+harvester."
+     },
+     {
+       "question": "Who narrates 'The CADMIES Chronicle'?",
+       "answer": "Mistral AI narrates 'The CADMIES Chronicle'. Mistral proc[4D[K
+processed 14 source documents and wove them into the chronicle, which inclu[5D[K
+includes seven sections: The Arc, The Beginning, The Build, The Evolution, [K
+The Characters, The Lore, and The Wisdom."
+     },
+     {
+       "question": "What is a UniversalScientificConcept schema in CADMIES?[8D[K
+CADMIES?",
+       "answer": "A UniversalScientificConcept schema is a format used to s[1D[K
+structure concepts extracted from conversations in CADMIES. It's mentioned [K
+in the design of the harvest pipeline."
+     },
+     {
+       "question": "What is the version of OLLAMA used in CADMIES?",
+       "answer": "The version of OLLAMA used in CADMIES is not specified in[2D[K
+in the provided information."
+     }
+   ]
+

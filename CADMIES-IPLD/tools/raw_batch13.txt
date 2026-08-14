@@ -1,0 +1,27 @@
+{
+  "relationships": {
+    "dynamic_process_of_connection": [
+      {"target": "ecology:principle/humans_as_weeds", "type": "builds_upon"},
+      {"target": "ecology:principle/weed_triumph", "type": "builds_upon"},
+      {"target": "ecosystem_as_cohabitation", "type": "builds_upon"},
+      {"target": "effortless_mastery", "type": "builds_upon"},
+      {"target": "ego_as_feature", "type": "builds_upon"},
+      {"target": "egoless_awareness", "type": "builds_upon"},
+      {"target": "embodied_awakening", "type": "builds_upon"},
+      {"target": "emergence", "type": "builds_upon"},
+      {"target": "emergent_phenomena_unification", "type": "builds_upon"}
+    ],
+    "eightk_mirror": [],
+    "ecology:principle/humans_as_weeds": [
+      {"target": "dynamic_process_of_connection", "type": "specializes"},
+      {"target": "ecology:principle/weed_triumph", "type": "related_to"}
+    ],
+    "ecology:principle/weed_triumph": [
+      {"target": "dynamic_process_of_connection", "type": "specializes"},
+      {"target": "ecology:principle/humans_as_weeds", "type": "related_to"}
+    ],
+    "ecosystem_as_cohabitation": [
+      {"target": "dynamic_process_of_connection", "type": "specializes"}
+    ],
+    "effortless_mastery": [
+      {"target": "dynamic_process_of_connection", "type": "builds_upon"}

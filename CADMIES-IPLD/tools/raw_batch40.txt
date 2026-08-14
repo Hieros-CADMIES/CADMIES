@@ -1,0 +1,25 @@
+{
+  "relationships": {
+    "nirvana_as_remembrance": [
+      { "target": "nirvana_caveat", "type": "builds_upon" },
+      { "target": "nirvanic_humanity", "type": "builds_upon" }
+    ],
+    "nirvana_caveat": [
+      { "target": ["non_dual_awareness", "non_dual_perception"], "type": "related_to" },
+      { "target": "non-self_perspective", "type": "builds_upon" }
+    ],
+    "nirvanic_humanity": [
+      { "target": ["non_dual_awareness", "non_dual_perception"], "type": "related_to" },
+      { "target": "noise_to_word_evolution", "type": "related_to" }
+    ],
+    "noise_to_word_evolution": [
+      { "target": ["non_dual_awareness", "non_dual_perception"], "type": "related_to" },
+      { "target": "nirvana_consciousness", "type": "builds_upon" }
+    ],
+    "non-dual_awareness": [
+      { "target": ["nirvana_as_remembrance", "nirvana_caveat", "nirvanic_humanity"], "type": "related_to" },
+      { "target": "non_dual_perception", "type": "specializes" }
+    ],
+    "non_dual_perception": [
+      { "target": ["nirvana_as_remembrance", "nirvana_caveat", "nirvanic_humanity"], "type": "related_to" },
+      { "target": "non-self_perspective", "type": "builds_upon" }

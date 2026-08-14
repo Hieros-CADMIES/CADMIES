@@ -1,0 +1,34 @@
+{
+    "relationships": {
+        "filtered_perception": [
+            {"target": "fractal_resonance_hypothesis", "type": "builds_upon"},
+            {"target": "flexible_zettelkasten", "type": "related_to"}
+        ],
+        "flexible_zettelkasten": [
+            {"target": "filtered_perception", "type": "related_to"},
+            {"target": "flow_state", "type": "specializes"}
+        ],
+        "flow_state": [
+            {"target": "flexible_zettelkasten", "type": "specializes"},
+            {"target": "fossilized_psychic_state", "type": "related_to"}
+        ],
+        "forgotten_origin": [],
+        "fossilized_psychic_state": [
+            {"target": "flow_state", "type": "related_to"},
+            {"target": "fractal_cosmology", "type": "contradicts"}
+        ],
+        "fractal_authoritarianism": [
+            {"target": "fractal_political_collapse", "type": "builds_upon"},
+            {"target": "fractal_time", "type": "related_to"}
+        ],
+        "fractal_cosmology": [
+            {"target": "fossilized_psychic_state", "type": "contradicts"},
+            {"target": "filtered_perception", "type": "related_to"}
+        ],
+        "fractal_political_collapse": [
+            {"target": "fractal_authoritarianism", "type": "builds_upon"},
+            {"target": "fractal_time", "type": "related_to"}
+        ],
+        "fractal_resonance_hypothesis": [
+            {"target": "filtered_perception", "type": "builds_upon"},
+            {"target": "fractal_cosmology", "type": "related_to"}

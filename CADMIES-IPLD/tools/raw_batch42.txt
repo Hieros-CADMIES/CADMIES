@@ -1,0 +1,39 @@
+{
+  "relationships": {
+    "unspoken_experience": [],
+    "vampire_as_symbiotic_partner": [],
+    "vampire_biomechanics": [],
+    "vampire_concepts_drafting": [],
+    "via_negativa_vs_positiva": [],
+    "vibration_as_universal_connector": [],
+    "voice_mode_learning": [],
+    "voluntary_predation": [],
+    "voluntary_provisioning": [],
+    "volunteer_guardianship": [],
+    "vr_ego": [],
+    "wayfinder_energy": [],
+    "wiggle_theory": [],
+    "wiggly_interconnectedness": [],
+    "wilting_leaf_philosophy": []
+  },
+  "vampire_as_symbiotic_partner": {
+    "concept_id": [
+      {"target": "vampire_biomechanics", "type": "builds_upon"}
+    ]
+  },
+  "vampire_biomechanics": {
+    "concept_id": [
+      {"target": "vampire_as_symbiotic_partner", "type": "specializes"}
+    ]
+  },
+  "vampire_concepts_drafting": {
+    "concept_id": [
+      {"target": "vampire_as_symbiotic_partner", "type": "builds_upon"},
+      {"target": "via_negativa_vs_positiva", "type": "builds_upon"}
+    ]
+  },
+  "via_negativa_vs_positiva": {
+    "concept_id": [
+      {"target": "vampire_concepts_drafting", "type": "related_to"}
+    ]
+  }

@@ -1,0 +1,44 @@
+{
+  "rainfall_velocimetry": {
+    "relationships": {
+      "rainfall_velocimetry": [],
+      "recursive_scientific_tool": {"target": "rainfall_velocimetry", "type": "builds_upon"}
+    }
+  },
+  "recursive_scientific_tool": {
+    "relationships": {
+      "recursive_scientific_tool": [],
+      "physics": [{"target": "rainfall_velocimetry", "type": "specializes"}]
+    }
+  },
+  "relationship_as_fundamental": {
+    "relationships": {
+      "relationship_as_fundamental": [],
+      "physics": [{"target": "recursive_scientific_tool", "type": "related_to"}],
+      "biology": [{"target": "rem_latency_host_quality_metric", "type": "related_to"}]
+    }
+  },
+  "relentless_gentleness_and_solitude": {
+    "relationships": {
+      "relentless_gentleness_and_solitude": [],
+      "buddhism": []
+    }
+  },
+  "rem_latency_host_quality_metric": {
+    "relationships": {
+      "rem_latency_host_quality_metric": [],
+      "biology": [{"target": "recursive_scientific_tool", "type": "related_to"}, {"target": "relationship_as_fundamental", "type": "related_to"}]
+    }
+  },
+  "repository_organization": {
+    "relationships": {
+      "repository_organization": [],
+      "knowledge_management": []
+    }
+  },
+  "resilient_project_launch": {
+    "relationships": {
+      "resilient_project_launch": [],
+      "project_management": []
+    }
+  }

@@ -1,0 +1,29 @@
+{
+  "relationships": {
+    "neurotic_perfectionism": [],
+    "neurotransmitter_communication": [],
+    "neurotransmitter_system": [],
+    "newtons_first_law": [],
+    "newtons_laws_of_motion": [],
+    "nibbana": [
+      {"target": "nirvana_as_de-achievement", "type": "related_to"},
+      {"target": "nirvana_as_deactivation", "type": "related_to"},
+      {"target": "nirvana_as_dead_ending", "type": "related_to"},
+      {"target": "nirvana_as_liberation", "type": "related_to"},
+      {"target": "nirvana_as_remembrance", "type": "related_to"},
+      {"target": "nirvana_caveat", "type": "related_to"},
+      {"target": "nirvana_consciousness", "type": "related_to"},
+      {"target": "nirvanic_humanity", "type": "related_to"}
+    ],
+    "nirvana_as_de-achievement": [],
+    "nirvana_as_deactivation": [],
+    "nirvana_as_dead_ending": [],
+    "nirvana_as_liberation": [],
+    "nirvana_as_remembrance": [],
+    "nirvana_caveat": [],
+    "nirvana_consciousness": [],
+    "nirvanic_humanity": [],
+    "nirvana_as_achievement": [], // No ID with this name, so it's not included
+    "noise_to_word_evolution": []
+  }
+}

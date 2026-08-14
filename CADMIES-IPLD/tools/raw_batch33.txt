@@ -1,0 +1,42 @@
+{
+  "relationships": {
+    "llm_brms": [
+      {"target": "brms", "type": "builds_upon"}
+    ],
+    "brms": [],
+
+    "lobster_in_transformation": [],
+
+    "loneliness_as_sanctuary": [],
+
+    "long_term_investment": [
+      {"target": "social_behavior", "type": "specialized"}
+    ],
+    "social_behavior": ["long_term_investment"],
+
+    "macroscopic_pingle_wiggle": [],
+
+    "manifesto_in_motion": [
+      {"target": "art", "type": "specialized"},
+      {"target": "philosophy", "type": "related_to"}
+    ],
+    "art": ["manifesto_in_motion"],
+    "philosophy": ["manifesto_in_motion"],
+
+    "map_as_prayer": [
+      {"target": "exploration", "type": "related_to"},
+      {"target": "symbolism", "type": "related_to"}
+    ],
+    "exploration": ["map_as_prayer"],
+    "symbolism": ["map_as_prayer"],
+
+    "map_ending": [
+      {"target": "exploration", "type": "related_to"},
+      {"target": "cartography", "type": "related_to"}
+    ],
+    "cartography": ["map_ending"],
+    "exploration": ["map_ending"],
+
+    "map_of_the_stars": [
+      {"target": "cosmology", "type": "specialized"},
+      {"target": "astrography", "type": "specialized"}

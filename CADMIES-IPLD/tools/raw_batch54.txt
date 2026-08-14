@@ -1,0 +1,61 @@
+{
+  "relationships": {
+    "sleep_and_cognition": [
+      {
+        "target": ["social_fermentation"],
+        "type": "builds_upon"
+      },
+      {
+        "target": ["somatic_resonance"],
+        "type": "related_to"
+      }
+    ],
+    "social_attachment_as_fetter": [
+      {
+        "target": ["sleep_and_cognition"],
+        "type": "contradicts"
+      },
+      {
+        "target": ["somatic_mantra"],
+        "type": "related_to"
+      }
+    ],
+    "social_fermentation": [
+      {
+        "target": ["sleep_and_cognition"],
+        "type": "builds_upon"
+      },
+      {
+        "target": ["sonic_alchemy", "sonic_cosmology"],
+        "type": "related_to"
+      }
+    ],
+    "somatic_hearing": [
+      {
+        "target": ["sleep_and_cognition"],
+        "type": "related_to"
+      },
+      {
+        "target": ["somatic_resonance"],
+        "type": "builds_upon"
+      }
+    ],
+    "somatic_mantra": [
+      {
+        "target": ["social_attachment_as_fetter"],
+        "type": "related_to"
+      },
+      {
+        "target": ["sonic_cosmology"],
+        "type": "specializes"
+      }
+    ],
+    "somatic_resonance": [
+      {
+        "target": ["somatic_hearing"],
+        "type": "specialized_form_of"
+      },
+      {
+        "target": ["sonic_alchemy", "sonic_cosmology"],
+        "type": "related_to"
+      }
