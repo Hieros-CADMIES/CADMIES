@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / tools
-Document_ID: CA-2026-043-TOOL
-Version: 1.1.0
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [paths.py, import_from_car.py]
----
 """
 File: import_from_github.py
 Tool: CADMIES GitHub CAR Downloader
