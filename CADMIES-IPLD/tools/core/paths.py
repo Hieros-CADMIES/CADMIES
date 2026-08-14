@@ -35,6 +35,9 @@ SOURCE_CONCEPTS_DIR = PROJECT_ROOT / "source_concepts"
 # Index file path
 INDEX_FILE = INDEX_DIR / "human_id_to_cid.json"
 
+# Docs output directory (public gateway)
+DOCS_DIR = PROJECT_ROOT.parent / "docs"
+
 # Ensure directories exist
 def ensure_dirs():
     """Create all required directories if they don't exist.
