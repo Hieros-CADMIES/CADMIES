@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / tools
-Document_ID: CA-2026-032-TOOL
-Version: 2.4.1
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [paths.py, generate_public_gateway.py]
----
 """
 File: generate_mycelium_map.py
 Tool: CADMIES Mycelium Map Generator
