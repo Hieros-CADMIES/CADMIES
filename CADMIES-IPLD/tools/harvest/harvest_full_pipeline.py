@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / tools/harvest
-Document_ID: CA-2026-041-TOOL
-Version: 4.2.1
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [paths.py, cid_generator.py, scientific_validator.py, cadmies_concept_reader.py]
----
 """
 File: harvest_full_pipeline.py
 Tool: CADMIES Harvest Pipeline
