@@ -1,5 +1,5 @@
 // ============================================================
-// CADMIES — Main Application (v3)
+// CADMIES — Main Application (v4)
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let browseFilter = 'all';
     let browseSearchTerm = '';
 
-    // CANONICAL 15 DOMAINS — used for filters and dropdown
+    // CANONICAL 15 DOMAINS
     const canonicalDomains = [
         "Physics", "Philosophy", "Biology", "Mathematics", "Consciousness",
         "Chemistry", "Ethics", "Computer Science", "Psychology", "Spirituality",
@@ -85,13 +85,13 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('browse-count').textContent =
                 `${conceptsData.length} concepts in the mycelium`;
 
-            // Build domain filters — Browse only (Dashboard has no grid)
+            // Build domain filters
             buildDomainFilters('browse-filters', 'browse-grid');
 
             // Render Browse grid
             renderBrowseConcepts();
 
-            // Domain list for dropdown — uses canonical 15
+            // Build domain list for dropdown
             buildDomainList();
 
             // Check map status
@@ -99,16 +99,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         } catch (err) {
             console.error('Error loading concepts:', err);
-            document.getElementById('browse-count').textContent = '❌ Failed to load concepts';
+            document.getElementById('browse-count').textContent = 'Failed to load concepts';
             document.getElementById('stat-concepts').textContent = '?';
             document.getElementById('stat-domains').textContent = '?';
             document.getElementById('stat-relationships').textContent = '?';
             document.getElementById('browse-grid').innerHTML =
-                '<p class="error-text">Could not load concept data.</p>';
+                '<p class="empty-text">Could not load concept data.</p>';
         }
     }
 
-    // ---------- DOMAIN FILTERS — Canonical 15 only ----------
+    // ---------- DOMAIN FILTERS ----------
     function buildDomainFilters(containerId, gridId) {
         const container = document.getElementById(containerId);
         if (!container) return;
@@ -125,7 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         container.appendChild(allBtn);
 
-        // Only show canonical domains that exist in the data
         const existingCanonical = canonicalDomains.filter(d => domainCounts[d] > 0);
 
         existingCanonical.forEach(domain => {
@@ -142,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // ---------- BROWSE CONCEPTS ----------
+    // ---------- BROWSE CONCEPTS (Expandable Cards) ----------
     function renderBrowseConcepts(filter, search) {
         filter = filter || browseFilter;
         search = (search !== undefined) ? search : browseSearchTerm;
@@ -176,26 +175,72 @@ document.addEventListener('DOMContentLoaded', function() {
         filtered.forEach(c => {
             const title = c.name || c.title || 'Untitled';
             const domain = c.canonical_domain || c.domain || 'Unknown';
+            const rawDomain = c.domain || domain;
             const def = c.description || c.definition || 'No definition available.';
             const id = c.human_id || c.id || '';
+            const cid = c.termCode || c.cid || '';
+
+            // Relationships
+            const rels = c.relationships || {};
+            const relLabels = {
+                builds_upon: 'Builds Upon',
+                related_to: 'Related To',
+                specializes: 'Specializes',
+                contradicts: 'Contradicts'
+            };
+            let relHtml = '';
+            for (const [key, label] of Object.entries(relLabels)) {
+                const items = rels[key] || [];
+                if (items.length > 0) {
+                    const tags = items.map(item => {
+                        const relTitle = item.title || item.id || item;
+                        return `<span class="rel-tag rel-${key}">${escapeHtml(relTitle)}</span>`;
+                    }).join('');
+                    relHtml += `<div class="rel-group"><strong>${label}:</strong> ${tags}</div>`;
+                }
+            }
+
+            // Extras
+            let extrasHtml = '';
+            if (c.extra) {
+                if (c.extra.insight) {
+                    extrasHtml += `<div class="extra-section"><strong>Core Insight:</strong> ${escapeHtml(c.extra.insight)}</div>`;
+                }
+                if (c.extra.poetic_version) {
+                    extrasHtml += `<div class="extra-section poetic"><strong>Poetic Version:</strong><blockquote>${escapeHtml(c.extra.poetic_version)}</blockquote></div>`;
+                }
+                if (c.extra.mantra) {
+                    extrasHtml += `<div class="extra-section mantra"><strong>Mantra:</strong> <em>"${escapeHtml(c.extra.mantra)}"</em></div>`;
+                }
+            }
+
+            // Preview (first ~180 chars)
+            const preview = def.substring(0, 180) + (def.length > 180 ? '…' : '');
 
             html += `
-                <div class="concept-card" data-id="${id}">
-                    <h4>${escapeHtml(title)}</h4>
-                    <div class="card-domain">${escapeHtml(domain)}</div>
-                    <div class="card-definition">${escapeHtml(def.substring(0, 180))}${def.length > 180 ? '…' : ''}</div>
-                </div>
+                <article class="concept-card" data-domain="${escapeHtml(domain)}" data-raw-domain="${escapeHtml(rawDomain)}" data-search="${escapeHtml(title.toLowerCase())} ${escapeHtml(domain.toLowerCase())} ${escapeHtml(id.toLowerCase())}">
+                    <div class="card-header" onclick="this.parentElement.classList.toggle('expanded')">
+                        <span class="domain-badge">${escapeHtml(domain)}</span>
+                        <h4>${escapeHtml(title)}</h4>
+                        <p class="definition-preview">${escapeHtml(preview)}</p>
+                        <span class="expand-hint">Click to expand ↓</span>
+                    </div>
+                    <div class="card-detail">
+                        <div class="definition-full">
+                            <p>${escapeHtml(def)}</p>
+                        </div>
+                        ${extrasHtml}
+                        <div class="relationships">
+                            <h5>Relationships</h5>
+                            ${relHtml || '<p class="no-rels">No relationships recorded yet.</p>'}
+                        </div>
+                        ${cid ? `<div class="cid-box"><strong>Permanent CID:</strong><br><code>${escapeHtml(cid)}</code></div>` : ''}
+                    </div>
+                </article>
             `;
         });
 
         grid.innerHTML = html;
-        grid.querySelectorAll('.concept-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const id = card.dataset.id;
-                const concept = conceptsData.find(c => (c.human_id || c.id) === id);
-                if (concept) openDetail(concept);
-            });
-        });
     }
 
     // ---------- SEARCH (Browse) ----------
@@ -206,103 +251,7 @@ document.addEventListener('DOMContentLoaded', function() {
         renderBrowseConcepts(filter, search);
     });
 
-    // ---------- DETAIL MODAL ----------
-    const modal = document.getElementById('detail-modal');
-    const modalClose = document.querySelector('.modal-close');
-
-    function openDetail(concept) {
-        const title = concept.name || concept.title || 'Untitled';
-        const domain = concept.canonical_domain || concept.domain || 'Unknown';
-        const type = concept.type || 'Concept';
-        const def = concept.description || concept.definition || 'No definition available.';
-        const mantra = concept.mantra || '';
-        const poetic = concept.poetic_version || '';
-        const axioms = concept.axioms || [];
-        const relationships = concept.relationships || {};
-        const metadata = concept.metadata || {};
-        const cid = concept.termCode || concept.cid || '';
-
-        document.getElementById('detail-title').textContent = title;
-
-        let badges = `
-            <span style="background:#4F46E5;color:#fff;">${escapeHtml(domain)}</span>
-            <span style="background:#6366F1;color:#fff;">${escapeHtml(type)}</span>
-        `;
-        document.getElementById('detail-badges').innerHTML = badges;
-        document.getElementById('detail-definition').textContent = def;
-
-        const mantraEl = document.getElementById('detail-mantra');
-        if (mantra) {
-            mantraEl.innerHTML = `<div class="detail-section"><h5>Mantra</h5><p><em>"${escapeHtml(mantra)}"</em></p></div>`;
-        } else {
-            mantraEl.innerHTML = '';
-        }
-
-        const poeticEl = document.getElementById('detail-poetic');
-        if (poetic) {
-            poeticEl.innerHTML = `<div class="detail-section"><h5>Poetic Version</h5><p><em>"${escapeHtml(poetic)}"</em></p></div>`;
-        } else {
-            poeticEl.innerHTML = '';
-        }
-
-        const axiomsEl = document.getElementById('detail-axioms');
-        if (axioms && axioms.length > 0) {
-            let list = axioms.map(a => `<li>${escapeHtml(a)}</li>`).join('');
-            axiomsEl.innerHTML = `<div class="detail-section"><h5>Core Truths</h5><ul>${list}</ul></div>`;
-        } else {
-            axiomsEl.innerHTML = '';
-        }
-
-        const relEl = document.getElementById('detail-relationships');
-        let relHtml = '';
-        const relLabels = {
-            builds_upon: 'Builds Upon',
-            related_to: 'Related To',
-            contradicts: 'Contradicts'
-        };
-        for (const [key, label] of Object.entries(relLabels)) {
-            const items = relationships[key] || [];
-            if (items.length > 0) {
-                const list = items.map(i => `<li>${escapeHtml(i.title || i.id || i)}</li>`).join('');
-                relHtml += `<div class="detail-section"><h5>${label}</h5><ul>${list}</ul></div>`;
-            }
-        }
-        relEl.innerHTML = relHtml;
-
-        const metaEl = document.getElementById('detail-metadata');
-        let metaHtml = '';
-        if (metadata.created) metaHtml += `<p><strong>Created:</strong> ${escapeHtml(metadata.created)}</p>`;
-        if (metadata.creator) metaHtml += `<p><strong>Creator:</strong> ${escapeHtml(metadata.creator)}</p>`;
-        if (metadata.certainty_score !== undefined) metaHtml += `<p><strong>Certainty:</strong> ${metadata.certainty_score}</p>`;
-        if (metadata.license) metaHtml += `<p><strong>License:</strong> ${escapeHtml(metadata.license)}</p>`;
-        if (metadata.genesis) metaHtml += `<p><strong>Genesis:</strong> ${escapeHtml(metadata.genesis)}</p>`;
-        if (metaHtml) {
-            metaEl.innerHTML = `<div class="detail-section"><h5>Metadata</h5>${metaHtml}</div>`;
-        } else {
-            metaEl.innerHTML = '';
-        }
-
-        const diffEl = document.getElementById('detail-difficulty');
-        const diff = concept.difficulty_levels || {};
-        let diffHtml = '';
-        for (const [level, text] of Object.entries(diff)) {
-            if (text) diffHtml += `<div class="detail-section"><h5>${level.charAt(0).toUpperCase() + level.slice(1)}</h5><p>${escapeHtml(text)}</p></div>`;
-        }
-        diffEl.innerHTML = diffHtml;
-
-        document.getElementById('detail-cid').innerHTML = cid ?
-            `<div class="detail-section"><h5>CID</h5><p style="font-family:monospace;font-size:12px;color:#64748B;word-break:break-all;">${escapeHtml(cid)}</p></div>` :
-            '';
-
-        modal.classList.remove('hidden');
-    }
-
-    modalClose.addEventListener('click', () => modal.classList.add('hidden'));
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) modal.classList.add('hidden');
-    });
-
-    // ---------- DOMAIN DROPDOWN — Canonical 15 only ----------
+    // ---------- DOMAIN DROPDOWN ----------
     function buildDomainList() {
         const container = document.getElementById('domain-list');
         if (!container) return;
@@ -403,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         concept.human_id = concept.human_id.toLowerCase().replace(/[^a-z0-9_]/g, '_');
-        showResult(`✅ Concept "${concept.title}" (${concept.human_id}) ready for submission.`, 'success');
+        showResult(`Concept "${concept.title}" (${concept.human_id}) ready for submission.`, 'success');
         console.log('Concept data:', concept);
     });
 
@@ -446,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function() {
         chatDisplay.scrollTop = chatDisplay.scrollHeight;
 
         chatSend.disabled = true;
-        chatStatus.textContent = '⏳ Connecting to Dr. Mistral...';
+        chatStatus.textContent = 'Connecting to Dr. Mistral...';
         chatStatus.style.color = '#F59E0B';
 
         try {
