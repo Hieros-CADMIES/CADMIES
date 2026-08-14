@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / tools/core
-Document_ID: CA-2026-045-TOOL
-Version: 1.1.0
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [verification_manager.py, orcid_device_flow.py]
----
 """
 File: orcid_stamper.py
 Tool: CADMIES ORCID Stamper
