@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+# ---
+# System: CADMIES / tools
+# Document_ID: CA-2026-029-TOOL
+# Version: 3.2.1
+# Classification: INTERNAL
+# Author: The Gardener
+# Reviewers: [The Gardener, DeepSeek]
+# Status: ACTIVE
+# Created: 2026-08-12
+# Modified: 2026-08-12
+# Related_Docs: [paths.py, generate_mycelium_map.py]
+# ---
 """
 File: generate_public_gateway.py
 Tool: CADMIES Public Mycelium Gateway Generator
