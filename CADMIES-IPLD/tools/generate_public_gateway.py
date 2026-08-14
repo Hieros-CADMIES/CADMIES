@@ -2,21 +2,23 @@
 """
 File: generate_public_gateway.py
 Tool: CADMIES Public Mycelium Gateway Generator
-Version: 3.2.1
+Version: 3.3.0
 System: CADMIES / tools
 Status: ACTIVE
 License: AGPLv3 with Commons Clause
 
-Purpose: Generates a single-page public-facing website from the blockstore.
-         All concepts rendered as filterable, searchable cards on one page.
-         Includes JSON-LD structured data feed and XML sitemap.
+Purpose: Generates the public-facing CADMIES mycelium website.
 
-         Domain filter pills now actually filter the concept cards.
-         Subdomain tier is designed but not yet implemented.
+         Reads concept data from the blockstore and writes:
+           - index.html  (new single-page app: splash, dashboard, browse)
+           - concepts.json (Schema.org JSON-LD, includes relationships)
+           - sitemap.xml (SEO sitemap)
 
-         translate.js integration — client-side multilingual support.
-         Toggle placed left of the CADMIES title. Language preference stored in localStorage.
-         Default: disabled. User clicks to activate translation dropdown.
+         Concept cards are rendered client-side from concepts.json
+         by docs/app.js. Styling lives in docs/style.css and
+         docs/splash.css. This generator owns the data layer and
+         the HTML shell. The hand-maintained design files are not
+         overwritten.
 
          No personal information. No internal tooling references.
          Just the knowledge the mycelium wants to share with the world.
@@ -28,6 +30,11 @@ Output:
     ../docs/ — static site served by web server
 
 Version History:
+  v3.3.0 (2026-08-14): Rewrote generator for new site design.
+      index.html now uses the new app shell (splash, dashboard, browse).
+      Concept cards render client-side from concepts.json via app.js.
+      Added relationships and extra fields to concepts.json JSON-LD.
+      Sitemap now references the root page and section anchors.
   v3.2.1 (2026-08-12): Added scientific documentation YAML metadata block.
       Made version display dynamic via VERSION constant.
       Switched to paths.py DOCS_DIR for output directory.
@@ -64,7 +71,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "tools" / "core"))
 from cadmies_concept_reader import load_concept, load_all_concept_cids
 from paths import BLOCKS_DIR, DOCS_DIR
 
-VERSION = "3.2.1"
+VERSION = "3.3.0"
 OUTPUT_DIR = DOCS_DIR
 SITE_URL = "https://project-hierion.org"
 
@@ -98,10 +105,10 @@ DOMAIN_UPWARD_MAP = {
     "Quantum Mechanics, Philosophy": "Physics",
     "Quantum Physics and Philosophy": "Physics",
     "Quantum Physics, Consciousness Studies": "Physics",
+    "Quantum Physics and Philosophy": "Physics",
     "Physics and Philosophy": "Physics",
     "Physics & Philosophy": "Physics",
     "Physics, Philosophy": "Physics",
-    "Philosophy, Physics": "Philosophy",
     "Physics, Metaphysics": "Physics",
     "Metaphysics, Philosophy": "Philosophy",
     "Physics, Philosophy, Consciousness": "Physics",
@@ -302,361 +309,574 @@ def gather_public_concepts():
     return sorted(concepts, key=lambda c: c["title"]), domain_counts, subdomain_index
 
 
-def escape_html(text):
-    """Escape text for safe HTML embedding."""
-    return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
-
-
-def build_card(concept):
-    """Build a single concept card with expandable detail."""
-    hid = concept["human_id"]
-    title = escape_html(concept["title"])
-    domain = concept["domain"]
-    canonical_domain = concept["canonical_domain"]
-    domain_display = escape_html(concept["domain_display"])
-    definition = escape_html(concept["definition"])
-    domain_class = canonical_domain.lower().replace(" ", "-").replace("_", "-")
-
-    rel_html_parts = []
-    for rel_type in ["builds_upon", "related_to", "specializes", "contradicts"]:
-        targets = concept["relationships"].get(rel_type, [])
-        if targets:
-            label = RELATIONSHIP_LABELS.get(rel_type, rel_type)
-            tags = "".join(f'<span class="rel-tag rel-{rel_type}">{escape_html(t["title"])}</span>' for t in targets)
-            rel_html_parts.append(f'<div class="rel-group"><strong>{label}:</strong> {tags}</div>')
-    rel_html = "".join(rel_html_parts) if rel_html_parts else '<p class="no-rels"><em>No relationships recorded yet.</em></p>'
-
-    extras = []
-    if concept.get("insight"):
-        extras.append(f'<div class="extra-section"><strong>Core Insight:</strong> {escape_html(concept["insight"])}</div>')
-    if concept.get("poetic_version"):
-        poetic = escape_html(concept["poetic_version"]).replace("\n", "<br>")
-        extras.append(f'<div class="extra-section poetic"><strong>Poetic Version:</strong><blockquote>{poetic}</blockquote></div>')
-    if concept.get("mantra"):
-        extras.append(f'<div class="extra-section mantra"><strong>Mantra:</strong> <em>"{escape_html(concept["mantra"])}"</em></div>')
-    extras_html = "".join(extras)
-
-    return f'''
-    <article class="concept-card" data-domain="{escape_html(canonical_domain)}" data-raw-domain="{escape_html(domain)}" data-search="{title.lower()} {domain_display.lower()} {hid.lower()}">
-        <div class="card-header" onclick="this.parentElement.classList.toggle('expanded')">
-            <span class="domain-badge domain-{domain_class}">{domain_display}</span>
-            <h2>{title}</h2>
-            <p class="definition-preview">{definition[:250]}{'...' if len(definition) > 250 else ''}</p>
-            <span class="expand-hint">Click to expand ↓</span>
-        </div>
-        <div class="card-detail">
-            <div class="definition-full">
-                <p>{definition}</p>
-            </div>
-            {extras_html}
-            <div class="relationships">
-                <h3>Relationships</h3>
-                {rel_html}
-            </div>
-            <div class="cid-box">
-                <strong>Permanent CID:</strong><br>
-                <code>{concept["cid"]}</code>
-            </div>
-        </div>
-    </article>'''
-
-
 def build_index_page(concepts, domain_counts, subdomain_index):
-    """Build the single-page public gateway."""
-    cards = [build_card(c) for c in concepts]
+    """Build the new single-page app shell.
 
-    domain_filters = []
-    for d in CANONICAL_DOMAINS:
-        count = domain_counts.get(d, 0)
-        if count > 0:
-            display = DOMAIN_DISPLAY.get(d, d)
-            domain_filters.append(f'<button class="filter-btn" data-filter="{d}">{display} ({count})</button>')
-
+    The app shell contains the splash screen, dashboard, navigation,
+    and empty browse grid. Concept cards are rendered client-side by
+    app.js from concepts.json. This function does NOT pre-bake cards.
+    """
     total_edges = sum(
         sum(len(targets) for targets in c["relationships"].values())
         for c in concepts
     )
 
+    domain_filter_buttons = []
+    for d in CANONICAL_DOMAINS:
+        count = domain_counts.get(d, 0)
+        if count > 0:
+            display = DOMAIN_DISPLAY.get(d, d)
+            domain_filter_buttons.append(
+                f'<button class="filter-btn" data-filter="{d}">{display} ({count})</button>'
+            )
+
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CADMIES Mycelium — Public Knowledge Graph</title>
-    <meta name="description" content="A decentralized knowledge graph of {len(concepts)} interconnected scientific and philosophical concepts. Content-addressed, open-source, forever.">
-    <meta name="robots" content="index, follow">
-    <link rel="sitemap" type="application/xml" href="sitemap.xml">
-    <link rel="alternate" type="application/json" href="concepts.json">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CADMIES — Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</title>
+    <meta name="description" content="A decentralized knowledge graph of {len(concepts)} interconnected scientific and philosophical concepts. Content-addressed. Open-source. Forever." />
+    <link rel="icon" type="image/png" href="favicon.png" />
+
+    <link rel="stylesheet" href="splash.css" />
+    <link rel="stylesheet" href="style.css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+
     <style>
-        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-        body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0d1117; color: #c9d1d9; line-height: 1.6; }}
-        .container {{ max-width: 1100px; margin: 0 auto; padding: 20px; }}
-        header {{ background: linear-gradient(135deg, #161b22 0%, #0d1117 100%); border-bottom: 1px solid #30363d; padding: 50px 20px 40px; text-align: center; }}
-        .header-content {{ display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }}
-        header h1 {{ font-size: 2.4em; color: #e6edf3; margin: 0; }}
-        .header-sprout {{ font-size: 2.4em; line-height: 1; }}
-        .header-subtitle {{ color: #8b949e; font-size: 1.05em; max-width: 600px; margin: 8px auto 20px; }}
-        .translate-toggle {{ display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid #30363d; border-radius: 6px; padding: 4px 12px; font-size: 0.9em; color: #8b949e; cursor: pointer; transition: all 0.2s ease; font-family: inherit; line-height: 1.5; margin-right: 4px; }}
-        .translate-toggle:hover {{ color: #c9d1d9; border-color: #58a6ff; }}
-        .translate-toggle.active {{ border-color: #58a6ff; color: #58a6ff; }}
-        .translate-toggle .icon {{ font-size: 1em; }}
-        #translate-select {{ background: #161b22 !important; color: #c9d1d9 !important; border: 1px solid #30363d !important; border-radius: 6px !important; padding: 4px 8px !important; font-size: 0.85em !important; font-family: inherit !important; }}
-        #translate-select option {{ background: #161b22; color: #c9d1d9; }}
-        .map-link {{ display: inline-block; margin-top: 12px; padding: 10px 24px; background: #238636; color: #ffffff; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.95em; transition: background 0.2s; }}
-        .map-link:hover {{ background: #2ea043; }}
-        .stats {{ display: flex; gap: 20px; justify-content: center; margin: 24px 0 0; flex-wrap: wrap; }}
-        .stat {{ background: #161b22; border: 1px solid #30363d; padding: 14px 24px; border-radius: 8px; }}
-        .stat-number {{ font-size: 1.6em; font-weight: bold; color: #e6edf3; }}
-        .stat-label {{ font-size: 0.8em; color: #8b949e; }}
-        .stat-orcid .stat-number {{ font-size: 1.0em; font-weight: 600; color: #58a6ff; }}
-        .stat-orcid .stat-label {{ display: flex; align-items: center; gap: 6px; justify-content: center; }}
-        .stat-orcid .stat-label svg {{ width: 18px; height: 18px; fill: #58a6ff; }}
-        .search-bar {{ margin: 24px 0; }}
-        .search-bar input {{ width: 100%; padding: 12px 18px; background: #161b22; border: 1px solid #30363d; border-radius: 8px; color: #e6edf3; font-size: 1em; outline: none; }}
-        .search-bar input:focus {{ border-color: #58a6ff; }}
-        .search-bar input::placeholder {{ color: #484f58; }}
-        .filters {{ display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 8px; }}
-        .filter-btn {{ background: #21262d; border: 1px solid #30363d; color: #c9d1d9; padding: 6px 14px; border-radius: 20px; cursor: pointer; font-size: 0.85em; transition: all 0.2s; }}
-        .filter-btn:hover {{ background: #30363d; }}
-        .filter-btn.active {{ background: #58a6ff; color: #ffffff; border-color: #58a6ff; }}
-        .subdomain-row {{ display: none; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; padding-left: 4px; }}
-        .subdomain-row.visible {{ display: flex; }}
-        .subdomain-btn {{ background: #1c2333; border: 1px solid #30363d; color: #8b949e; padding: 4px 12px; border-radius: 16px; cursor: pointer; font-size: 0.75em; transition: all 0.2s; }}
-        .subdomain-btn:hover {{ background: #30363d; color: #c9d1d9; }}
-        .subdomain-btn.active {{ background: #58a6ff; color: #ffffff; border-color: #58a6ff; }}
-        .subdomain-label {{ color: #484f58; font-size: 0.75em; margin-right: 4px; align-self: center; }}
-        .concept-grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }}
-        .concept-card {{ background: #161b22; border: 1px solid #30363d; border-radius: 10px; overflow: hidden; transition: border-color 0.2s; }}
-        .concept-card:hover {{ border-color: #58a6ff; }}
-        .concept-card.hidden {{ display: none; }}
-        .card-header {{ padding: 20px; cursor: pointer; user-select: none; }}
-        .card-header h2 {{ font-size: 1.15em; color: #e6edf3; margin-bottom: 6px; }}
-        .definition-preview {{ color: #8b949e; font-size: 0.9em; }}
-        .expand-hint {{ display: block; font-size: 0.75em; color: #484f58; margin-top: 10px; }}
-        .card-detail {{ display: none; padding: 0 20px 20px; border-top: 1px solid #30363d; }}
-        .concept-card.expanded .card-detail {{ display: block; }}
-        .concept-card.expanded .expand-hint {{ display: none; }}
-        .definition-full {{ margin: 16px 0; padding: 16px; background: #0d1117; border-radius: 8px; border: 1px solid #21262d; }}
-        .definition-full p {{ color: #c9d1d9; font-size: 0.95em; }}
-        .relationships {{ margin: 16px 0; }}
-        .relationships h3 {{ font-size: 0.9em; color: #8b949e; margin-bottom: 10px; }}
-        .rel-group {{ margin: 8px 0; font-size: 0.85em; color: #8b949e; }}
-        .rel-group strong {{ color: #c9d1d9; }}
-        .rel-tag {{ display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.85em; margin: 2px 4px 2px 0; }}
-        .rel-builds_upon {{ background: #1b3a1b; color: #7ee787; }}
-        .rel-related_to {{ background: #1b2d4a; color: #79c0ff; }}
-        .rel-specializes {{ background: #2d1b3a; color: #d2a8ff; }}
-        .rel-contradicts {{ background: #3a1b1b; color: #ff7b72; }}
-        .no-rels {{ color: #484f58; font-style: italic; font-size: 0.85em; }}
-        .extra-section {{ margin: 12px 0; font-size: 0.9em; color: #c9d1d9; }}
-        .extra-section strong {{ color: #e6edf3; }}
-        .poetic blockquote {{ border-left: 3px solid #58a6ff; padding-left: 14px; color: #8b949e; font-style: italic; margin: 8px 0; }}
-        .mantra em {{ color: #d2a8ff; }}
-        .cid-box {{ margin: 16px 0; padding: 12px; background: #0d1117; border-radius: 6px; font-size: 0.8em; color: #8b949e; }}
-        .cid-box code {{ word-break: break-all; color: #484f58; }}
-        .domain-badge {{ display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.72em; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }}
-        .domain-physics {{ background: #1b2d4a; color: #79c0ff; }}
-        .domain-philosophy {{ background: #2d1b3a; color: #d2a8ff; }}
-        .domain-biology {{ background: #1b3a1b; color: #7ee787; }}
-        .domain-mathematics {{ background: #1b2d4a; color: #79c0ff; }}
-        .domain-ethics {{ background: #3a1b2d; color: #ff9bce; }}
-        .domain-psychology {{ background: #1b3a2d; color: #7ee787; }}
-        .domain-chemistry {{ background: #3a361b; color: #e3b341; }}
-        .domain-consciousness {{ background: #21262d; color: #c9d1d9; }}
-        .domain-computer-science {{ background: #1b2d4a; color: #79c0ff; }}
-        .domain-spirituality {{ background: #2d1b3a; color: #d2a8ff; }}
-        .domain-neuroscience {{ background: #1b3a2d; color: #7ee787; }}
-        .domain-sociology {{ background: #3a1b2d; color: #ff9bce; }}
-        .domain-economics {{ background: #3a361b; color: #e3b341; }}
-        .domain-ecology {{ background: #1b3a1b; color: #7ee787; }}
-        .domain-medicine {{ background: #1b3a1b; color: #7ee787; }}
-        footer {{ text-align: center; padding: 40px 20px; color: #484f58; font-size: 0.85em; border-top: 1px solid #30363d; margin-top: 40px; }}
-        footer a {{ color: #58a6ff; text-decoration: none; }}
-        footer a:hover {{ text-decoration: underline; }}
-        .footer-privacy {{ font-size: 0.85em; color: #484f58; margin-top: 8px; }}
-        .results-count {{ color: #8b949e; font-size: 0.85em; margin: 4px 0 16px; }}
-        @media (max-width: 640px) {{ .concept-grid {{ grid-template-columns: 1fr; }} header h1 {{ font-size: 1.6em; }} .stats {{ gap: 10px; }} .stat {{ padding: 10px 16px; }} .header-content {{ gap: 8px; }} .translate-toggle {{ font-size: 0.8em; padding: 3px 10px; }} }}
+        .translate-controls {{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }}
+        .translate-toggle {{
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 6px;
+            padding: 6px 16px;
+            font-size: 0.9em;
+            color: #94A3B8;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            line-height: 1.5;
+        }}
+        .translate-toggle:hover {{
+            color: #FFFFFF;
+            border-color: #4F46E5;
+        }}
+        .translate-toggle.active {{
+            border-color: #4F46E5;
+            color: #4F46E5;
+        }}
+        #translate-select {{
+            background: rgba(255, 255, 255, 0.06) !important;
+            color: #E2E8F0 !important;
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            border-radius: 6px !important;
+            padding: 6px 12px !important;
+            font-size: 0.9em !important;
+            font-family: 'Inter', sans-serif !important;
+            cursor: pointer;
+            outline: none;
+            display: none;
+        }}
+        #translate-select:hover {{
+            border-color: #4F46E5 !important;
+        }}
+        #translate-select option {{
+            background: #1E1B4B;
+            color: #E2E8F0;
+        }}
+        #translate-select.visible {{
+            display: inline-block;
+        }}
+        .footer-privacy {{
+            font-size: 0.85em;
+            color: #484f58;
+            margin-top: 8px;
+        }}
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <button class="translate-toggle" id="translateToggle" onclick="toggleTranslation()">
-                    <span class="icon">🌐</span> <span id="toggleLabel">Translate</span>
-                </button>
-                <span class="header-sprout">🌱</span>
-                <h1>CADMIES</h1>
-            </div>
-            <p class="header-subtitle">A decentralized knowledge graph of interconnected scientific and philosophical concepts.<br>Content-addressed. Open-source. Forever.</p>
-            <a href="mycelium_map.html" class="map-link">Explore the Interactive Mycelium Map</a>
-                        <div class="stats">
-                <div class="stat"><div class="stat-number">{len(concepts)}</div><div class="stat-label">Concepts</div></div>
-                <div class="stat"><div class="stat-number">{len(domain_counts)}</div><div class="stat-label">Domains</div></div>
-                <div class="stat"><div class="stat-number">{total_edges}</div><div class="stat-label">Relationships</div></div>
-                <div class="stat"><div class="stat-number">CC BY-SA 4.0</div><div class="stat-label">License</div></div>
-                <div class="stat stat-orcid">
-                    <a href="https://orcid.org/0009-0000-8877-2731" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
-                        <div class="stat-number">0009-0000-8877-2731</div>
-                        <div class="stat-label">
-                            <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M256 128c0 70.686-57.314 128-128 128C57.314 256 0 198.686 0 128 0 57.314 57.314 0 128 0c70.686 0 128 57.314 128 128z" fill="#A6CE39"/>
-                                <path d="M86.4 106.4h25.6v43.2H86.4zM86.4 86.4h25.6v12.8H86.4z" fill="#fff"/>
-                                <path d="M130.4 106.4h25.6v43.2h-25.6zM130.4 86.4h25.6v12.8h-25.6z" fill="#fff"/>
-                                <path d="M174.4 106.4h12.8v43.2h-12.8zM174.4 86.4h12.8v12.8h-12.8z" fill="#fff"/>
-                            </svg>
-                            ORCID iD
+
+    <!-- SPLASH SCREEN -->
+    <div id="splash-overlay">
+        <div id="splash-content">
+            <div class="splash-emoji">🌱</div>
+            <h1 class="splash-title">CADMIES</h1>
+            <p class="splash-subtitle">Cosmium Angelo Digital Mycorrhizal<br />Intelligence EcoSystem</p>
+            <div class="splash-divider"></div>
+            <p class="splash-message">The mycelium awaits you.</p>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app" class="hidden">
+
+        <!-- DASHBOARD -->
+        <section id="page-dashboard" class="page active">
+            <div class="dashboard-container">
+                <div class="dashboard-header">
+                    <div class="header-center">
+                        <div class="header-title">
+                            <span class="header-emoji">🌱</span>
+                            <h1>CADMIES</h1>
                         </div>
+                        <div class="header-tagline">Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</div>
+                        <div class="translate-controls">
+                            <button class="translate-toggle" id="translateToggle" onclick="toggleTranslate()">
+                                <span class="icon">🌐</span> <span>Translate</span>
+                            </button>
+                            <select id="translate-select" onchange="handleLanguageChange(this.value)">
+                                <option value="">Select Language</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-card" data-stat="concepts">
+                        <div class="stat-number" id="stat-concepts">{len(concepts)}</div>
+                        <div class="stat-label">Concepts</div>
+                    </div>
+                    <div class="stat-card" data-stat="domains">
+                        <div class="stat-number" id="stat-domains">{len(domain_counts)}</div>
+                        <div class="stat-label">Domains</div>
+                    </div>
+                    <div class="stat-card" data-stat="relationships">
+                        <div class="stat-number" id="stat-relationships">{total_edges}</div>
+                        <div class="stat-label">Relationships</div>
+                    </div>
+                    <div class="stat-card" data-stat="license">
+                        <div class="stat-number">AGPLv3</div>
+                        <div class="stat-label">License</div>
+                    </div>
+                    <div class="stat-card stat-orcid" data-stat="orcid">
+                        <a href="https://orcid.org/0009-0000-8877-2731" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+                            <div class="stat-number">0009-0000-8877-2731</div>
+                            <div class="stat-label">ORCID iD</div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-grid">
+                    <div class="nav-card" data-page="mistral">
+                        <div class="nav-card-icon">👩‍🏫</div>
+                        <h3>Dr. Mistral</h3>
+                        <p>Chat with Dr. Mistral</p>
+                    </div>
+                    <div class="nav-card" data-page="browse">
+                        <div class="nav-card-icon">📚</div>
+                        <h3>Browse The Mycelium Library</h3>
+                        <p>Explore concepts in the library</p>
+                    </div>
+                    <div class="nav-card" data-page="add">
+                        <div class="nav-card-icon">➕</div>
+                        <h3>Add Concept</h3>
+                        <p>Nourish the network.</p>
+                    </div>
+                    <div class="nav-card" data-page="map">
+                        <div class="nav-card-icon">🕸️</div>
+                        <h3>Mycelium Map</h3>
+                        <p>See the connections!</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-footer">
+                    <span>Let the mycelium grow! 🌱</span>
+                </div>
+
+                <div class="referral-footer">
+                    <a href="https://www.digitalocean.com/?refcode=fd70c6e2650a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge" target="_blank" rel="noopener noreferrer">
+                        <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" />
                     </a>
+                    <a href="https://cape.co/get-cape?referral=ZCWW60AA" target="_blank" rel="noopener noreferrer">Cape Wireless</a>
+                    <a href="https://app.spheron.ai/signup?ref=ENXyV3608" target="_blank" rel="noopener noreferrer">Spheron AI</a>
+                </div>
+
+                <div class="footer-privacy" style="text-align:center;padding:12px 20px;max-width:900px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.06);">
+                    🌐 Translation powered by <a href="https://translate.zvo.cn" target="_blank" rel="noopener noreferrer" style="color:#58a6ff;text-decoration:none;">translate.js</a> — all processing occurs client-side. No data is sent to CADMIES servers.
                 </div>
             </div>
-    <main class="container">
-        <div class="search-bar">
-            <input type="text" id="search" placeholder="Search concepts..." oninput="filterConcepts()">
-        </div>
-        <div class="filters" id="filters">
-            <button class="filter-btn active" data-filter="all">All ({len(concepts)})</button>
-            {''.join(domain_filters)}
-        </div>
-        <div class="subdomain-row" id="subdomainRow">
-            <span class="subdomain-label">Subdomains:</span>
-        </div>
-        <div class="results-count" id="resultsCount">Showing {len(concepts)} of {len(concepts)} concepts</div>
-        <div class="concept-grid" id="conceptGrid">
-            {''.join(cards)}
-        </div>
-    </main>
-    <footer>
-        <div class="container">
-            <p>CADMIES — Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</p>
-            <p>All concepts licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>. Each concept has a permanent CID (Content Identifier) — the hash proves nothing was altered.</p>
-            <p><a href="sitemap.xml">Sitemap</a> · <a href="concepts.json">JSON Feed</a> · <a href="https://github.com/Project-Hierion/Hierion-CADMIES">GitHub</a></p>
-            <p class="footer-privacy">🌐 Translation powered by <a href="https://translate.zvo.cn" target="_blank" rel="noopener noreferrer">translate.js</a> — all processing occurs client-side. No data is sent to CADMIES servers.</p>
-        </div>
-    </footer>
+        </section>
+
+        <!-- DR MISTRAL -->
+        <section id="page-mistral" class="page">
+            <div class="full-page-container">
+                <div class="full-page-header">
+                    <button class="back-btn" data-page="dashboard">← Back to Dashboard</button>
+                    <h2>👩‍🏫 Dr. Mistral</h2>
+                    <p class="page-subtitle">Madame La Professeure de CADMIES</p>
+                </div>
+                <div class="chat-container">
+                    <div class="chat-display" id="chat-display">
+                        <div class="chat-message system">
+                            <span class="msg-label">Dr. Mistral:</span>
+                            <span class="msg-text">Bonjour, mon ami. I am Dr. Amanda Mistral. Ask me anything about the mycelium, and I shall consult the library.</span>
+                        </div>
+                    </div>
+                    <div class="chat-controls">
+                        <div class="control-group">
+                            <label>Model</label>
+                            <select id="chat-model">
+                                <option value="tinyllama:1.1b">TinyLlama (Fast)</option>
+                                <option value="mistral:7b" selected>Mistral (Deep)</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Tone</label>
+                            <select id="chat-tone">
+                                <option value="helpful">Helpful</option>
+                                <option value="scholarly">Scholarly</option>
+                                <option value="casual">Casual</option>
+                                <option value="french" selected>French</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label>Max Concepts</label>
+                            <select id="chat-max">
+                                <option value="3">3</option>
+                                <option value="5" selected>5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="all">All</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chat-input-area">
+                        <input type="text" id="chat-input" placeholder="Ask Dr. Mistral about the mycelium..." />
+                        <button id="chat-send">Send</button>
+                    </div>
+                    <div class="chat-status" id="chat-status">🟢 Connected to Dr. Mistral</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BROWSE -->
+        <section id="page-browse" class="page">
+            <div class="full-page-container">
+                <div class="full-page-header">
+                    <button class="back-btn" data-page="dashboard">← Back to Dashboard</button>
+                    <h2>📚 Browse The Library</h2>
+                    <p class="page-subtitle" id="browse-count">Loading concepts...</p>
+                </div>
+                <div class="browse-controls">
+                    <input type="text" id="browse-search" placeholder="Search concepts..." />
+                    <div class="domain-filters" id="browse-filters">
+                        <button class="filter-btn active" data-filter="all">All ({len(concepts)})</button>
+                        {''.join(domain_filter_buttons)}
+                    </div>
+                </div>
+                <div class="concept-grid" id="browse-grid">
+                    <p class="loading-text">Loading concepts...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ADD CONCEPT -->
+        <section id="page-add" class="page">
+            <div class="full-page-container">
+                <div class="full-page-header">
+                    <button class="back-btn" data-page="dashboard">← Back to Dashboard</button>
+                    <h2>➕ Add A Concept</h2>
+                    <p class="page-subtitle">Submit a new concept to the mycelium.</p>
+                </div>
+                <form id="add-form" class="add-form">
+                    <div class="form-section">
+                        <h4>Required</h4>
+                        <label>Human ID <span class="required">*</span>
+                            <input type="text" id="add-human-id" placeholder="snake_case_identifier" required />
+                        </label>
+                        <label>Title <span class="required">*</span>
+                            <input type="text" id="add-title" placeholder="Concept Title" required />
+                        </label>
+                        <label>Definition <span class="required">*</span>
+                            <textarea id="add-definition" rows="3" placeholder="Clear 1–3 sentence definition"></textarea>
+                        </label>
+                        <label>Domain <span class="required">*</span>
+                            <select id="add-domain">
+                                <option value="Philosophy">Philosophy</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Biology">Biology</option>
+                                <option value="Mathematics">Mathematics</option>
+                                <option value="Consciousness">Consciousness</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Ethics">Ethics</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Psychology">Psychology</option>
+                                <option value="Spirituality">Spirituality</option>
+                                <option value="Neuroscience">Neuroscience</option>
+                                <option value="Sociology">Sociology</option>
+                                <option value="Economics">Economics</option>
+                                <option value="Ecology">Ecology</option>
+                                <option value="Medicine">Medicine</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </label>
+                        <label>Type <span class="required">*</span>
+                            <select id="add-type">
+                                <option value="PhilosophicalPrinciple">Philosophical Principle</option>
+                                <option value="ScientificTheory">Scientific Theory</option>
+                                <option value="ScientificLaw">Scientific Law</option>
+                                <option value="ScientificHypothesis">Scientific Hypothesis</option>
+                                <option value="MetaphysicalConcept">Metaphysical Concept</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-section">
+                        <h4>Optional — Enrichment</h4>
+                        <label>Mantra <input type="text" id="add-mantra" placeholder="Short memorable phrase" /></label>
+                        <label>Poetic Version <input type="text" id="add-poetic" placeholder="One beautiful sentence" /></label>
+                        <label>Axioms (one per line)
+                            <textarea id="add-axioms" rows="3" placeholder="Core truths of the concept"></textarea>
+                        </label>
+                        <label>Genesis (origin story)
+                            <textarea id="add-genesis" rows="2" placeholder="How this concept came to be"></textarea>
+                        </label>
+                    </div>
+                    <div class="form-section">
+                        <h4>Optional — Relationships</h4>
+                        <label>Builds Upon <input type="text" id="add-builds" placeholder="human_id, human_id" /></label>
+                        <label>Related To <input type="text" id="add-related" placeholder="human_id, human_id" /></label>
+                        <label>Contradicts <input type="text" id="add-contradicts" placeholder="human_id, human_id" /></label>
+                    </div>
+                    <div class="form-section">
+                        <h4>Optional — Difficulty Levels</h4>
+                        <label>Beginner <textarea id="add-beginner" rows="2" placeholder="Simple explanation"></textarea></label>
+                        <label>Intermediate <textarea id="add-intermediate" rows="2" placeholder="Domain-fluent explanation"></textarea></label>
+                        <label>Expert <textarea id="add-expert" rows="2" placeholder="Full depth explanation"></textarea></label>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Submit to Mycelium</button>
+                        <button type="reset" class="btn-secondary">Reset</button>
+                    </div>
+                </form>
+                <div id="add-result" class="hidden"></div>
+            </div>
+        </section>
+
+        <!-- MAP -->
+        <section id="page-map" class="page">
+            <div class="full-page-container">
+                <div class="full-page-header">
+                    <button class="back-btn" data-page="dashboard">← Back to Dashboard</button>
+                    <h2>🕸️ The Mycelium Map</h2>
+                    <p class="page-subtitle">Interactive visualization of the CADMIES knowledge network</p>
+                </div>
+                <div class="map-content">
+                    <div class="map-info">
+                        <p>The mycelium map is a force-directed graph showing all concepts in the CADMIES knowledge network. Each node is a concept. Each connection is a relationship — builds_upon, related_to, or contradicts.</p>
+                        <ul>
+                            <li>🔄 Drag nodes to rearrange</li>
+                            <li>🔍 Scroll to zoom</li>
+                            <li>👆 Hover for concept name</li>
+                            <li>🖱️ Click to highlight connections</li>
+                        </ul>
+                        <div class="map-status" id="map-status">
+                            <span class="status-dot">●</span> Checking map file...
+                        </div>
+                        <button id="map-launch" class="btn-primary">🕸️ Launch The Mycelium Map</button>
+                        <p class="map-note">Opens in a new tab. Requires a modern browser with JavaScript enabled.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="app.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/xnx3/translate/translate.js/translate.js"></script>
     <script>
-        let currentFilter = 'all';
-        const totalConcepts = {len(concepts)};
+        document.addEventListener('DOMContentLoaded', function() {{
+            translate.language.setLocal('english');
+            translate.execute();
+        }});
+
         let translationActive = false;
+        let currentLanguage = '';
+        const dropdown = document.getElementById('translate-select');
 
-        function toggleTranslation() {{
-            if (!translationActive) {{
-                if (typeof translate === 'undefined') {{
-                    const script = document.createElement('script');
-                    script.src = 'https://cdn.staticfile.net/translate.js/3.15.6/translate.min.js';
-                    script.onload = function() {{
-                        translate.execute();
-                        translationActive = true;
-                        updateToggleUI(true);
-                        try {{ localStorage.setItem('translateActive', 'true'); }} catch(e) {{}}
-                    }};
-                    document.head.appendChild(script);
-                }} else {{
-                    translate.execute();
-                    translationActive = true;
-                    updateToggleUI(true);
-                    try {{ localStorage.setItem('translateActive', 'true'); }} catch(e) {{}}
-                }}
+        function toggleTranslate() {{
+            if (typeof translate === 'undefined') {{
+                console.warn('translate.js not loaded yet');
+                return;
+            }}
+            if (dropdown.classList.contains('visible')) {{
+                dropdown.classList.remove('visible');
             }} else {{
-                if (typeof translate !== 'undefined' && translate.reset) {{
-                    translate.reset();
-                }} else {{
-                    location.reload();
+                dropdown.classList.add('visible');
+                if (dropdown.options.length <= 1) {{
+                    populateLanguages();
                 }}
-                translationActive = false;
-                updateToggleUI(false);
-                try {{ localStorage.setItem('translateActive', 'false'); }} catch(e) {{}}
+                if (!currentLanguage) {{
+                    dropdown.value = '';
+                }}
             }}
         }}
 
-        function updateToggleUI(active) {{
-            const btn = document.getElementById('translateToggle');
-            const label = document.getElementById('toggleLabel');
-            if (active) {{
-                btn.classList.add('active');
-                label.textContent = 'English';
-            }} else {{
-                btn.classList.remove('active');
-                label.textContent = 'Translate';
-            }}
+        function populateLanguages() {{
+            const languages = [
+                {{ code: 'en', name: 'English' }},
+                {{ code: 'es', name: 'Español' }},
+                {{ code: 'fr', name: 'Français' }},
+                {{ code: 'de', name: 'Deutsch' }},
+                {{ code: 'it', name: 'Italiano' }},
+                {{ code: 'pt', name: 'Português' }},
+                {{ code: 'ru', name: 'Русский' }},
+                {{ code: 'ja', name: '日本語' }},
+                {{ code: 'ko', name: '한국어' }},
+                {{ code: 'zh-cn', name: '简体中文' }},
+                {{ code: 'zh-tw', name: '繁體中文' }},
+                {{ code: 'ar', name: 'العربية' }},
+                {{ code: 'hi', name: 'हिन्दी' }},
+                {{ code: 'bn', name: 'বাংলা' }},
+                {{ code: 'pa', name: 'ਪੰਜਾਬੀ' }},
+                {{ code: 'ta', name: 'தமிழ்' }},
+                {{ code: 'te', name: 'తెలుగు' }},
+                {{ code: 'ml', name: 'മലയാളം' }},
+                {{ code: 'kn', name: 'ಕನ್ನಡ' }},
+                {{ code: 'mr', name: 'मराठी' }},
+                {{ code: 'gu', name: 'ગુજરાતી' }},
+                {{ code: 'or', name: 'ଓଡ଼ିଆ' }},
+                {{ code: 'as', name: 'অসমীয়া' }},
+                {{ code: 'mai', name: 'मैथिली' }},
+                {{ code: 'sat', name: 'ᱥᱟᱱᱛᱟᱲᱤ' }},
+                {{ code: 'th', name: 'ไทย' }},
+                {{ code: 'lo', name: 'ລາວ' }},
+                {{ code: 'my', name: 'မြန်မာ' }},
+                {{ code: 'km', name: 'ខ្មែរ' }},
+                {{ code: 'vi', name: 'Tiếng Việt' }},
+                {{ code: 'id', name: 'Bahasa Indonesia' }},
+                {{ code: 'ms', name: 'Bahasa Melayu' }},
+                {{ code: 'tl', name: 'Tagalog' }},
+                {{ code: 'pl', name: 'Polski' }},
+                {{ code: 'uk', name: 'Українська' }},
+                {{ code: 'ro', name: 'Română' }},
+                {{ code: 'nl', name: 'Nederlands' }},
+                {{ code: 'sv', name: 'Svenska' }},
+                {{ code: 'no', name: 'Norsk' }},
+                {{ code: 'da', name: 'Dansk' }},
+                {{ code: 'fi', name: 'Suomi' }},
+                {{ code: 'el', name: 'Ελληνικά' }},
+                {{ code: 'tr', name: 'Türkçe' }},
+                {{ code: 'he', name: 'עברית' }},
+                {{ code: 'fa', name: 'فارسی' }},
+                {{ code: 'ur', name: 'اردو' }}
+            ];
+            dropdown.innerHTML = '<option value="">Select Language</option>';
+            languages.forEach(function(lang) {{
+                const option = document.createElement('option');
+                option.value = lang.code;
+                option.textContent = lang.name;
+                dropdown.appendChild(option);
+            }});
         }}
 
-        (function() {{
+        function getTranslateLangName(code) {{
+            const map = {{
+                'en': 'english', 'es': 'spanish', 'fr': 'french', 'de': 'deutsch',
+                'it': 'italian', 'pt': 'portuguese', 'ru': 'russian', 'ja': 'japanese',
+                'ko': 'korean', 'zh-cn': 'chinese_simplified', 'zh-tw': 'chinese_traditional',
+                'ar': 'arabic', 'hi': 'hindi', 'bn': 'bengali', 'pa': 'punjabi',
+                'ta': 'tamil', 'te': 'telugu', 'ml': 'malayalam', 'kn': 'kannada',
+                'mr': 'marathi', 'gu': 'gujarati', 'or': 'oriya', 'as': 'assamese',
+                'mai': 'maithili', 'sat': 'santali', 'th': 'thai', 'lo': 'lao',
+                'my': 'burmese', 'km': 'khmer', 'vi': 'vietnamese', 'id': 'indonesian',
+                'ms': 'malay', 'tl': 'tagalog', 'pl': 'polish', 'uk': 'ukrainian',
+                'ro': 'romanian', 'nl': 'dutch', 'sv': 'swedish', 'no': 'norwegian',
+                'da': 'danish', 'fi': 'finnish', 'el': 'greek', 'tr': 'turkish',
+                'he': 'hebrew', 'fa': 'persian', 'ur': 'urdu'
+            }};
+            return map[code] || code;
+        }}
+
+        function handleLanguageChange(langCode) {{
+            if (!langCode) return;
+            currentLanguage = langCode;
+            translationActive = true;
+            const langName = getTranslateLangName(langCode);
+            if (typeof translate !== 'undefined') {{
+                translate.changeLanguage(langName);
+            }}
+            dropdown.classList.remove('visible');
             try {{
-                const saved = localStorage.getItem('translateActive');
-                if (saved === 'true') {{
+                localStorage.setItem('translateLanguage', langCode);
+                localStorage.setItem('translateActive', 'true');
+            }} catch(e) {{}}
+            document.dispatchEvent(new CustomEvent('translateLanguageChange', {{
+                detail: {{ language: langCode }}
+            }}));
+        }}
+
+        function checkSavedLanguage() {{
+            try {{
+                const savedLang = localStorage.getItem('translateLanguage');
+                const savedActive = localStorage.getItem('translateActive');
+                if (savedLang && savedActive === 'true') {{
+                    currentLanguage = savedLang;
+                    translationActive = true;
                     setTimeout(function() {{
                         if (typeof translate !== 'undefined') {{
-                            translate.execute();
-                            translationActive = true;
-                            updateToggleUI(true);
-                        }} else {{
-                            const script = document.createElement('script');
-                            script.src = 'https://cdn.staticfile.net/translate.js/3.15.6/translate.min.js';
-                            script.onload = function() {{
-                                translate.execute();
-                                translationActive = true;
-                                updateToggleUI(true);
-                            }};
-                            document.head.appendChild(script);
+                            const langName = getTranslateLangName(savedLang);
+                            translate.changeLanguage(langName);
                         }}
                     }}, 500);
                 }}
-            }} catch(e) {{ }}
-        }})();
+            }} catch(e) {{}}
+        }}
+
+        function resetTranslation() {{
+            if (typeof translate !== 'undefined' && translate.reset) {{
+                translate.reset();
+            }} else {{
+                location.reload();
+            }}
+            translationActive = false;
+            currentLanguage = '';
+            dropdown.value = '';
+            try {{
+                localStorage.setItem('translateActive', 'false');
+                localStorage.removeItem('translateLanguage');
+            }} catch(e) {{}}
+        }}
+
+        setTimeout(checkSavedLanguage, 1000);
 
         document.addEventListener('translateLanguageChange', function(e) {{
             if (e.detail && e.detail.language) {{
-                const label = document.getElementById('toggleLabel');
-                label.textContent = e.detail.language;
-                document.getElementById('translateToggle').classList.add('active');
+                currentLanguage = e.detail.language;
+                translationActive = true;
+                try {{
+                    localStorage.setItem('translateLanguage', e.detail.language);
+                    localStorage.setItem('translateActive', 'true');
+                }} catch(e) {{}}
             }}
         }});
 
-        function setFilter(filter, btn) {{
-            currentFilter = filter;
-            document.querySelectorAll('#filters .filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.getElementById('subdomainRow').classList.remove('visible');
-            filterConcepts();
-        }}
-
-        function filterConcepts() {{
-            const searchTerm = document.getElementById('search').value.toLowerCase();
-            const cards = document.querySelectorAll('.concept-card');
-            let visible = 0;
-
-            cards.forEach(card => {{
-                const domain = card.dataset.domain;
-                const searchData = card.dataset.search;
-                const matchesFilter = currentFilter === 'all' || domain === currentFilter;
-                const matchesSearch = searchData.includes(searchTerm);
-                if (matchesFilter && matchesSearch) {{
-                    card.classList.remove('hidden');
-                    visible++;
-                }} else {{
-                    card.classList.add('hidden');
-                }}
-            }});
-
-            document.getElementById('resultsCount').textContent = 'Showing ' + visible + ' of ' + totalConcepts + ' concepts';
-        }}
-
-        document.querySelectorAll('#filters .filter-btn').forEach(function(btn) {{
-            btn.addEventListener('click', function() {{
-                var filter = this.dataset.filter;
-                setFilter(filter, this);
-            }});
+        document.addEventListener('click', function(e) {{
+            const controls = document.querySelector('.translate-controls');
+            if (controls && !controls.contains(e.target)) {{
+                dropdown.classList.remove('visible');
+            }}
         }});
-
-        document.getElementById('search').addEventListener('input', filterConcepts);
     </script>
 </body>
 </html>'''
 
 
 def build_json_feed(concepts):
-    """Build a JSON-LD structured data feed with domain info."""
+    """Build a JSON-LD structured data feed with domain info and relationships."""
     items = []
     for c in concepts:
         items.append({
@@ -671,6 +891,17 @@ def build_json_feed(concepts):
             "url": f"{SITE_URL}/index.html#{c['human_id']}",
             "domain": c["domain"],
             "canonical_domain": c["canonical_domain"],
+            "relationships": {
+                "builds_upon": [{"id": r["id"], "title": r["title"]} for r in c["relationships"].get("builds_upon", [])],
+                "related_to": [{"id": r["id"], "title": r["title"]} for r in c["relationships"].get("related_to", [])],
+                "specializes": [{"id": r["id"], "title": r["title"]} for r in c["relationships"].get("specializes", [])],
+                "contradicts": [{"id": r["id"], "title": r["title"]} for r in c["relationships"].get("contradicts", [])],
+            },
+            "extra": {
+                "insight": c.get("insight", ""),
+                "poetic_version": c.get("poetic_version", ""),
+                "mantra": c.get("mantra", ""),
+            },
         })
     return json.dumps({"@context": "https://schema.org", "@graph": items}, indent=2)
 
@@ -690,7 +921,7 @@ def main():
     print("=" * 60)
     print(f"CADMIES PUBLIC MYCELIUM GATEWAY GENERATOR v{VERSION}")
     print(f"Output: {OUTPUT_DIR}")
-    print("translate.js integration: ENABLED (client-side, privacy-respecting)")
+    print("App shell + data layer (cards render client-side from concepts.json)")
     print("=" * 60)
 
     concepts, domain_counts, subdomain_index = gather_public_concepts()
@@ -699,16 +930,15 @@ def main():
         for c in concepts
     )
     print(f"\nLoaded {len(concepts)} concepts across {len(domain_counts)} canonical domains with {total_edges} edges")
-    print(f"Subdomain index: {len(subdomain_index)} canonical domains with subdomains")
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    print("Generating index.html (single-page gateway with translate.js)...")
+    print("Generating index.html (app shell)...")
     index_html = build_index_page(concepts, domain_counts, subdomain_index)
     with open(OUTPUT_DIR / "index.html", "w") as f:
         f.write(index_html)
 
-    print("Generating concepts.json (structured data with domain fields)...")
+    print("Generating concepts.json (structured data + relationships)...")
     json_feed = build_json_feed(concepts)
     with open(OUTPUT_DIR / "concepts.json", "w") as f:
         f.write(json_feed)
@@ -723,17 +953,11 @@ def main():
         nojekyll.touch()
 
     print(f"\nPublic gateway generated: {OUTPUT_DIR}")
-    print(f"   index.html — single-page app with {len(concepts)} concept cards")
-    print(f"   concepts.json — JSON-LD structured data with domain fields")
+    print(f"   index.html — app shell with dashboard, browse, translate")
+    print(f"   concepts.json — JSON-LD with relationships")
     print(f"   sitemap.xml — search engine sitemap")
-    print(f"   .nojekyll — bypass Jekyll processing")
-    print(f"\nDomain filter pills now functional. Click a domain to filter cards.")
-    print(f"   Subdomain tier is designed but not yet implemented.")
-    print(f"\ntranslate.js integration:")
-    print(f"   Toggle left of CADMIES title — click to activate client-side translation")
-    print(f"   Language preference stored in localStorage")
-    print(f"   All processing occurs client-side — no data sent to CADMIES servers")
-    print(f"\nDeploy: push to GitHub, Pages serves from /docs folder")
+    print(f"\nDesign files (style.css, splash.css, app.js) are maintained separately.")
+    print(f"Deploy: push to GitHub, Pages serves from /docs folder")
 
 
 if __name__ == "__main__":
