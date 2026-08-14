@@ -258,6 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const relLabels = {
             builds_upon: 'Builds Upon',
             related_to: 'Related To',
+            specializes: 'Specializes',
             contradicts: 'Contradicts'
         };
         for (const [key, label] of Object.entries(relLabels)) {
