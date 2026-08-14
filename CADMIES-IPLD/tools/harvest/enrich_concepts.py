@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / tools
-Document_ID: CA-2026-042-TOOL
-Version: 1.1.0
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [paths.py, cid_generator.py, scientific_validator.py, provenance_manager.py]
----
 """
 File: enrich_concepts.py
 Tool: CADMIES Concept Enrichment Pipeline
