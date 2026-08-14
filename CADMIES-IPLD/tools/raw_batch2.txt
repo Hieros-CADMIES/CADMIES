@@ -1,0 +1,31 @@
+{
+    "relationships": {
+        "anatta_non_self": [
+            {"target": "anatta_not_self", "type": "builds_upon"},
+            {"target": "anatta_perspective", "type": "builds_upon"}
+        ],
+        "anatta_not_self": [
+            {"target": "anatta_non_self", "type": "builds_upon"},
+            {"target": "anatta_perspective", "type": "builds_upon"}
+        ],
+        "anatta_perspective": [
+            {"target": "anatta_non_self", "type": "builds_upon"},
+            {"target": "anatta_not_self", "type": "builds_upon"}
+        ],
+        "anchorfang_ratcheting_mechanism": [
+            {"target": "antibiotic_resistance", "type": "related_to"}
+        ],
+        "antibiotic_resistance": [],
+        "archetypal_pattern": [
+            {"target": "art_as_a_window_and_proposal", "type": "specializes"},
+            {"target": "art_as_a_window_into_different_mindsets", "type": "specializes"},
+            {"target": "art_as_window_into_the_mind", "type": "specializes"}
+        ],
+        "art_as_a_window_and_proposal": [
+            {"target": "archetypal_pattern", "type": "builds_upon"},
+            {"target": "art_as_a_window_into_different_mindsets", "type": "contradicts"},
+            {"target": "art_as_window_into_the_mind", "type": "contradicts"}
+        ],
+        "art_as_a_window_into_different_mindsets": [
+            {"target": "archetypal_pattern", "type": "builds_upon"},
+            {"target": "art_as_a_window_and_proposal", "type": "contradicts"}

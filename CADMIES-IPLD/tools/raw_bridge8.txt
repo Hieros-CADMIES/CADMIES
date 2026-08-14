@@ -1,0 +1,32 @@
+{
+     "relationships": {
+       "synesthetic_consciousness": [
+         {"target": "unified_frequency", "type": "related_to"},
+         {"target": "vibration_as_universal_connector", "type": "related_to"},
+         {"target": "universal_action_and_evolution_of_tools", "type": "builds_upon"}
+       ],
+       "the_journey_is_the_destination": [
+         {"target": "time_as_spatialization", "type": "contradicts"},
+         {"target": "wise_attention", "type": "related_to"}
+       ],
+       "time_as_spatialization": [
+         {"target": "the_journey_is_the_destination", "type": "contradicts"},
+         {"target": "universe_as_symphony", "type": "related_to"}
+       ],
+       "unified_frequency": [
+         {"target": "synesthetic_consciousness", "type": "related_to"},
+         {"target": "universal_action_and_evolution_of_tools", "type": "related_to"},
+         {"target": "vibration_as_universal_connector", "type": "related_to"}
+       ],
+       "universal_action_and_evolution_of_tools": [
+         {"target": "synesthetic_consciousness", "type": "builds_upon"},
+         {"target": "unified_frequency", "type": "related_to"},
+         {"target": "vibration_as_universal_connector", "type": "related_to"}
+       ],
+       "universe_as_symphony": [
+         {"target": "time_as_spatialization", "type": "related_to"},
+         {"target": "vibration_as_universal_connector", "type": "related_to"}
+       ],
+       "vibration_as_universal_connector": [
+         {"target": "synesthetic_consciousness", "type": "related_to"},
+         {"target": "unified_frequency", "type": "related_to"}

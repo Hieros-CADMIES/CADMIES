@@ -1,0 +1,36 @@
+{
+    "relationships": {
+        "perceived_reality": [
+            {"target": "perceiver_centricity", "type": "builds_upon"},
+            {"target": "perceptual_frames_as_intelligence_multipliers", "type": "related_to"}
+        ],
+        "perceiver_centricity": [
+            {"target": "perceived_reality", "type": "specializes"},
+            {"target": "perceptual_click", "type": "related_to"}
+        ],
+        "perception_plasticity": [
+            {"target": "perceptual_frames_as_intelligence_multipliers", "type": "builds_upon"},
+            {"target": "perceptual_shift", "type": "related_to"}
+        ],
+        "perceptual_click": [
+            {"target": "perceiver_centricity", "type": "leads_to"},
+            {"target": "perceptual_transformation", "type": "related_to"}
+        ],
+        "perceptual_frames_as_intelligence_multipliers": [
+            {"target": "perceived_reality", "type": "related_to"},
+            {"target": "perception_plasticity", "type": "depends_on"}
+        ],
+        "perceptual_shift": [
+            {"target": "perception_plasticity", "type": "is_a_type_of"},
+            {"target": "perceptual_transformation", "type": "contradicts"}
+        ],
+        "perceptual_transformation": [
+            {"target": "perceptual_click", "type": "results_from"},
+            {"target": "perceptual_shift", "type": "contradicts"}
+        ],
+        "perceptual_unmaking": [
+            {"target": "peripheral_vision_discovery", "type": "related_to"}
+        ],
+        "performance_of_deterrence": [],
+        "peripheral_vision_discovery": [
+            {"target": "perceptual_unmaking", "type": "is_a_form_of"}

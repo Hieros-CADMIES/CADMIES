@@ -1,0 +1,34 @@
+{
+    "relationships": {
+        "perpetual_knowledge_universe": [
+            {"target": "philosophical_pattern_finder_v1", "type": "builds_upon"},
+            {"target": "phylogenetic_concept_creation", "type": "builds_upon"}
+        ],
+        "perspectival_diversity_in_art": [
+            {"target": "physics_beyond_materialism", "type": "related_to"}
+        ],
+        "ph_scale": [
+            {"target": "photosynthesis", "type": "related_to"},
+            {"target": "placebo_effect", "type": "related_to"}
+        ],
+        "philanthropy_catalyst": [
+            {"target": "physics_beyond_materialism", "type": "related_to"}
+        ],
+        "philosophical_pattern_finder_v1": [
+            {"target": "perpetual_knowledge_universe", "type": "specializes"},
+            {"target": "phylogenetic_concept_creation", "type": "related_to"}
+        ],
+        "photosynthesis": [
+            {"target": "ph_scale", "type": "specializes"},
+            {"target": "physics_of_poetic_eternity", "type": "related_to"}
+        ],
+        "phylogenetic_concept_creation": [
+            {"target": "perpetual_knowledge_universe", "type": "specializes"},
+            {"target": "philosophical_pattern_finder_v1", "type": "related_to"}
+        ],
+        "physics_beyond_materialism": [
+            {"target": "perspectival_diversity_in_art", "type": "related_to"},
+            {"target": "philanthropy_catalyst", "type": "related_to"}
+        ],
+        "physics_of_poetic_eternity": [
+            {"target": "photosynthesis", "type": "related_to"}

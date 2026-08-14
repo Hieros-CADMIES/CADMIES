@@ -4,9 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CADMIES — Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</title>
-    <meta name="description" content="A decentralized knowledge graph of interconnected scientific and philosophical concepts. Content-addressed. Open-source. Forever." />
+    <meta name="description" content="A decentralized knowledge graph of 636 interconnected scientific and philosophical concepts. Content-addressed. Open-source. Forever." />
     <link rel="icon" type="image/png" href="favicon.png" />
-    
+
     <link rel="stylesheet" href="splash.css" />
     <link rel="stylesheet" href="style.css" />
 
@@ -15,7 +15,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
 
     <style>
-        /* Translate controls — side by side */
         .translate-controls {
             display: flex;
             align-items: center;
@@ -24,8 +23,6 @@
             margin-top: 8px;
             flex-wrap: wrap;
         }
-
-        /* Translate toggle button */
         .translate-toggle {
             display: inline-flex;
             align-items: center;
@@ -49,8 +46,6 @@
             border-color: #4F46E5;
             color: #4F46E5;
         }
-
-        /* translate.js dropdown — dark theme override */
         #translate-select {
             background: rgba(255, 255, 255, 0.06) !important;
             color: #E2E8F0 !important;
@@ -73,7 +68,6 @@
         #translate-select.visible {
             display: inline-block;
         }
-
         .footer-privacy {
             font-size: 0.85em;
             color: #484f58;
@@ -83,7 +77,7 @@
 </head>
 <body>
 
-    <!-- ============ SPLASH SCREEN ============ -->
+    <!-- SPLASH SCREEN -->
     <div id="splash-overlay">
         <div id="splash-content">
             <div class="splash-emoji">🌱</div>
@@ -94,14 +88,12 @@
         </div>
     </div>
 
-    <!-- ============ MAIN APP ============ -->
+    <!-- MAIN APP -->
     <div id="app" class="hidden">
 
-        <!-- ===== PAGE: DASHBOARD ===== -->
+        <!-- DASHBOARD -->
         <section id="page-dashboard" class="page active">
             <div class="dashboard-container">
-
-                <!-- Dashboard Header -->
                 <div class="dashboard-header">
                     <div class="header-center">
                         <div class="header-title">
@@ -109,7 +101,6 @@
                             <h1>CADMIES</h1>
                         </div>
                         <div class="header-tagline">Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem</div>
-                        <!-- Translate controls: button + dropdown side by side -->
                         <div class="translate-controls">
                             <button class="translate-toggle" id="translateToggle" onclick="toggleTranslate()">
                                 <span class="icon">🌐</span> <span>Translate</span>
@@ -121,18 +112,17 @@
                     </div>
                 </div>
 
-                <!-- Stats Grid -->
                 <div class="stats-grid" id="stats-grid">
                     <div class="stat-card" data-stat="concepts">
-                        <div class="stat-number" id="stat-concepts">—</div>
+                        <div class="stat-number" id="stat-concepts">636</div>
                         <div class="stat-label">Concepts</div>
                     </div>
                     <div class="stat-card" data-stat="domains">
-                        <div class="stat-number" id="stat-domains">—</div>
+                        <div class="stat-number" id="stat-domains">108</div>
                         <div class="stat-label">Domains</div>
                     </div>
                     <div class="stat-card" data-stat="relationships">
-                        <div class="stat-number" id="stat-relationships">—</div>
+                        <div class="stat-number" id="stat-relationships">1507</div>
                         <div class="stat-label">Relationships</div>
                     </div>
                     <div class="stat-card" data-stat="license">
@@ -142,27 +132,11 @@
                     <div class="stat-card stat-orcid" data-stat="orcid">
                         <a href="https://orcid.org/0009-0000-8877-2731" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
                             <div class="stat-number">0009-0000-8877-2731</div>
-                            <div class="stat-label">
-                                <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;fill:#4F46E5;display:inline-block;vertical-align:middle;margin-right:4px;">
-                                    <path d="M256 128c0 70.686-57.314 128-128 128C57.314 256 0 198.686 0 128 0 57.314 57.314 0 128 0c70.686 0 128 57.314 128 128z" fill="#A6CE39"/>
-                                    <path d="M86.4 106.4h25.6v43.2H86.4zM86.4 86.4h25.6v12.8H86.4z" fill="#fff"/>
-                                    <path d="M130.4 106.4h25.6v43.2h-25.6zM130.4 86.4h25.6v12.8h-25.6z" fill="#fff"/>
-                                    <path d="M174.4 106.4h12.8v43.2h-12.8zM174.4 86.4h12.8v12.8h-12.8z" fill="#fff"/>
-                                </svg>
-                                ORCID iD
-                            </div>
+                            <div class="stat-label">ORCID iD</div>
                         </a>
                     </div>
                 </div>
 
-                <!-- Domain Dropdown -->
-                <div id="domain-dropdown" class="domain-dropdown hidden">
-                    <h4>All Domains</h4>
-                    <div id="domain-list" class="domain-list"></div>
-                    <p class="dropdown-hint">Click a domain to filter concepts in Browse.</p>
-                </div>
-
-                <!-- Navigation Cards -->
                 <div class="nav-grid">
                     <div class="nav-card" data-page="mistral">
                         <div class="nav-card-icon">👩‍🏫</div>
@@ -182,16 +156,14 @@
                     <div class="nav-card" data-page="map">
                         <div class="nav-card-icon">🕸️</div>
                         <h3>Mycelium Map</h3>
-                        <p>See the connections! 👀</p>
+                        <p>See the connections!</p>
                     </div>
                 </div>
 
-                <!-- Footer -->
                 <div class="dashboard-footer">
                     <span>Let the mycelium grow! 🌱</span>
                 </div>
 
-                <!-- Referral Footer -->
                 <div class="referral-footer">
                     <a href="https://www.digitalocean.com/?refcode=fd70c6e2650a&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=badge" target="_blank" rel="noopener noreferrer">
                         <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge%201.svg" alt="DigitalOcean Referral Badge" />
@@ -200,15 +172,13 @@
                     <a href="https://app.spheron.ai/signup?ref=ENXyV3608" target="_blank" rel="noopener noreferrer">Spheron AI</a>
                 </div>
 
-                <!-- Privacy Note -->
                 <div class="footer-privacy" style="text-align:center;padding:12px 20px;max-width:900px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.06);">
                     🌐 Translation powered by <a href="https://translate.zvo.cn" target="_blank" rel="noopener noreferrer" style="color:#58a6ff;text-decoration:none;">translate.js</a> — all processing occurs client-side. No data is sent to CADMIES servers.
                 </div>
-
             </div>
         </section>
 
-        <!-- ===== PAGE: DR. MISTRAL ===== -->
+        <!-- DR MISTRAL -->
         <section id="page-mistral" class="page">
             <div class="full-page-container">
                 <div class="full-page-header">
@@ -216,7 +186,6 @@
                     <h2>👩‍🏫 Dr. Mistral</h2>
                     <p class="page-subtitle">Madame La Professeure de CADMIES</p>
                 </div>
-
                 <div class="chat-container">
                     <div class="chat-display" id="chat-display">
                         <div class="chat-message system">
@@ -224,7 +193,6 @@
                             <span class="msg-text">Bonjour, mon ami. I am Dr. Amanda Mistral. Ask me anything about the mycelium, and I shall consult the library.</span>
                         </div>
                     </div>
-
                     <div class="chat-controls">
                         <div class="control-group">
                             <label>Model</label>
@@ -253,18 +221,16 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="chat-input-area">
                         <input type="text" id="chat-input" placeholder="Ask Dr. Mistral about the mycelium..." />
                         <button id="chat-send">Send</button>
                     </div>
-
                     <div class="chat-status" id="chat-status">🟢 Connected to Dr. Mistral</div>
                 </div>
             </div>
         </section>
 
-        <!-- ===== PAGE: BROWSE LIBRARY ===== -->
+        <!-- BROWSE -->
         <section id="page-browse" class="page">
             <div class="full-page-container">
                 <div class="full-page-header">
@@ -272,40 +238,20 @@
                     <h2>📚 Browse The Library</h2>
                     <p class="page-subtitle" id="browse-count">Loading concepts...</p>
                 </div>
-
                 <div class="browse-controls">
                     <input type="text" id="browse-search" placeholder="Search concepts..." />
                     <div class="domain-filters" id="browse-filters">
-                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn active" data-filter="all">All (636)</button>
+                        <button class="filter-btn" data-filter="Physics">Physics (112)</button><button class="filter-btn" data-filter="Philosophy">Philosophy (219)</button><button class="filter-btn" data-filter="Biology">Biology (54)</button><button class="filter-btn" data-filter="Mathematics">Mathematics (5)</button><button class="filter-btn" data-filter="Consciousness">Consciousness Studies (2)</button><button class="filter-btn" data-filter="Chemistry">Chemistry (5)</button><button class="filter-btn" data-filter="Ethics">Ethics (6)</button><button class="filter-btn" data-filter="Computer Science">Computer Science (20)</button><button class="filter-btn" data-filter="Psychology">Psychology (18)</button><button class="filter-btn" data-filter="Spirituality">Spirituality (15)</button><button class="filter-btn" data-filter="Neuroscience">Neuroscience (19)</button><button class="filter-btn" data-filter="Sociology">Sociology (20)</button><button class="filter-btn" data-filter="Economics">Economics (4)</button><button class="filter-btn" data-filter="Ecology">Ecology (3)</button><button class="filter-btn" data-filter="Medicine">Medicine (3)</button>
                     </div>
                 </div>
-
                 <div class="concept-grid" id="browse-grid">
                     <p class="loading-text">Loading concepts...</p>
-                </div>
-
-                <!-- Detail Modal -->
-                <div id="detail-modal" class="modal hidden">
-                    <div class="modal-content">
-                        <span class="modal-close">&times;</span>
-                        <div id="detail-body">
-                            <h2 id="detail-title">Concept</h2>
-                            <div id="detail-badges"></div>
-                            <p id="detail-definition"></p>
-                            <div id="detail-mantra"></div>
-                            <div id="detail-poetic"></div>
-                            <div id="detail-axioms"></div>
-                            <div id="detail-relationships"></div>
-                            <div id="detail-metadata"></div>
-                            <div id="detail-difficulty"></div>
-                            <div id="detail-cid"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- ===== PAGE: ADD CONCEPT ===== -->
+        <!-- ADD CONCEPT -->
         <section id="page-add" class="page">
             <div class="full-page-container">
                 <div class="full-page-header">
@@ -313,7 +259,6 @@
                     <h2>➕ Add A Concept</h2>
                     <p class="page-subtitle">Submit a new concept to the mycelium.</p>
                 </div>
-
                 <form id="add-form" class="add-form">
                     <div class="form-section">
                         <h4>Required</h4>
@@ -357,7 +302,6 @@
                             </select>
                         </label>
                     </div>
-
                     <div class="form-section">
                         <h4>Optional — Enrichment</h4>
                         <label>Mantra <input type="text" id="add-mantra" placeholder="Short memorable phrase" /></label>
@@ -369,32 +313,28 @@
                             <textarea id="add-genesis" rows="2" placeholder="How this concept came to be"></textarea>
                         </label>
                     </div>
-
                     <div class="form-section">
                         <h4>Optional — Relationships</h4>
                         <label>Builds Upon <input type="text" id="add-builds" placeholder="human_id, human_id" /></label>
                         <label>Related To <input type="text" id="add-related" placeholder="human_id, human_id" /></label>
                         <label>Contradicts <input type="text" id="add-contradicts" placeholder="human_id, human_id" /></label>
                     </div>
-
                     <div class="form-section">
                         <h4>Optional — Difficulty Levels</h4>
                         <label>Beginner <textarea id="add-beginner" rows="2" placeholder="Simple explanation"></textarea></label>
                         <label>Intermediate <textarea id="add-intermediate" rows="2" placeholder="Domain-fluent explanation"></textarea></label>
                         <label>Expert <textarea id="add-expert" rows="2" placeholder="Full depth explanation"></textarea></label>
                     </div>
-
                     <div class="form-actions">
                         <button type="submit" class="btn-primary">Submit to Mycelium</button>
                         <button type="reset" class="btn-secondary">Reset</button>
                     </div>
                 </form>
-
                 <div id="add-result" class="hidden"></div>
             </div>
         </section>
 
-        <!-- ===== PAGE: MYCELIUM MAP ===== -->
+        <!-- MAP -->
         <section id="page-map" class="page">
             <div class="full-page-container">
                 <div class="full-page-header">
@@ -402,7 +342,6 @@
                     <h2>🕸️ The Mycelium Map</h2>
                     <p class="page-subtitle">Interactive visualization of the CADMIES knowledge network</p>
                 </div>
-
                 <div class="map-content">
                     <div class="map-info">
                         <p>The mycelium map is a force-directed graph showing all concepts in the CADMIES knowledge network. Each node is a concept. Each connection is a relationship — builds_upon, related_to, or contradicts.</p>
@@ -424,33 +363,23 @@
 
     </div>
 
-    <script src="app.js?t=20260803"></script>
-
-    <!-- ============ TRANSLATE.JS ============ -->
+    <script src="app.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/xnx3/translate/translate.js/translate.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // === TRANSLATE.JS INTEGRATION ===
-            // Set local language (the language your page is written in)
             translate.language.setLocal('english');
-            
-            // Execute translation — this creates the language selector
             translate.execute();
         });
 
-        // === STATE ===
         let translationActive = false;
         let currentLanguage = '';
         const dropdown = document.getElementById('translate-select');
 
-        // === TOGGLE TRANSLATE ===
         function toggleTranslate() {
             if (typeof translate === 'undefined') {
                 console.warn('translate.js not loaded yet');
                 return;
             }
-
-            // Toggle dropdown visibility
             if (dropdown.classList.contains('visible')) {
                 dropdown.classList.remove('visible');
             } else {
@@ -464,7 +393,6 @@
             }
         }
 
-        // === POPULATE LANGUAGE DROPDOWN ===
         function populateLanguages() {
             const languages = [
                 { code: 'en', name: 'English' },
@@ -514,7 +442,6 @@
                 { code: 'fa', name: 'فارسی' },
                 { code: 'ur', name: 'اردو' }
             ];
-
             dropdown.innerHTML = '<option value="">Select Language</option>';
             languages.forEach(function(lang) {
                 const option = document.createElement('option');
@@ -524,99 +451,49 @@
             });
         }
 
-        // === MAP LANGUAGE CODES TO TRANSLATE.JS NAMES ===
         function getTranslateLangName(code) {
             const map = {
-                'en': 'english',
-                'es': 'spanish',
-                'fr': 'french',
-                'de': 'deutsch',
-                'it': 'italian',
-                'pt': 'portuguese',
-                'ru': 'russian',
-                'ja': 'japanese',
-                'ko': 'korean',
-                'zh-cn': 'chinese_simplified',
-                'zh-tw': 'chinese_traditional',
-                'ar': 'arabic',
-                'hi': 'hindi',
-                'bn': 'bengali',
-                'pa': 'punjabi',
-                'ta': 'tamil',
-                'te': 'telugu',
-                'ml': 'malayalam',
-                'kn': 'kannada',
-                'mr': 'marathi',
-                'gu': 'gujarati',
-                'or': 'oriya',
-                'as': 'assamese',
-                'mai': 'maithili',
-                'sat': 'santali',
-                'th': 'thai',
-                'lo': 'lao',
-                'my': 'burmese',
-                'km': 'khmer',
-                'vi': 'vietnamese',
-                'id': 'indonesian',
-                'ms': 'malay',
-                'tl': 'tagalog',
-                'pl': 'polish',
-                'uk': 'ukrainian',
-                'ro': 'romanian',
-                'nl': 'dutch',
-                'sv': 'swedish',
-                'no': 'norwegian',
-                'da': 'danish',
-                'fi': 'finnish',
-                'el': 'greek',
-                'tr': 'turkish',
-                'he': 'hebrew',
-                'fa': 'persian',
-                'ur': 'urdu'
+                'en': 'english', 'es': 'spanish', 'fr': 'french', 'de': 'deutsch',
+                'it': 'italian', 'pt': 'portuguese', 'ru': 'russian', 'ja': 'japanese',
+                'ko': 'korean', 'zh-cn': 'chinese_simplified', 'zh-tw': 'chinese_traditional',
+                'ar': 'arabic', 'hi': 'hindi', 'bn': 'bengali', 'pa': 'punjabi',
+                'ta': 'tamil', 'te': 'telugu', 'ml': 'malayalam', 'kn': 'kannada',
+                'mr': 'marathi', 'gu': 'gujarati', 'or': 'oriya', 'as': 'assamese',
+                'mai': 'maithili', 'sat': 'santali', 'th': 'thai', 'lo': 'lao',
+                'my': 'burmese', 'km': 'khmer', 'vi': 'vietnamese', 'id': 'indonesian',
+                'ms': 'malay', 'tl': 'tagalog', 'pl': 'polish', 'uk': 'ukrainian',
+                'ro': 'romanian', 'nl': 'dutch', 'sv': 'swedish', 'no': 'norwegian',
+                'da': 'danish', 'fi': 'finnish', 'el': 'greek', 'tr': 'turkish',
+                'he': 'hebrew', 'fa': 'persian', 'ur': 'urdu'
             };
             return map[code] || code;
         }
 
-        // === HANDLE LANGUAGE SELECTION ===
         function handleLanguageChange(langCode) {
             if (!langCode) return;
-
             currentLanguage = langCode;
             translationActive = true;
-
-            // Get the language name translate.js expects
             const langName = getTranslateLangName(langCode);
-
             if (typeof translate !== 'undefined') {
-                // Use changeLanguage to switch the target language
                 translate.changeLanguage(langName);
             }
-
-            // Hide dropdown after selection
             dropdown.classList.remove('visible');
-
-            // Save preference
             try {
                 localStorage.setItem('translateLanguage', langCode);
                 localStorage.setItem('translateActive', 'true');
             } catch(e) {}
-
-            // Fire event for any listeners
             document.dispatchEvent(new CustomEvent('translateLanguageChange', {
                 detail: { language: langCode }
             }));
         }
 
-        // === CHECK SAVED LANGUAGE ===
         function checkSavedLanguage() {
             try {
                 const savedLang = localStorage.getItem('translateLanguage');
                 const savedActive = localStorage.getItem('translateActive');
-
                 if (savedLang && savedActive === 'true') {
                     currentLanguage = savedLang;
                     translationActive = true;
-                    // Auto-translate to saved language after a delay
                     setTimeout(function() {
                         if (typeof translate !== 'undefined') {
                             const langName = getTranslateLangName(savedLang);
@@ -624,12 +501,9 @@
                         }
                     }, 500);
                 }
-            } catch(e) {
-                // localStorage not available
-            }
+            } catch(e) {}
         }
 
-        // === RESET TRANSLATION (for toggling off) ===
         function resetTranslation() {
             if (typeof translate !== 'undefined' && translate.reset) {
                 translate.reset();
@@ -645,10 +519,8 @@
             } catch(e) {}
         }
 
-        // Check for saved language after a short delay
         setTimeout(checkSavedLanguage, 1000);
 
-        // === LISTEN FOR TRANSLATE.JS EVENTS ===
         document.addEventListener('translateLanguageChange', function(e) {
             if (e.detail && e.detail.language) {
                 currentLanguage = e.detail.language;
@@ -660,7 +532,6 @@
             }
         });
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
             const controls = document.querySelector('.translate-controls');
             if (controls && !controls.contains(e.target)) {
@@ -668,6 +539,5 @@
             }
         });
     </script>
-
 </body>
 </html>

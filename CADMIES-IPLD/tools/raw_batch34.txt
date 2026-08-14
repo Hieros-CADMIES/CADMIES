@@ -1,0 +1,36 @@
+{
+    "relationships": {
+        "meditative_disconnect": [
+            {"target": "mental_models", "type": "builds_upon"},
+            {"target": "micro_spark", "type": "related_to"}
+        ],
+        "mental_models": [
+            {"target": "meditative_disconnect", "type": "builds_upon"}
+        ],
+        "micro_enlightenment_versus_full_awakening": [
+            {"target": "micro_spark", "type": "specializes"}
+        ],
+        "micro_spark": [
+            {"target": "meditative_disconnect", "type": "related_to"},
+            {"target": "micro_enlightenment_versus_full_awakening", "type": "specializes"},
+            {"target": "microbial_ecosystems", "type": "related_to"}
+        ],
+        "microbial_diversity_and_interactions": [
+            {"target": "microbial_ecosystems", "type": "specializes"}
+        ],
+        "microbial_ecosystems": [
+            {"target": "microbial_diversity_and_interactions", "type": "specializes"},
+            {"target": "micro_spark", "type": "related_to"}
+        ],
+        "middle_path_of_consumption": [
+            {"target": "middle_way_philosophy", "type": "specializes"}
+        ],
+        "middle_way_of_practice": [
+            {"target": "middle_way_philosophy", "type": "specializes"}
+        ],
+        "middle_way_philosophy": [
+            {"target": "middle_path_of_consumption", "type": "specializes"},
+            {"target": "middle_way_of_practice", "type": "specializes"}
+        ],
+        "mind_mycelium_network": [
+            {"target": "microbial_ecosystems", "type": "related_to"}

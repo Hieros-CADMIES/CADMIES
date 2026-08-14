@@ -1,10 +1,36 @@
 {
      "relationships": {
-       "quantum_perception": [{"target":"consciousness","type":"related_to"}],
-       "rainfall_velocimetry": [{"target":"physics","type":"builds_upon"}, {"target":"cloud_speed","type":"related_to"}],
-       "resonance_presence": [{"target":"meditation","type":"related_to"}, {"target":"sound","type":"related_to"}, {"target":"relaxation","type":"related_to"}, {"target":"ego_dissolution","type":"contradicts"}],
-       "self-aware_cancer": [{"target":"humanity","type":"related_to"}, {"target":"earth","type":"related_to"}, {"target":"planetary_immune_system","type":"related_to"}],
-       "siddhi_fork_in_the_road": [{"target":"spiritual_practice","type":"related_to"}, {"target":"psychic_abilities","type":"contradicts"}, {"target":"magical_abilities","type":"contradicts"}, {"target":"self-freedom","type":"related_to"}],
-       "sleep_and_cognition": [{"target":"consciousness","type":"related_to"}, {"target":"sensory_activity","type":"related_to"}, {"target":"health","type":"related_to"}, {"target":"cognition","type":"related_to"}, {"target":"emotional_regulation","type":"related_to"}, {"target":"immune_function","type":"related_to"}, {"target":"memory_consolidation","type":"related_to"}],
-       "sonic_symbolism": [{"target":"sound","type":"related_to"}, {"target":"universal_concepts","type":"related_to"}, {"target":"processes","type":"related_to"}, {"target":"experiences","type":"related_to"}],
-       "stomatal_regulation": [{"target":"plants","type":"related_to"}, {"target":"stomata","type":"related_to"}, {"target":"gas_exchange","type":"related_to"}, {"target":"light","type":"related_to"}
+       "quantum_perception": [
+         {"target": "consciousness", "type": "related_to"},
+         {"target": "quantum_physics", "type": "builds_upon"}
+       ],
+       "rainfall_velocimetry": [
+         {"target": "physics", "type": "related_to"}
+       ],
+       "resonance_presence": [
+         {"target": "meditation", "type": "related_to"},
+         {"target": "sound", "type": "related_to"}
+       ],
+       "self-aware_cancer": [
+         {"target": "science", "type": "related_to"},
+         {"target": "philosophy", "type": "related_to"},
+         {"target": "humanity", "type": "related_to"},
+         {"target": "earth", "type": "related_to"}
+       ],
+       "siddhi_fork_in_the_road": [
+         {"target": "spirituality", "type": "related_to"},
+         {"target": "philosophy", "type": "related_to"},
+         {"target": "psychic_abilities", "type": "contradicts"},
+         {"target": "freedom_from_self", "type": "related_to"}
+       ],
+       "sleep_and_cognition": [
+         {"target": "biology", "type": "related_to"},
+         {"target": "neuroscience", "type": "related_to"},
+         {"target": "consciousness", "type": "related_to"},
+         {"target": "cognition", "type": "related_to"},
+         {"target": "emotional_regulation", "type": "related_to"},
+         {"target": "immune_function", "type": "related_to"},
+         {"target": "memory_consolidation", "type": "related_to"}
+       ],
+       "sonic_symbolism": [
+         {"target": "philosophy", "type": "related_to"}

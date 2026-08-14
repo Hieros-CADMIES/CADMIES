@@ -51,7 +51,7 @@ import dag_cbor
 VERSION = "1.2.7"
 
 # === CONFIG ===
-MODEL = "codestral"
+MODEL = "codestral:22b"
 DELAY = 2
 BATCH_SIZE = 10
 BRIDGE_BATCH_SIZE = 8

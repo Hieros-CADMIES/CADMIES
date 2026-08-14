@@ -1,0 +1,35 @@
+{
+    "relationships": {
+        "sleep_and_cognition": [
+            {"target": "social_attachment_as_fetter", "type": "related_to"},
+            {"target": "somatic_hearing", "type": "related_to"},
+            {"target": "somatic_resonance", "type": "related_to"}
+        ],
+        "social_attachment_as_fetter": [
+            {"target": "social_fermentation", "type": "builds_upon"},
+            {"target": "sleep_and_cognition", "type": "related_to"}
+        ],
+        "social_fermentation": [
+            {"target": "social_attachment_as_fetter", "type": "specializes"}
+        ],
+        "somatic_hearing": [
+            {"target": "sleep_and_cognition", "type": "related_to"},
+            {"target": "sonic_internal_process", "type": "related_to"}
+        ],
+        "somatic_mantra": [
+            {"target": "sonic_alchemy", "type": "builds_upon"},
+            {"target": "sonic_cosmology", "type": "builds_upon"},
+            {"target": "sonic_dna", "type": "builds_upon"}
+        ],
+        "somatic_resonance": [
+            {"target": "sleep_and_cognition", "type": "related_to"},
+            {"target": "sonic_alchemy", "type": "related_to"}
+        ],
+        "sonic_alchemy": [
+            {"target": "somatic_mantra", "type": "specializes"},
+            {"target": "somatic_resonance", "type": "related_to"},
+            {"target": "sonic_cosmology", "type": "contradicts"}
+        ],
+        "sonic_cosmology": [
+            {"target": "somatic_mantra", "type": "specializes"},
+            {"target": "sonic_alchemy", "type": "contradicts"}
