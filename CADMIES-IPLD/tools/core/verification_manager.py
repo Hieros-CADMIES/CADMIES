@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / tools/core
-Document_ID: CA-2026-025-TOOL
-Version: 1.1.0
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [provenance_manager.py, paths.py, car_utils.py]
----
 """
 File: verification_manager.py
 Tool: CADMIES Verification Manager
