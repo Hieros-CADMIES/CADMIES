@@ -1,16 +1,4 @@
 #!/usr/bin/env python3
----
-System: CADMIES / tools/core
-Document_ID: CA-2026-026-TOOL
-Version: 1.1.0
-Classification: INTERNAL
-Author: The Gardener
-Reviewers: [The Gardener, DeepSeek]
-Status: ACTIVE
-Created: 2026-08-12
-Modified: 2026-08-12
-Related_Docs: [cid_generator.py, verification_manager.py]
----
 """
 File: car_utils.py
 Tool: CADMIES CAR Utilities
