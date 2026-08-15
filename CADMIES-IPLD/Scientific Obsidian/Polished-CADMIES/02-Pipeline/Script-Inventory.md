@@ -1,9 +1,11 @@
-# CADMIES Script Inventory
+---
+Version 1.0.0
+Date: 2026-08-12
+Status: Active
+System: CADMIES / Documentation
+---
 
-## Version 1.0.0
-## Date: 2026-08-12
-## Status: Active
-## System: CADMIES / Documentation
+# CADMIES Script Inventory
 
 This inventory documents every Python script in the CADMIES repository, its function, relationships, and status as of the script audit completed on 2026-08-12.
 
