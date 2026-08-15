@@ -1,6 +1,8 @@
 ---
 type: pipeline-doc
-status: Active
+pipeline: Core
+date: 2026-08-15
+related: []
 ---
 
 # PIPELINE FLOW
