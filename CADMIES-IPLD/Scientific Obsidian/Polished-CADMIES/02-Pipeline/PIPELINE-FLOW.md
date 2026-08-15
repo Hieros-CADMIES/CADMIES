@@ -1,8 +1,8 @@
 ---
-type: pipeline-doc
-pipeline: Core
-date: 2026-08-15
-related: []
+Version 1.0.0
+Date: 2026-08-12
+Status: Active
+System: CADMIES / Documentation
 ---
 
 # PIPELINE FLOW
