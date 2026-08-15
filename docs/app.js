@@ -241,6 +241,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         grid.innerHTML = html;
+
+        // === TRANSLATE.JS FIX: Retranslate newly injected concept cards ===
+        if (typeof translate !== 'undefined' && translate.to) {
+            // Use setTimeout to allow DOM to render before re-translating
+            setTimeout(function() {
+                translate.execute();
+            }, 100);
+        }
     }
 
     // ---------- SEARCH (Browse) ----------
