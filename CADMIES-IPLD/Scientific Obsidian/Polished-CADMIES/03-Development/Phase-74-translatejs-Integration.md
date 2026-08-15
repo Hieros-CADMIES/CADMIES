@@ -2,7 +2,7 @@
 phase: 74
 date: 2026-08-11
 status: Complete
-related:
+related: []
 ---
 
 # Phase 74 - translatejs-Integration
