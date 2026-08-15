@@ -2,7 +2,7 @@
 phase: 73D
 date: 2026-08-10
 status: Active
-related: [[Phase-73C-Matadisco-Reverse-Domain-Implementation]], [[Session-044C-2026-08-10-Matadisco-Viewer-Clarification-and-Architecture-Strategy]]
+related: [[Phase-73C-Matadisco-Reverse-Domain-Implementation-and-Bulk-Readiness]], [[Session-044C-2026-08-10-Matadisco-Viewer-Clarification-and-Architecture-Strategy]]
 ---
 
 # Phase 73D - Matadisco Viewer Clarification and Architecture Strategy
