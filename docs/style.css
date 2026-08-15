@@ -942,3 +942,10 @@ body {
     height: 40px;
     width: auto;
 }
+
+/* ---------- HIDE TRANSLATE.JS INJECTED SELECTOR ---------- */
+/* We use our own custom toggle/dropdown. Hide translate.js's default. */
+#translateSelectLanguage,
+.translateSelectLanguage {
+    display: none !important;
+}
