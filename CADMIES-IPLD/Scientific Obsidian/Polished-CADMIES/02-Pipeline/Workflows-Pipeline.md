@@ -2,7 +2,7 @@
 pipeline: CADMIES End-to-End Workflows
 date: 2026-08-12
 status: Living document
-related: [[SCRIPT_INVENTORY.md]], [[PIPELINE_FLOW.md]], [[Phase-66-Mycelium-Map-UX-Fractal-Succulent-Layout-and-Progressive-Loading]], [[Phase-63-Cloud-Deployment-Project-Hierion-Foundation]], [[Session-049-2026-08-12-Script-Audit-and-Standardization]]
+related: [[PIPELINE_FLOW.md]], [[Phase-66-Mycelium-Map-UX-Fractal-Succulent-Layout-and-Progressive-Loading]], [[Phase-63-Cloud-Deployment-Project-Hierion-Foundation]], [[Session-049-2026-08-12-Script-Audit-and-Standardization]]
 ---
 
 # CADMIES Pipeline Workflows
