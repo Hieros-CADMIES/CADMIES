@@ -1,5 +1,10 @@
-# PIPELINE FLOW
+---
+type: pipeline-doc
+status: Active
+---
 
+# PIPELINE FLOW
+```text
 CONVERSATION / TEXT
         │
         ▼
@@ -119,3 +124,4 @@ CONVERSATION / TEXT
                                                         │  restores      │
                                                         │  blocks        │
                                                         └─────────────────┘
+```
