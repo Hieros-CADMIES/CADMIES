@@ -2,7 +2,7 @@
 pipeline: CADMIES Documentation Workflow
 date: 2026-08-12
 status: Living document
-related: [[SCRIPT-INVENTORY.md]], [[Session-049-2026-08-12-Script-Audit-and-Standardization]], [[Phase-37-Scientific-Obsidian]]
+related: [[Session-049-2026-08-12-Script-Audit-and-Standardization]], [[Phase-37-Scientific-Obsidian]]
 ---
 
 # CADMIES Documentation Workflow
