@@ -243,8 +243,8 @@ document.addEventListener('DOMContentLoaded', function() {
         grid.innerHTML = html;
 
         // === TRANSLATE.JS FIX: Retranslate newly injected concept cards ===
-        if (typeof translate !== 'undefined' && translate.to) {
-            // Use setTimeout to allow DOM to render before re-translating
+        // Use the official API method to check if translation is active
+        if (typeof translate !== 'undefined' && translate.isTranslateExecute && translate.isTranslateExecute()) {
             setTimeout(function() {
                 translate.execute();
             }, 100);
