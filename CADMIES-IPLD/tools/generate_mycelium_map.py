@@ -48,7 +48,7 @@ from paths import BLOCKS_DIR
 VERSION = "2.4.1"
 
 # === CONFIG ===
-OUTPUT_FILE = PROJECT_ROOT / "mycelium_map.html"
+OUTPUT_FILE = PROJECT_ROOT.parent / "docs" / "mycelium_map.html"
 
 # === CANONICAL TOP-LEVEL DOMAINS (Phase 44) ===
 CANONICAL_DOMAINS = [
