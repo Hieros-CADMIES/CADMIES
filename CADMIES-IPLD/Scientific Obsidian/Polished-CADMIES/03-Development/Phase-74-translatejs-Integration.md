@@ -55,9 +55,3 @@ The "two lines of JS" claim holds true for the client-side integration, provided
 ## Conclusion
 
 Phase 74 is complete. translate.js is successfully integrated into the CADMIES website, providing multilingual support without any backend changes or third-party API keys. Mr. Leiming's offer was accepted, evaluated, and deployed. The mycelium now grows in every language.
-
-## Related
-
-- [[Session-047-2026-08-09-translate-js-The-Cold-Email-The-Integration-The-Reality-Check]]
-- [[Session-047B-2026-08-11-translate-js-The-Fix-The-Deployment-Some-Italian]]
-- [[Collaborations-Citations-Acknowledgments]]
