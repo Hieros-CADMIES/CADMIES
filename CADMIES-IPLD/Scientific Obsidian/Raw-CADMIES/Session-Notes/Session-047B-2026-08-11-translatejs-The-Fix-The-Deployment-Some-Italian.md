@@ -2,7 +2,7 @@
 > unfiltered thoughts, and coded messages for fellow gardeners.
 > For polished documentation, check Polished CADMIES or promote this note.
 
-# Session 047B - 2026-08-11 - translate.js - The Fix, The Deployment, Some Italian, 
+# Session 047B - 2026-08-11 - translatejs - The Fix, The Deployment, Some Italian, 
 
 ## Soundtrack
 More Pine Vinyl - the early stuff
