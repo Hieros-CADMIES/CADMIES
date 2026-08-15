@@ -2,7 +2,7 @@
 >unfiltered thoughts, and coded messages for fellow gardeners.
 >For polished documentation, check Polished CADMIES or promote this note.
 
-# Session 047 — 2026-08-09 — translate.js: The Cold Email, The Integration, The Reality Check
+# Session 047 - 2026-08-09 - translate.js - The Cold Email, The Integration, The Reality Check
 
 ## Soundtrack
 Pine Vinyl and confidence =)
