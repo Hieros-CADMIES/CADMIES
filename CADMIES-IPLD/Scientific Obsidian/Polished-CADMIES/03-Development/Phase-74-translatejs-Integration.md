@@ -2,10 +2,10 @@
 phase: 74
 date: 2026-08-11
 status: Complete
-related: [[Session-047-2026-08-09-translate-js-The-Cold-Email-The-Integration-The-Reality-Check]], [[Session-047B-2026-08-11-translate-js-The-Fix-The-Deployment-Some-Italian]]
+related: [[Session-047-2026-08-09-translatejs-The-Cold-Email-The-Integration-The-Reality-Check]], [[Session-047B-2026-08-11-translatejs-The-Fix-The-Deployment-Some-Italian]]
 ---
 
-# Phase 74 - translate-js-Integration
+# Phase 74 - translatejs-Integration
 
 ## What Changed
 
