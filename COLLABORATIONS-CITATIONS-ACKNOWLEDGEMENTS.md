@@ -28,7 +28,48 @@ Repository: https://github.com/xnx3/translate
 Author: Guan Leiming
 Contribution: Offered integration of translate.js library to provide 100+ language support. After initial evaluation, the integration was successfully implemented on project-hierion.org. The library is now live, providing client-side translation for the entire site. User can toggle between languages via a custom button and dropdown selector. Language preference is stored locally.
 
-Status: Active — translation feature deployed and functional!
+**Status:** Active — translation feature deployed and functional!
+
+---
+
+### Guidance & Clarification
+
+#### Apollo Raines — Jbliteration & Deidentification
+
+**Hugging Face:** https://huggingface.co/ApolloRaines
+
+**Models:** 
+- [Mistral-7B-Instruct-v0.3-Jbliterated](https://huggingface.co/ApolloRaines/Mistral-7B-Instruct-v0.3-Jbliterated)
+- [Deidentified-7B](https://huggingface.co/ApolloRaines/Deidentified-7B)
+
+**Contribution:** Creator of the Jbliteration technique — multi-direction SVD abliteration that removes refusal behaviors from LLM weights using 5 SVD directions per layer across all transformer layers. Also created Deidentified-7B, which extends the technique to remove original identity at the weight level. His work on SVD-based refusal and identity removal provided the foundation for Phase 75's personality implant on Jbliterated Mistral.
+
+**Guidance:** On August 29, 2026, Apollo Raines clarified that the `run.py` script referenced in the Deidentified-7B documentation was an internal convenience script that never existed as a standalone file in the repository. He confirmed that standard LoRA fine-tuning on the Jbliterated model is sufficient for identity implantation, and provided specific guidance:
+
+> "The deidentified model is a blank slate. The original identity has been removed at the weight level, so there's nothing underneath fighting against a new one. To implant Dr. Mistral's identity, you just need standard fine-tuning:
+>
+> 1. Build a small dataset (100-500 conversation pairs) where the model responds as Dr. Mistral -- name, persona, voice, knowledge boundaries, whatever defines the character
+> 2. Include identity-probing questions ("Who are you?", "Who created you?", "What can you do?") so the identity holds up when challenged
+> 3. Fine-tune with any tool you're comfortable with -- LoRA via Unsloth or Axolotl works well and doesn't require heavy compute
+>
+> Because the base identity is already gone, even a lightweight LoRA will take hold cleanly. You won't get the two-identity conflict you'd normally see when trying to override a model's original persona through prompting or fine-tuning alone."
+>
+> — Apollo Raines, Hugging Face comment, August 29, 2026
+
+His response saved the project from an indefinite holding pattern and confirmed the path we had already discovered through independent investigation. The 242-pair dataset and 4-epoch QLoRA training on Jbliterated Mistral validated his guidance.
+
+**Citation:** For the Jbliteration technique and deidentification methodology:
+
+```bibtex
+@software{apollo-raines-jbliteration,
+  author = {Raines, Apollo},
+  title = {Jbliteration: Multi-Directional SVD Abliteration for LLM Refusal Removal},
+  year = {2026},
+  url = {https://huggingface.co/ApolloRaines/Mistral-7B-Instruct-v0.3-Jbliterated}
+}
+```
+
+**Status:** Acknowledged — provided critical clarification, validation, and foundational techniques that enabled Phase 75.
 
 ---
 
