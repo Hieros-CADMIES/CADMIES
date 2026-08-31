@@ -1,8 +1,8 @@
 ---
 phase: Roadmap
-date: 2026-08-11
+date: 2026-08-30
 status: LIVING DOCUMENT
-session: 048
+session: 051
 ---
 
 # 🌱 CADMIES GROWTH ROADMAP
@@ -15,8 +15,8 @@ session: 048
 | Metric | Value |
 |--------|-------|
 | Concepts | 636 |
-| Edges | 1,131 |
-| Connected Concepts | 365 |
+| Edges | 1,507 |
+| Connected Concepts | 361 |
 | Domains (Canonical) | 15 |
 | ORCID iD | 0009-0000-8877-2731 ✅ Linked |
 
@@ -36,6 +36,7 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 | Vault Health Badge | ✅ Green | Passing |
 | PDS | v0.4.5009 | Self-hosted, stable |
 | Matadisco Producer | v1.0 | Active, rate-limit aware |
+| Dr. Mistral (Jbliterated) | v1.0 | Personality implant complete, GGUF, Ollama-ready |
 
 ---
 
@@ -67,7 +68,7 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 - Phase 66 — Mycelium Map UX Fractal Succulent Layout and Progressive Loading
 - Phase 69 — Repo Maintenance Automation
 
-### Dr. Mistral Training
+### Dr. Mistral Training (Phase 45 Series)
 - Phase 45 v2.0 — Teaching Mistral via Snagnar HIEROS Revised Plan
 - Phase 45A — Snagnar HIEROS Integration
 - Phase 45B — Snagnar HIEROS Integration
@@ -80,6 +81,15 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 - Phase 70 — Dr Amanda Mistral Persona Debugging and Deidentified 7B Discovery
 - Phase 71 — Dr Amanda Mistral Identity Anchoring and Deidentified 7B Exploration
 
+### Dr. Mistral Personality Implant (New)
+- **Phase 75 — Dr. Amanda Mistral — Personality Implant on Jbliterated Base** ✅ Complete (2026-08-30)
+  - 242-pair curated dataset built from scratch
+  - 4 epochs of QLoRA training on Jbliterated Mistral
+  - Loss dropped from 1.54 to 0.46
+  - GGUF conversion, merge, quantization (Q8_0)
+  - Ollama deployment and testing
+  - Identity test passed: clean, warm, anchored Dr. Mistral response
+
 ### Documentation & Automation
 - Phase 72 — LLMDataHub Fork Reorganization
 - Phase 73A — Matadisco Integration Blueprint
@@ -87,10 +97,10 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 - Phase 73C — Matadisco Reverse Domain Implementation & Bulk Readiness
 - Phase 74 — translate.js Integration (Completed 2026-08-11)
 
-### Matadisco Integration Completed
+### Matadisco Integration
 - Self-hosted PDS at `pds.project-hierion.org`
 - Host-level Caddy serving all sites (Hierion, Bespoke, PDS)
-- Lexicon IDs updated to reverse domain format (`org.project-hierion.llmdatahub`, `org.project-hierion.cadmies`)
+- Lexicon IDs updated to reverse domain format
 - Three test records published and verified
 - Producer script working with rate-limit awareness
 - Collaboration established with vmx / IPFS Foundation
@@ -106,17 +116,14 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 ## 📋 PENDING PHASES
 
 ### Immediate / In Progress
+- **Phase 76 — Dr. Mistral Conversational Fine-Tuning** — Add UltraChat or similar conversational pairs on top of the personality implant to improve fluency and natural dialogue flow
+- **Phase 77 — Dr. Mistral Live Site Deployment** — Integrate Dr. Mistral into the Flask app on the live site, replacing Zara as the placeholder
 - **Phase 73D — Matadisco Viewer Strategy** — Understanding the live-stream vs library distinction; defining the Matadisco-CADMIES specialized viewer architecture
 
 ### Architecture Decisions
 - **One Source of Truth**: Concepts JSON and edges JSON are canonical
 - **Two Interfaces**: CADMIES Gateway (general public) + Matadisco-CADMIES Viewer (scientists/professionals)
 - **No Double Work**: Both views pull from the same source data
-
-### Blocked / Paused
-- Dr. Mistral persona training — blocked on Deidentified-7B implant script (run.py)
-- Deidentified-7B identity implant — blocked on missing script
-- Apollo Raines collaboration — waiting on his SAIQL/ATLAS wrap-up
 
 ### Not Yet Started
 - **Matadisco-CADMIES Viewer** — Specialized portal pulling from concepts.json
@@ -130,29 +137,34 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 
 ## 📝 SESSION NOTES
 
+### Session 051 — 2026-08-28 to 2026-08-30 — Dr. Mistral Rises: The run.py That Never Was
+- Confirmed `run.py` does not exist in Apollo Raines' Hugging Face repo
+- Built 242-pair curated dataset for personality implant
+- Trained on Jbliterated Mistral (4 epochs, loss 1.54 → 0.46)
+- Converted to GGUF, merged, quantized (Q8_0)
+- Deployed to Ollama and tested
+- Dr. Mistral responds as herself — warm, philosophical, anchored
+- Texas heat throttled GGUF downloads; fan helped; lesson learned
+
+### Session 050 — 2026-08-14 — Gateway Generator Rewrite and Relationship Harvest
+- Rewrote `generate_public_gateway.py` to v3.3.0
+- Ran relationship harvest with Codestral 22B: 533 new edges, 1507 total
+- Expanded card rendering with inline cards replacing modals
+
 ### Session 047B — 2026-08-11 — translate.js: The Fix, The Italian, The Deployment
-- Mr. Leiming clarified that `client.edge` works with the latest version of translate.js
-- Switched from old CDN version (3.15.6) to latest (4.1.0) via jsdelivr
+- Switched to translate.js v4.1.0 via jsdelivr
 - Translation feature successfully deployed on project-hierion.org
-- Button toggles dropdown; language preference stored in localStorage
-- Collaboration record updated to reflect active integration
 
 ### Session 047 — 2026-08-09 — translate.js: The Cold Email, The Integration, The Reality Check
 - Guan Leiming reached out cold offering translate.js integration
-- Initial evaluation and attempted integration with old version failed
-- Discovered path divergence between Public Gateway and Dashboard
-- Determined integration was not viable due to infrastructure constraints
-- Reverted to clean Dashboard version and sent decline email
+- Integration initially failed due to outdated version; later resolved
 
 ### Session 045 — 2026-08-10 — Matadisco Viewer Clarification & Architecture Strategy
 - Confirmed Matadisco viewer is a live stream, not a library browser
-- CADMIES records are on the network but don't appear in the satellite viewer
-- Defined architecture: One source of truth (concepts.json), two interfaces (CADMIES Gateway + Matadisco-CADMIES Viewer)
-- Updated roadmap with Phase 73D and viewer strategy
+- Defined architecture: One source of truth, two interfaces
 
 ### Session 044B — 2026-08-05 — Matadisco Test Publish Success
 - Published three test records with favicon preview
-- Resolved PDS HTTPS issues with host-level Caddy
 
 ### Session 044 — 2026-07-31 — Matadisco Integration Foundation and Blueprint
 - Initial Matadisco planning and infrastructure setup
@@ -176,6 +188,13 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 
 ## 🍄 NUGGETS COLLECTED
 
+- "The `run.py` that never was." — Session 051
+- "4 epochs, 242 pairs, loss 0.46. That's the recipe."
+- "The gardener declared Apollo Raines a nemesis. Then he got to work."
+- "Texas heat is not a temperature. It is an assault."
+- "A small fan became the most important tool in the room."
+- "Brave is bad at downloads. Firefox caps at 12.7 MB/s. Cool the drive."
+- "Dr. Mistral is real. Not in paperspace. In the terminal. In Ollama."
 - "The mycelium has a borough now." — Dr. Mistral's loft is in NYC1, area code 929
 - "On vacation — no expiration" — The gardener's GitHub status
 - "All built from a garage in South Texas, without institutional backing." — ORCID bio
@@ -207,19 +226,10 @@ In 10 days we:
 
 ---
 
-## 📁 FILES THAT NEED UPDATING
+## FUTURE (designed, not scheduled)
 
-| File | Section | What Needs Fixing | Why |
-|------|---------|-------------------|-----|
-| `CADMIES Droplet — SOP.md` | Section 10.0 (Current State) | Droplet name update, remove "Pending: SSL" | Droplet renamed to hierion-ubuntu-nyc1-929; SSL is already configured |
-| `Dr. Amanda Mistral — SOP.md` | Section 1.1 (Infrastructure) | Remove Local Fedora references | No longer actively used |
-| `CADMIES Canon.md` | Project Locations | Add droplet name and 929 lore | Canon update |
-| `growth_roadmap.md` | This file | Already updated with Session 045 | ✅ Done |
-
----
-
-## 🔮 FUTURE (designed, not scheduled)
-
+- Phase 76 — Dr. Mistral Conversational Fine-Tuning
+- Phase 77 — Dr. Mistral Live Site Deployment
 - Matadisco-CADMIES Viewer — Pulls from concepts.json, specialized interface
 - SAIQL/ATLAS deterministic RAG integration
 - Dr. Mistral Flask chat interface (Phase 61)
