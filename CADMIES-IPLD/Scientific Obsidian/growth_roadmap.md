@@ -1,8 +1,8 @@
 ---
 phase: Roadmap
-date: 2026-08-30
+date: 2026-09-01
 status: LIVING DOCUMENT
-session: 051
+session: 052
 ---
 
 # 🌱 CADMIES GROWTH ROADMAP
@@ -116,17 +116,24 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 ## 📋 PENDING PHASES
 
 ### Immediate / In Progress
+- **Phase 78 — Matadisco-CADMIES Portal** — Build a dedicated viewer/indexer for CADMIES Matadisco records
+  - Pulls from `concepts.json` as source of truth (no double work)
+  - Indexes CADMIES records from the AT Protocol network
+  - Provides specialized search and discovery interface for scientists and academics
+  - One source of truth, two interfaces (Gateway + Portal)
+  - Reference architecture: Podium (https://tangled.org/robin.berjon.com/podium)
+
+### Next Up
 - **Phase 76 — Dr. Mistral Conversational Fine-Tuning** — Add UltraChat or similar conversational pairs on top of the personality implant to improve fluency and natural dialogue flow
 - **Phase 77 — Dr. Mistral Live Site Deployment** — Integrate Dr. Mistral into the Flask app on the live site, replacing Zara as the placeholder
-- **Phase 73D — Matadisco Viewer Strategy** — Understanding the live-stream vs library distinction; defining the Matadisco-CADMIES specialized viewer architecture
 
 ### Architecture Decisions
 - **One Source of Truth**: Concepts JSON and edges JSON are canonical
-- **Two Interfaces**: CADMIES Gateway (general public) + Matadisco-CADMIES Viewer (scientists/professionals)
+- **Two Interfaces**: CADMIES Gateway (general public) + Matadisco-CADMIES Portal (scientists/professionals)
 - **No Double Work**: Both views pull from the same source data
+- **Portal Tech Stack**: Node.js/Python backend + SQLite + frontend (Lit, React, or vanilla JS)
 
 ### Not Yet Started
-- **Matadisco-CADMIES Viewer** — Specialized portal pulling from concepts.json
 - **Full License Audit** — Complete audit of LLMDataHub datasets
 - **Bulk Publishing** — All 636 concepts + audited datasets
 - RAG Pipeline (ChromaDB, embeddings, query router)
@@ -136,6 +143,13 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 ---
 
 ## 📝 SESSION NOTES
+
+### Session 052 — 2026-09-01 — Matadisco Portal Planning
+- Received feedback from vmx confirming the portal/AppView approach
+- Reviewed Podium as reference architecture
+- Defined Phase 78: Matadisco-CADMIES Portal
+- Hardware assessment: current droplet (2 vCPU, 4GB RAM, 80GB SSD) is sufficient for community AppView
+- Next step: tech stack selection and implementation
 
 ### Session 051 — 2026-08-28 to 2026-08-30 — Dr. Mistral Rises: The run.py That Never Was
 - Confirmed `run.py` does not exist in Apollo Raines' Hugging Face repo
@@ -230,7 +244,7 @@ In 10 days we:
 
 - Phase 76 — Dr. Mistral Conversational Fine-Tuning
 - Phase 77 — Dr. Mistral Live Site Deployment
-- Matadisco-CADMIES Viewer — Pulls from concepts.json, specialized interface
+- Phase 78 — Matadisco-CADMIES Portal
 - SAIQL/ATLAS deterministic RAG integration
 - Dr. Mistral Flask chat interface (Phase 61)
 - Public gateway subdomain tier
