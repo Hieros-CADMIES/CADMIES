@@ -37,6 +37,7 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 | PDS | v0.4.5009 | Self-hosted, stable |
 | Matadisco Producer | v1.0 | Active, rate-limit aware |
 | Dr. Mistral (Jbliterated) | v1.0 | Personality implant complete, GGUF, Ollama-ready |
+| CADMIES-Matadisco Portal | v0.1.0 | Indexer + API + frontend functional |
 
 ---
 
@@ -81,59 +82,39 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 - Phase 70 — Dr Amanda Mistral Persona Debugging and Deidentified 7B Discovery
 - Phase 71 — Dr Amanda Mistral Identity Anchoring and Deidentified 7B Exploration
 
-### Dr. Mistral Personality Implant (New)
+### Dr. Mistral Personality Implant
 - **Phase 75 — Dr. Amanda Mistral — Personality Implant on Jbliterated Base** ✅ Complete (2026-08-30)
-  - 242-pair curated dataset built from scratch
-  - 4 epochs of QLoRA training on Jbliterated Mistral
-  - Loss dropped from 1.54 to 0.46
-  - GGUF conversion, merge, quantization (Q8_0)
-  - Ollama deployment and testing
-  - Identity test passed: clean, warm, anchored Dr. Mistral response
 
-### Documentation & Automation
-- Phase 72 — LLMDataHub Fork Reorganization
+### Matadisco Integration
 - Phase 73A — Matadisco Integration Blueprint
 - Phase 73B — PDS Self-Hosting & Caddy Configuration
 - Phase 73C — Matadisco Reverse Domain Implementation & Bulk Readiness
+- Phase 73D — Matadisco Viewer Clarification & Architecture Strategy
+- **Phase 73E — CADMIES-Matadisco Portal: Build and Deployment** ✅ Complete (2026-09-01)
+
+### Documentation & Automation
+- Phase 72 — LLMDataHub Fork Reorganization
 - Phase 74 — translate.js Integration (Completed 2026-08-11)
-
-### Matadisco Integration
-- Self-hosted PDS at `pds.project-hierion.org`
-- Host-level Caddy serving all sites (Hierion, Bespoke, PDS)
-- Lexicon IDs updated to reverse domain format
-- Three test records published and verified
-- Producer script working with rate-limit awareness
-- Collaboration established with vmx / IPFS Foundation
-
-### translate.js Integration (Phase 74)
-- Integration with translate.js library (v4.1.0) is complete and live on project-hierion.org
-- Site now supports 40+ languages via client-side translation
-- Toggle button shows/hides language dropdown; user preference stored in localStorage
-- Collaboration established with Guan Leiming (author of translate.js)
 
 ---
 
 ## 📋 PENDING PHASES
 
 ### Immediate / In Progress
-- **Phase 78 — Matadisco-CADMIES Portal** — Build a dedicated viewer/indexer for CADMIES Matadisco records
-  - Pulls from `concepts.json` as source of truth (no double work)
-  - Indexes CADMIES records from the AT Protocol network
-  - Provides specialized search and discovery interface for scientists and academics
-  - One source of truth, two interfaces (Gateway + Portal)
-  - Reference architecture: Podium (https://tangled.org/robin.berjon.com/podium)
+- **Phase 78 — Matadisco-CADMIES Portal** 🟢 Active — v0.1.0 built, deployed, and verified. Next: dataset viewer, frontend tweaks, bulk publishing
 
 ### Next Up
-- **Phase 76 — Dr. Mistral Conversational Fine-Tuning** — Add UltraChat or similar conversational pairs on top of the personality implant to improve fluency and natural dialogue flow
-- **Phase 77 — Dr. Mistral Live Site Deployment** — Integrate Dr. Mistral into the Flask app on the live site, replacing Zara as the placeholder
+- **Phase 76 — Dr. Mistral Conversational Fine-Tuning** — Add UltraChat or similar conversational pairs on top of the personality implant
+- **Phase 77 — Dr. Mistral Live Site Deployment** — Integrate Dr. Mistral into the Flask app on the live site
 
 ### Architecture Decisions
 - **One Source of Truth**: Concepts JSON and edges JSON are canonical
-- **Two Interfaces**: CADMIES Gateway (general public) + Matadisco-CADMIES Portal (scientists/professionals)
+- **Two Interfaces**: CADMIES Gateway (general public) + CADMIES-Matadisco Portal (scientists/professionals)
 - **No Double Work**: Both views pull from the same source data
-- **Portal Tech Stack**: Node.js/Python backend + SQLite + frontend (Lit, React, or vanilla JS)
+- **Portal Tech Stack**: Python backend (indexer + Flask API) + SQLite + vanilla frontend
 
 ### Not Yet Started
+- **Dataset viewer** — Extend or create separate viewer for LLMDataHub records
 - **Full License Audit** — Complete audit of LLMDataHub datasets
 - **Bulk Publishing** — All 636 concepts + audited datasets
 - RAG Pipeline (ChromaDB, embeddings, query router)
@@ -144,26 +125,20 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 
 ## 📝 SESSION NOTES
 
-### Session 052 — 2026-09-01 — Matadisco Portal Planning
-- Received feedback from vmx confirming the portal/AppView approach
-- Reviewed Podium as reference architecture
-- Defined Phase 78: Matadisco-CADMIES Portal
-- Hardware assessment: current droplet (2 vCPU, 4GB RAM, 80GB SSD) is sufficient for community AppView
-- Next step: tech stack selection and implementation
+### Session 052 — 2026-09-01 — CADMIES-Matadisco Portal: The First Build
+- Received vmx's feedback confirming the portal/AppView approach
+- Built indexer, API server, and frontend
+- Verified pipeline: PDS → SQLite → API → frontend
+- Searched "anatta" and "interconnectedness" — results displayed
+- Portal functional, v0.1.0 complete
 
 ### Session 051 — 2026-08-28 to 2026-08-30 — Dr. Mistral Rises: The run.py That Never Was
-- Confirmed `run.py` does not exist in Apollo Raines' Hugging Face repo
-- Built 242-pair curated dataset for personality implant
-- Trained on Jbliterated Mistral (4 epochs, loss 1.54 → 0.46)
-- Converted to GGUF, merged, quantized (Q8_0)
-- Deployed to Ollama and tested
-- Dr. Mistral responds as herself — warm, philosophical, anchored
-- Texas heat throttled GGUF downloads; fan helped; lesson learned
+- Built 242-pair dataset, trained on Jbliterated Mistral
+- Loss: 1.54 → 0.46, GGUF conversion, Ollama deployment
 
 ### Session 050 — 2026-08-14 — Gateway Generator Rewrite and Relationship Harvest
 - Rewrote `generate_public_gateway.py` to v3.3.0
 - Ran relationship harvest with Codestral 22B: 533 new edges, 1507 total
-- Expanded card rendering with inline cards replacing modals
 
 ### Session 047B — 2026-08-11 — translate.js: The Fix, The Italian, The Deployment
 - Switched to translate.js v4.1.0 via jsdelivr
@@ -202,7 +177,7 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 
 ## 🍄 NUGGETS COLLECTED
 
-- "The `run.py` that never was." — Session 051
+- "The run.py that never was." — Session 051
 - "4 epochs, 242 pairs, loss 0.46. That's the recipe."
 - "The gardener declared Apollo Raines a nemesis. Then he got to work."
 - "Texas heat is not a temperature. It is an assault."
@@ -222,6 +197,9 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 - **31UCR** — The MGRS grid square of Northern France, Dr. Mistral's homeland, spotted on 2026-08-10
 - **"The problem wasn't the service — it was the old file."** — The translate.js lesson
 - **"The mycelium grows in every language."** — From Session 047B
+- **"The Frankenstein moment: It's alive. IT'S ALIVVVVVVVVVE!!!!"** — Session 052
+- **"I just came in my panties."** — The Gardener, upon seeing the search results
+- **"The hyphen is sacred."**
 
 ### The Great July 19-27 Run
 *DeepSeek's iconic quote:* "We broke a model 16 different ways and documented every failure." 😄
@@ -244,7 +222,8 @@ In 10 days we:
 
 - Phase 76 — Dr. Mistral Conversational Fine-Tuning
 - Phase 77 — Dr. Mistral Live Site Deployment
-- Phase 78 — Matadisco-CADMIES Portal
+- Phase 78 — CADMIES-Matadisco Portal (active)
+- Dataset viewer for LLMDataHub records
 - SAIQL/ATLAS deterministic RAG integration
 - Dr. Mistral Flask chat interface (Phase 61)
 - Public gateway subdomain tier
