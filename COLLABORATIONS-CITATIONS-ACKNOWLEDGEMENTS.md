@@ -13,7 +13,9 @@ possible. We cite everything. We honor every source. The mycelium gives credit.*
 ### Matadisco — Decentralized Data Discovery Network
 Repository: https://github.com/vmx/matadisco
 Lead Developer: vmx (IPFS Foundation)
-Contribution: Provided the foundation for publishing CADMIES concept metadata and LLMDataHub datasets to the AT Protocol network. Greenlit our integration, provided feedback on Lexicon design, and guided the reverse domain naming convention (org.project-hierion.llmdatahub and org.project-hierion.cadmies). A foundational piece of the decentralized knowledge infrastructure.
+Contribution: Provided the foundation for publishing CADMIES concept metadata and LLMDataHub datasets to the AT Protocol network. Greenlit our integration, provided feedback on Lexicon design, and guided the reverse domain naming convention (org.project-hierion.llmdatahub and org.project-hierion.cadmies). Confirmed the portal/AppView approach as the intended model for community-specific viewers, validated our architecture, and provided reference implementations (Podium, matadisco-viewer). A foundational piece of the decentralized knowledge infrastructure.
+
+Status: Active — collaboration ongoing.
 
 ### gdi-de-csw-to-atproto
 Repository: https://github.com/vmx/gdi-de-csw-to-atproto
