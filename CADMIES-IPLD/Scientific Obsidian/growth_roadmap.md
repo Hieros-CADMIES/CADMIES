@@ -41,6 +41,35 @@ Neuroscience • Sociology • Economics • Ecology • Medicine
 
 ---
 
+Roadmap entry:
+
+Phase 79 — LLMDataHub Dataset Publishing Pipeline (Planned)
+
+Automate publication of LLMDataHub dataset records to Matadisco and index them in the CADMIES-Matadisco Portal.
+
+Tasks:
+
+Finalize license audit for all datasets
+
+Publish dataset records via GitHub Actions (scheduled)
+
+Extend portal to display dataset records
+
+Index dataset records in the portal database
+
+Status: Planned
+
+What can be automated:
+
+Step	Automation
+License audit	⚠️ Manual (requires human judgment)
+Publishing records	✅ GitHub Actions (scheduled)
+Indexing records	✅ Cron job on droplet
+API server	✅ Systemd service (runs forever)
+Frontend	✅ Systemd service or Nginx static serving
+
+---
+
 ## ✅ COMPLETED PHASES
 
 ### Core Infrastructure
