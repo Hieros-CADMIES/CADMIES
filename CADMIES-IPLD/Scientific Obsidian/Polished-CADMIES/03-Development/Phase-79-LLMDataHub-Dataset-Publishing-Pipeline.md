@@ -5,6 +5,6 @@ status: Planned
 related: [[Phase-72-LLMDataHub-Fork-Reorganization]], [[Phase-73-Matadisco-Integration]]
 ---
 
-# Phase-79-LLMDataHub-Dataset-Publishing-Pipeline.md
+# Phase-79-LLMDataHub-Dataset-Publishing-Pipeline
 
 This is a placeholder file.
