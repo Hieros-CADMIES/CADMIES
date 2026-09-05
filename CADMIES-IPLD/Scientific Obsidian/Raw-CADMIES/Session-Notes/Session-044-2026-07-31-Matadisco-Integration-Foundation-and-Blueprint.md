@@ -86,7 +86,7 @@
 5. Build test records once schema approved
 
 ## Related
-- [[Phase-73-Matadisco-Integration]] (to be polished)
+- [[Phase-73A-Matadisco-Integration]] (to be polished)
 - [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]]
 - [hierion-matadisco](https://github.com/Project-Hierion/hierion-matadisco)
 - [Matadisco #18](https://github.com/vmx/matadisco/issues/18)
