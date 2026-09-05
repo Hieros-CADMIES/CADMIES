@@ -4,6 +4,17 @@
 <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Project-Hierion/Hierion-CADMIES"> 
 <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/Project-Hierion/Hierion-CADMIES"> 
 <img alt="Vault Health" src="https://github.com/Project-Hierion/Hierion-CADMIES/actions/workflows/vault-check.yml/badge.svg">
+<a href="https://orcid.org/0009-0000-8877-2731">
+  <img alt="ORCID" src="https://img.shields.io/badge/ORCID-0009--0000--8877--2731-A6CE39?style=flat&logo=orcid&logoColor=white">
+</a>
+</p>
+
+<p align="center"><em>Our work is open, traceable, and part of the scientific record.</em></p>
+
+<p align="center">
+<a href="https://project-hierion.org/">
+  <img alt="Public Gateway" src="https://img.shields.io/badge/Public%20Gateway-project--hierion.org-4F46E5?style=flat&logo=internet-explorer&logoColor=white">
+</a>
 </p>
 
 **Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem**
@@ -13,11 +24,6 @@ A philosophical and technical framework for content-addressed, scientifically-va
 **To-date:** 636 interconnected concepts, 1,131 cross-domain relationships, 15 canonical domains.
 
 One digital mycelium. One Digital Intelligence librarian. Infinite connections.
-
-🌍 **Public Gateway:** [https://project-hierion.org/](https://project-hierion.org/)
-
-**Project Hierion ORCID:** [![ORCID](https://img.shields.io/badge/ORCID-0009--0000--8877--2731-A6CE39?style=flat&logo=orcid&logoColor=white)](https://orcid.org/0009-0000-8877-2731)  
-*Our work is open, traceable, and part of the scientific record.*
 
 ---
 
