@@ -1,7 +1,7 @@
 # <div align="center">CADMIES-IPLD</div>
 ----------------------------------
 <p align="center">
-<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Project-Hierion/Hierion-CADMIES"> <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/Project-Hierion/Hierion-CADMIES"> ![Workflow Name](https://github.com/OWNER/REPO/actions/workflows/WORKFLOW_FILE.yml/badge.svg)
+<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Project-Hierion/Hierion-CADMIES"> <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/Project-Hierion/Hierion-CADMIES"> ![Vault Health](https://github.com/Project-Hierion/Hierion-CADMIES/actions/workflows/vault-check.yml/badge.svg)
 </p>
 
 **Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem**
