@@ -1,15 +1,18 @@
-# CADMIES-IPLD
+# <div align="center">CADMIES-IPLD</div>
+----------------------------------
+<p align="center">
+<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Project-Hierion/Hierion-CADMIES"> <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/Project-Hierion/Hierion-CADMIES"> ![Workflow Name](https://github.com/OWNER/REPO/actions/workflows/WORKFLOW_FILE.yml/badge.svg)
+</p>
 
 **Cosmium Angelo Digital Mycorrhizal Intelligence EcoSystem**
 
-A philosophical and technical framework for content-addressed, scientifically-validated
-knowledge storage and sharing. To-date: 636 interconnected concepts, 1,131 cross-domain relationships,
-15 canonical domains. One digital mycelium. One Digital Intelligence librarian.
-Infinite connections.
+A philosophical and technical framework for content-addressed, scientifically-validated knowledge storage and sharing.
+
+**To-date:** 636 interconnected concepts, 1,131 cross-domain relationships, 15 canonical domains.
+
+One digital mycelium. One Digital Intelligence librarian. Infinite connections.
 
 🌍 **Public Gateway:** [https://project-hierion.org/](https://project-hierion.org/)
-
-![Vault Health](https://github.com/Project-Hierion/Hierion-CADMIES/actions/workflows/vault-check.yml/badge.svg)
 
 **Project Hierion ORCID:** [![ORCID](https://img.shields.io/badge/ORCID-0009--0000--8877--2731-A6CE39?style=flat&logo=orcid&logoColor=white)](https://orcid.org/0009-0000-8877-2731)  
 *Our work is open, traceable, and part of the scientific record.*
