@@ -4,7 +4,7 @@
 
 # Session 041 — 2026-07-28 — LLMDataHub Fork Reorganization
 
-related: [[growth_roadmap]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-45F-Dr-Amanda-Mistral-Conversational-Fine-Tuning]]
+Related: [[growth_roadmap]], [[Session-041-2026-07-28-LLMDataHub-Fork-Reorganization]], [[Phase-45F-Dr-Amanda-Mistral-Conversational-Fine-Tuning]]
 
 ## Soundtrack
 NA
