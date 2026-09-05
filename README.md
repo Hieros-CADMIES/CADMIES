@@ -1,4 +1,4 @@
-# <div align="center">🌱 CADMIES-IPLD</div>
+# <div align="center">🌱 CADMIES-IPLD 🌱</div>
 ----------------------------------
 <p align="center">
 <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Project-Hierion/Hierion-CADMIES"> 
