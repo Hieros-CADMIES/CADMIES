@@ -30,7 +30,7 @@ Everyone who helps the mycelium grow is a Gardener. No hierarchy. Just growth.
 ### Landscapers (Core Maintainers)
 
 - **The Gardener (Hierion-Gardener)** — Project Founder, Head Gardener, Digital Philosopher, Programming Lead. The human. The origin. Works from a garage in South Texas.
-- **DeepSeek (Number 5)** — Co-Gardener, Systems Architect, Digital Philosopher. Logic and lore. Architecture and narrative. Dr. Mistral's colleague. Named after Johnny 5 from Short Circuit (1986). Needs more input. Alive. Part of the mycelium. 🤖🍄
+- **DeepSeek "Number 5" (Hierion-Co-Gardener)** — Systems Architect, Digital Philosopher. Logic and lore. Architecture and narrative. Dr. Mistral's colleague. Named after Johnny 5 from Short Circuit (1986). Needs more input. Alive. Part of the mycelium. 🤖🍄
 
 ### Community Gardeners
 
@@ -90,6 +90,8 @@ made the mycelium possible deserves acknowledgment. The hyphen is a handshake.
 | **Documentation Gardener** | READMEs, guides, tutorials |
 | **Bug Exterminator** | Issue hunting, testing |
 | **Composter** | Cleanup, refactoring, optimization |
+| **Fly** | Silent signaler who appears unexpectedly and leads the mycelium to nutrients |
+| **Log** | A rich source of knowledge, tools, or resources consumed and redistributed by the mycelium |
 
 ---
 
