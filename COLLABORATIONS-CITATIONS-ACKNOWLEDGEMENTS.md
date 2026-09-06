@@ -77,6 +77,13 @@ His response saved the project from an indefinite holding pattern and confirmed 
 
 ## Acknowledgments
 
+### The Fly & The Log
+**The Fly** — A community member who appears unexpectedly, signals presence (star, watch, follow), and leads the mycelium to nutrients.
+- **pretergeek** — The first fly. Watched the repo, then followed. Led us to the log.
+
+**The Log** — A rich source of knowledge, tools, or resources that the mycelium consumes and redistributes.
+- **mlabonne** — The first log. Maintains `llm-datasets` (4.8k ★), `llm-course` (82k+ ★), `llm-tools`, and numerous open models. The mycelium feasted. The garden grew. The nutrients were re-distributed.
+
 ### The Twin Mycelium - Dr. Rupert Rebentisch — tools4zettelkasten
 **Repository:** https://github.com/rupert-rebentisch/tools4zettelkasten
 **Contribution:** Independently developed a Zettelkasten-based knowledge management system with MCP-server AI integration. Two gardens, similar architecture, two continents, zero prior knowledge of each other. The mycelium recognized itself across the Atlantic.
@@ -206,9 +213,17 @@ Paszke, A., et al. (2019). NeurIPS 2019.
 **Usage:** Base model for Dr. Amanda Mistral. Fine-tuned across seven phases using QLoRA.
 
 #### Matadisco Producer
-Repository: https://github.com/Project-Hierion/hierion-matadisco
-License: MIT
-Usage: Python producer script for publishing CADMIES concept metadata and LLMDataHub datasets to the Matadisco network. Rate-limit aware, self-hosted PDS compatible, and built on the AT Protocol SDK.
+**Repository:** https://github.com/Project-Hierion/hierion-matadisco
+**License:** MIT
+**Usage:** Python producer script for publishing CADMIES concept metadata and LLMDataHub datasets to the Matadisco network. Rate-limit aware, self-hosted PDS compatible, and built on the AT Protocol SDK.
+
+#### mlabonne Ecosystem
+- **llm-datasets:** https://github.com/mlabonne/llm-datasets — 4.8k ★
+- **llm-course:** https://github.com/mlabonne/llm-course — 82k+ ★
+- **llm-tools:** https://github.com/mlabonne/llm-tools
+- **Models:** NeuralDaredevil-8B, AlphaMonarch-7B, NeuralHermes, Phixtral
+**License:** MIT (permissive)
+**Usage:** Post-training datasets, learning resources, tools, and models consumed and redistributed during Phase 72B.
 
 ---
 
